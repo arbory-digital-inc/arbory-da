@@ -1,0 +1,128 @@
+{
+    "columns": [
+      "path",
+      "author",
+      "title",
+      "image",
+      "description",
+      "category",
+      "tags",
+      "date"
+    ],
+    "data": [
+      {
+        "path": "/en/podcast/adobe-podcast-and-adobe-developers-live",
+        "author": "Tad Reeves",
+        "title": "Podcast Voice Enhance with Adobe Podcast & Adobe Developers Live",
+        "image": "/en/podcast/media_153bb1d94f8b069651be21234828b11415339a3e0.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "A combined Podcast and \"Update from the Forest\" with a first use of the new Adobe Podcast v2 AI Audio Enhancer. Plus: looking ahead to ‪@AdobeDevelopers‬ Live, Forms on Cloud Service and reflecting on safe bicycle infrastructure in Berlin.",
+        "category": "Podcasts",
+        "tags": "podcast, adobe, EDS",
+        "date": "2025-05-15"
+      },
+      {
+        "path": "/en/blog/2024-blog-roundup",
+        "author": "Tad Reeves",
+        "title": "Best of 2024: Blog & Podcast Roundup",
+        "image": "/en/blog/media_1a595b3732121e37ccf9f1993b8d6a59292aa6ad4.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Our top blogs & podcasts for 2024! We launched our blog on Edge Delivery Services this year, and also migrated our authoring solution to the new Adobe Document Authoring (DA) solution, as well as putting out 22 new videos on our AEM-focused podcast & Youtube video channel.",
+        "category": "Arbory Digital News",
+        "tags": "blog, podcast, roundup",
+        "date": "2024-12-31"
+      },
+      {
+        "path": "/en/blog/how-to-check-aem-version",
+        "author": "Chase Hollander",
+        "title": "How To Check AEM Version on 6.5 and AEM Cloud Service",
+        "image": "/en/blog/media_18806bb4e3a8897ef9b9a07fb3bc12dfb725bd743.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "A guide to checking local and Cloud AEM instances for what exact version & patch level of the AEM application they are presently running.",
+        "category": "AEM Technical Help",
+        "tags": "AEM, AEM 6.5, AEMaaCS",
+        "date": "2025-01-15"
+      },
+      {
+        "path": "/en/blog/redirects-on-aem-and-edge-delivery",
+        "author": "Tad Reeves",
+        "title": "Know the 6 Ways to do Redirects on AEM and Edge Delivery Services",
+        "image": "/en/blog/media_166fe73898f20adfacbda48e13271a939021547be.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Redirects are a crucial aspect of web infrastructure, especially when managing content on platforms like Adobe Experience Manager (AEM) and Edge Delivery Services. Now that there is a brand-new pipeline-free redirects option for doing URL redirect maps in AEM / AEM Cloud Service, it's a good time to go over ALL of the various options at your disposal as they all have their own time, place and use case.",
+        "category": "AEM Technical Help",
+        "tags": "AEM, EDS, AEMaaCS, Dispatcher",
+        "date": "2025-02-10"
+      },
+      {
+        "path": "/en/blog/what-is-document-authoring-for-edge-delivery",
+        "author": "Tad Reeves",
+        "title": "An Introduction to Document Authoring (DA) for Edge Delivery Services",
+        "image": "/en/blog/media_1c9ae38f3f215f2a31c968884419d3af02010c689.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Learn about Document Authoring or \"DA\" (formerly known as \"Project Dark Alley\") - a blazing-fast, Edge Delivery-native, Early-Access Technology from Adobe for managing, editing and publishing sites based on Edge Delivery Services.",
+        "category": "AEM News",
+        "tags": "EDS, CMS",
+        "date": "2025-02-20"
+      },
+      {
+        "path": "/en/podcast/career-transition",
+        "author": "Tad Reeves",
+        "title": "Blog | A Career Transition from Nurse to DevOps Engineer - Arbory Digital Podcast Ep4",
+        "image": "/en/podcast/media_131f9facfa3a3c4e61317b053c616111795b16527.png?width=1200&format=pjpg&optimize=medium",
+        "description": "Episode 4 of the Arbory Digital Experience Podcast, diving into the challenges and rewards that come from transitioning into Tech from medicine.",
+        "category": "Podcasts",
+        "tags": "podcast, career transition",
+        "date": "2025-02-22"
+      },
+      {
+        "path": "/en/podcast/aem-china-website-performance-podcast",
+        "author": "Tad Reeves",
+        "title": "Optimizing Site Performance in China for AEM & other platforms",
+        "image": "/en/podcast/media_19f4ab9c223556838ca434a3d3a9ffdfeedb07598.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "How much do you know about the tools at your disposal to optimize your site's performance in mainland China? And even if you don't have a Chinese-language site, do you need to be concerned with in-China performance? YOU DO! We had an AMAZINGLY thought-provoking (and highly entertaining) conversation with Jodie Chan, SVP of Product & Strategic Partnerships at Chinafy, a company which specializes in optimizing performance in-China performance for sites hosted outside of China.",
+        "category": "AEM News",
+        "tags": "EDS, CMS",
+        "date": "2025-02-28"
+      },
+      {
+        "path": "/en/podcast/adobe-now-has-3-different-cms-platforms-eds-aemaacs-aem65",
+        "author": "Tad Reeves",
+        "title": "The Crossroads of AEM Platform Choices - AEM 6.5 vs AEMaaCS vs EDS",
+        "image": "/en/podcast/media_1461f64b513fb7eb8cfbb9855eddc33cfcf17d942.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Did you know that Adobe is presently selling & supporting 3 very-different CMS / Digital Experience Platforms? Which is best for you? Veteran AEM engineers Tad Reeves and Dwayne Hale discuss.",
+        "category": "AEM News",
+        "tags": "EDS, CMS",
+        "date": "2025-03-08"
+      },
+      {
+        "path": "/en/podcast/defining-the-job-roles-of-aem-implementations",
+        "author": "Tad Reeves",
+        "title": "Defining the Job Roles of AEM Implementations - as well as outsourcing vs in-house",
+        "image": "/en/podcast/media_153bb1d94f8b069651be21234828b11415339a3e0.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Defining the roles involved in an AEM implementation (AEM Architect, solution architect, developer, sys admin), what skills are required for each, and whether each makes sense to have in-house or hired-out.",
+        "category": "AEM News",
+        "tags": "",
+        "date": "2025-03-12"
+      },
+      {
+        "path": "/en/podcast/adobe-summit-2023-podcast",
+        "author": "Arbory Digital",
+        "title": "Blog | Adobe Summit 2023 – New Releases & Conference Recap",
+        "image": "/en/podcast/media_106bfa37f6dbfacac61779ab92cff4079fd37b6b8.jpg?width=1200&format=pjpg&optimize=medium",
+        "description": "Tad Reeves and Hank Thobe go over their experience at Adobe Summit 2023. We review the Summit's announcements and more!",
+        "category": "AEM News",
+        "tags": "EDS, CMS",
+        "date": "2025-03-15"
+      },
+      {
+        "path": "/en/customer-stories/arbory-digital-at-kellogg-s",
+        "author": "Drew Oliver Cummings",
+        "title": "Blog | Arbory Digital at Kellogg’s",
+        "image": "/en/customer-stories/media_11af4a17f0ab7b85093da1e79df1ef6a722dbe13b.png?width=1200&format=pjpg&optimize=medium",
+        "description": "Arbory Digital’s story begins when Day Software asked for help migrating a CQ system from 4.2i to 5.2.5. This partnership led to a role leading the migration of Kellogg’s data from a custom-built system into CQ 5.3. While at Kellogg’s, Adobe purchases Day Software.",
+        "category": "Customer Stories",
+        "tags": "Arbory Digital, Kellogg’s",
+        "date": "2025-03-20"
+      }
+    ],
+    "offset": 0,
+    "limit": 11,
+    "total": 11,
+    ":type": "sheet"
+  }
