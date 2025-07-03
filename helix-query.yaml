@@ -28,8 +28,12 @@ indices:
           attribute(el, "content")
       tags:
         select: head > meta[property="article:tag"]
-        values: |
+        value: |
           attribute(el, "content")
+      date:
+          select: head > meta[name="date"]
+          value: |
+            attribute(el, "content")
 
 ## FRENCH CONTENT
   arbory-fr:
@@ -61,8 +65,12 @@ indices:
           attribute(el, "content")
       tags:
         select: head > meta[property="article:tag"]
-        values: |
+        value: |
           attribute(el, "content")
+      date:
+          select: head > meta[name="date"]
+          value: |
+            attribute(el, "content")
 
 ## GERMAN CONTENT
   arbory-de:
@@ -94,8 +102,12 @@ indices:
           attribute(el, "content")
       tags:
         select: head > meta[property="article:tag"]
-        values: |
+        value: |
           attribute(el, "content")
+      date:
+          select: head > meta[name="date"]
+          value: |
+            attribute(el, "content")
 
 ## ENGLISH CONTENT
   arbory-en:
@@ -127,8 +139,12 @@ indices:
           attribute(el, "content")
       tags:
         select: head > meta[property="article:tag"]
-        values: |
+        value: |
           attribute(el, "content")
+      date:
+          select: head > meta[name="date"]
+          value: |
+            attribute(el, "content")
 
 ## Spanish CONTENT
   arbory-es:
@@ -160,7 +176,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
 
 
@@ -194,7 +214,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
 
 ## Japanese CONTENT
@@ -227,7 +251,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
 
 ## Korean CONTENT
@@ -260,7 +288,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
 
 ## Traditional Chinese CONTENT
@@ -293,7 +325,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
 
 ## Mainland China CONTENT
@@ -326,5 +362,11 @@ indices:
             attribute(el, "content")
         tags:
           select: head > meta[property="article:tag"]
-          values: |
+          value: |
+            attribute(el, "content")
+          value: |
+            attribute(el, "content")
+        date:
+          select: head > meta[name="date"]
+          value: |
             attribute(el, "content")
