@@ -12,7 +12,8 @@ const langcode = bits[3] || 'en'; // Default to 'en' if not found
 
 // Define paths for data
 const QUERY_PATH = `/${langcode}-index.json`;
-const AUTHOR_PATH = `/${langcode}-index.json`;
+const TEST_PATH = '/en-index-test.json'; // Always use en-index-test.json for testing
+const AUTHOR_PATH = USE_TEST_FILE ? TEST_PATH : `/${langcode}-index.json`;
 
 // Define available categories and their paths
 const CATEGORIES = {
@@ -62,12 +63,19 @@ function formatDate(dateString) {
 }
 
 function fetchAuthors() {
+  const { locale } = getConfig();
   fetchingAuthors = new Promise((resolve) => {
-    fetch(AUTHOR_PATH).then(async (resp) => {
+    fetch(`${locale.base}${AUTHOR_PATH}`).then(async (resp) => {
       if (resp.ok) {
         const json = await resp.json();
         resolve(json.data);
+      } else {
+        console.log(`Could not fetch authors from: ${locale.base}${AUTHOR_PATH}`);
+        resolve([]);
       }
+    }).catch(err => {
+      console.error('Error fetching authors:', err);
+      resolve([]);
     });
   });
 }
@@ -119,9 +127,9 @@ function decorateFeed(data, opts) {
   // We need to check the block parameter, not el which isn't defined in this scope
   const block = opts.block || {};
   const isCardVariant = block.classList && (
-    block.classList.contains('2-card') || 
-    block.classList.contains('3-card') || 
-    block.classList.contains('4-card')
+    block.classList.contains('card-2') || 
+    block.classList.contains('card-3') || 
+    block.classList.contains('card-4')
   );
   
   data.forEach((item) => {
@@ -453,14 +461,16 @@ export default async function init(el) {
   
   try {
     // Determine which JSON file to use based on configuration
-    const jsonPath = USE_TEST_FILE ? '/en-index-test.json' : QUERY_PATH;
+    const jsonPath = USE_TEST_FILE ? TEST_PATH : QUERY_PATH;
     
     // Fetch the appropriate JSON file
     const resp = await fetch(`${locale.base}${jsonPath}`);
     
     if (!resp.ok) {
-      throw new Error(`Could not fetch ${USE_TEST_FILE ? 'test' : 'live'} index`);
+      throw new Error(`Could not fetch ${USE_TEST_FILE ? 'test' : 'live'} index: ${jsonPath}`);
     }
+    
+    console.log(`Successfully loaded JSON from: ${locale.base}${jsonPath}`);
 
     // Kick off the author request
     fetchAuthors();
@@ -510,25 +520,25 @@ export default async function init(el) {
     while (el.firstChild) {
       el.removeChild(el.firstChild);
     }
-    
+
     // We don't need to add back the metadata rows since they're only used for configuration
     // and shouldn't be displayed in the final rendered block
 
     // Get the number of cards per row based on the variant
     let cardsPerRow = 1; // Default for list layout
-    if (el.classList.contains('2-card')) {
+    if (el.classList.contains('card-2')) {
       cardsPerRow = 2;
-    } else if (el.classList.contains('3-card')) {
+    } else if (el.classList.contains('card-3')) {
       cardsPerRow = 3;
-    } else if (el.classList.contains('4-card')) {
+    } else if (el.classList.contains('card-4')) {
       cardsPerRow = 4;
     } else if (el.classList.contains('grid')) {
       cardsPerRow = 3; // Default grid is 3 columns
     }
-    
+
     // Default to 1 row initially
     let initialRows = 1;
-    
+
     // Check for 'number of rows' in the block's metadata
     if (blockMeta && blockMeta['number of rows'] && blockMeta['number of rows'].text) {
       const rowValue = parseInt(blockMeta['number of rows'].text, 10);
