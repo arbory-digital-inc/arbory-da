@@ -3,7 +3,7 @@ import createPicture from '../../scripts/utils/picture.js';
 
 // CONFIGURATION
 // Set to true to use test JSON file, false to use live index
-const USE_TEST_FILE = true;
+const USE_TEST_FILE = false;
 
 // Get language code from URL
 const url = window.location.href;
