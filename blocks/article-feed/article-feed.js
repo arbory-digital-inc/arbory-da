@@ -199,6 +199,7 @@ function decorateFeed(data, opts) {
         tagsContainer.className = 'article-feed-tags';
         
         const tags = item.tags;
+        tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
         tags.forEach(tag => {
           if (tag) {
             const tagEl = document.createElement('span');
@@ -271,6 +272,7 @@ function decorateFeed(data, opts) {
         tagsContainer.className = 'article-feed-tags';
         
         const tags = item.tags;
+        tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
         tags.forEach(tag => {
           if (tag) {
             const tagEl = document.createElement('span');
