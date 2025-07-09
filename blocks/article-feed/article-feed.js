@@ -198,7 +198,7 @@ function decorateFeed(data, opts) {
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'article-feed-tags';
         
-        const tags = item.tags.split(',').map(tag => tag.trim());
+        const tags = item.tags;
         tags.forEach(tag => {
           if (tag) {
             const tagEl = document.createElement('span');
@@ -270,7 +270,7 @@ function decorateFeed(data, opts) {
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'article-feed-tags';
         
-        const tags = item.tags.split(',').map(tag => tag.trim());
+        const tags = item.tags;
         tags.forEach(tag => {
           if (tag) {
             const tagEl = document.createElement('span');
@@ -300,43 +300,7 @@ function decorateFeed(data, opts) {
   return ul;
 }
 
-function filterFeed(filter, data) {
-  if (!filter) return data;
-  
-  // Check if filter is a string or an object
-  let key, search;
-  
-  if (typeof filter === 'string') {
-    const split = filter.split(' = ');
-    key = split[0];
-    search = split[1] === 'no' ? '' : split[1];
-  } else if (typeof filter === 'object') {
-    key = filter.key;
-    search = filter.text;
-  } else {
-    return data;
-  }
 
-  // Handle category filtering
-  if (key === 'category') {
-    return filterByCategories(search, data);
-  }
-  
-  // Handle tags filtering
-  if (key === 'tags') {
-    return filterByTags(search, data);
-  }
-  
-  return data.reduce((acc, article) => {
-    // featured must be an exact match
-    if (key === 'featured' && article[key] === search) {
-      acc.push(article);
-    } else if (key === 'author' && article[key].includes(search)) {
-      acc.push(article);
-    }
-    return acc;
-  }, []);
-}
 
 function filterByCategories(categoryString, data) {
   if (!categoryString) return data;
@@ -408,7 +372,7 @@ function filterByTags(tagString, data) {
     }
     
     // Convert article tags to array
-    const articleTags = article.tags.split(',').map(tag => tag.trim().toLowerCase());
+    const articleTags = article.tags;
     
     // Check if any of the article tags match any of the filter tags
     return tags.some(tag => articleTags.includes(tag));
