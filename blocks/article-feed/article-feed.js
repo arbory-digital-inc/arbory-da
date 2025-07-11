@@ -194,26 +194,26 @@ function decorateFeed(data, opts) {
       contentColumn.append(authorDateContainer);
       
       // Create tags container if tags exist and add below author-date
-      if (item.tags) {
-        const tagsContainer = document.createElement('div');
-        tagsContainer.className = 'article-feed-tags';
+      // if (item.tags) {
+      //   const tagsContainer = document.createElement('div');
+      //   tagsContainer.className = 'article-feed-tags';
         
-        const tags = item.tags;
-        tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
-        tags.forEach(tag => {
-          if (tag) {
-            const tagEl = document.createElement('span');
-            tagEl.className = 'article-feed-tag';
-            tagEl.textContent = tag;
-            tagsContainer.appendChild(tagEl);
-          }
-        });
+      //   const tags = item.tags;
+      //   tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
+      //   tags.forEach(tag => {
+      //     if (tag) {
+      //       const tagEl = document.createElement('span');
+      //       tagEl.className = 'article-feed-tag';
+      //       tagEl.textContent = tag;
+      //       tagsContainer.appendChild(tagEl);
+      //     }
+      //   });
         
-        // Add tags below author-date if they exist
-        if (tagsContainer.children.length > 0) {
-          contentColumn.append(tagsContainer);
-        }
-      }
+      //   // Add tags below author-date if they exist
+      //   if (tagsContainer.children.length > 0) {
+      //     contentColumn.append(tagsContainer);
+      //   }
+      // }
       
       // Add the content column to the container
       contentContainer.append(contentColumn);
@@ -267,26 +267,26 @@ function decorateFeed(data, opts) {
       leftColumn.append(authorDateContainer);
       
       // Create tags container if tags exist and add to right column
-      if (item.tags) {
-        const tagsContainer = document.createElement('div');
-        tagsContainer.className = 'article-feed-tags';
+      // if (item.tags) {
+      //   const tagsContainer = document.createElement('div');
+      //   tagsContainer.className = 'article-feed-tags';
         
-        const tags = item.tags;
-        tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
-        tags.forEach(tag => {
-          if (tag) {
-            const tagEl = document.createElement('span');
-            tagEl.className = 'article-feed-tag';
-            tagEl.textContent = tag;
-            tagsContainer.appendChild(tagEl);
-          }
-        });
+      //   const tags = item.tags;
+      //   tags.sort((a, b) => a.length - b.length || a.localeCompare(b));
+      //   tags.forEach(tag => {
+      //     if (tag) {
+      //       const tagEl = document.createElement('span');
+      //       tagEl.className = 'article-feed-tag';
+      //       tagEl.textContent = tag;
+      //       tagsContainer.appendChild(tagEl);
+      //     }
+      //   });
         
-        // Add tags to the right column if they exist
-        if (tagsContainer.children.length > 0) {
-          rightColumn.append(tagsContainer);
-        }
-      }
+      //   // Add tags to the right column if they exist
+      //   if (tagsContainer.children.length > 0) {
+      //     rightColumn.append(tagsContainer);
+      //   }
+      // }
       
       // Add both columns to the content container
       contentContainer.append(leftColumn, rightColumn);
