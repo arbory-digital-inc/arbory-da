@@ -16,7 +16,7 @@
   --article-font-size-2xl: 1.2rem;
   --article-font-size-3xl: 1.3rem;
   --article-font-size-4xl: 1.35rem;
-  --article-font-size-5xl: 1.9rem;
+  --article-font-size-5xl: 2.25rem;
   --article-transition: all 0.3s ease;
   --article-transform-hover: translateY(-3px);
   --article-transform-active: translateY(0);
@@ -50,6 +50,12 @@
   h1 a:hover {
     text-decoration: none;
     color: var(--text-color);
+  }
+
+  h2 {
+    font-size: var(--article-font-size-5xl);
+    font-weight: 600;
+    letter-spacing: -1px;
   }
 }
 

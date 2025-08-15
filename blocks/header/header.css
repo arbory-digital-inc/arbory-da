@@ -368,3 +368,21 @@ header nav .nav-tools {
     background-color: transparent;
   }
 }
+
+.nav-wrapper{
+  border-bottom: 1px solid;
+  border-color: var(--link-hover-color);
+  box-shadow: 0 4px 12px var(--background-color-1), var(--shadow-lg);
+  animation: glowPulseNav 15s infinite ease-in-out;
+}
+@keyframes glowPulseNav {
+  0% {
+    border-color: rgba(64, 110, 12, 0.6);
+  }
+  50% {
+    border-color: rgba(64, 110, 12, 1);
+  }
+  100% {
+    border-color: rgba(64, 110, 12, 0.6);
+  }
+}

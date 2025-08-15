@@ -27,12 +27,11 @@ import {
  * @param {Element} main The container element
  */
 function buildHeroBlock(main) {
-  // check if the first block is called arbory-blog-hero and if it is don't make a default hero
-  const firstBlock = main.querySelector(':scope > div > .arbory-blog-hero');
-  if (firstBlock && firstBlock.classList.contains('arbory-blog-hero')) {
+  // check if the first block is called arbory-blog-hero or blog-post-hero and if it is don't make a default hero
+  const firstBlock = main.querySelector(':scope > div');
+  if (firstBlock && (firstBlock.querySelector('.arbory-blog-hero') || firstBlock.querySelector('.blog-post-hero'))) {
     return;
   }
-
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
   // eslint-disable-next-line no-bitwise
