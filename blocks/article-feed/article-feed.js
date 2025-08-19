@@ -1,22 +1,18 @@
 import { getConfig } from '../../scripts/nx.js';
 import createPicture from '../../scripts/utils/picture.js';
+import { getLanguage, getLanguageIndex } from '../../scripts/lang.js';
 
 // CONFIGURATION
 // Set to true to use test JSON file, false to use live index
 const USE_TEST_FILE = false;
 
-// Get language code from URL
-const url = window.location.href;
-const bits = url.split("/");
-let langcode = bits[3] || 'en'; // Default to 'en' if not found
+// Get language code from the localization system
+const langcode = getLanguage();
 
-if (langcode === "0-sandbox" || langcode === "docs"){ // Set to 'en' if in the drafts folder
-  langcode = "en";
-};
-// Define paths for data
-const QUERY_PATH = `/${langcode}-index.json`;
+// Define paths for data using the proper localization functions
+const QUERY_PATH = getLanguageIndex();
 const TEST_PATH = '/en-index-test.json'; // Always use en-index-test.json for testing
-const AUTHOR_PATH = USE_TEST_FILE ? TEST_PATH : `/${langcode}-index.json`;
+const AUTHOR_PATH = USE_TEST_FILE ? TEST_PATH : getLanguageIndex();
 
 // Define available categories and their paths
 const CATEGORIES = {
@@ -487,13 +483,12 @@ export default async function init(el) {
     
     // Remove any duplicate articles that might have been introduced during filtering
     const uniquePaths = new Set();
-    const alocalPath = bits.slice(3).join("/");
-    const localPath = "/" + alocalPath;
+    const currentPath = window.location.pathname;
     filtered = filtered.filter(item => {
       if (uniquePaths.has(item.path)) {
         return false;
       }
-      if (item.path === localPath) {
+      if (item.path === currentPath) {
         return false;
       };
       uniquePaths.add(item.path);
