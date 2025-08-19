@@ -1,5 +1,6 @@
 const AUTO_BLOCKS = [
     { fragment: '/fragments/' },
+    { 'author-fragment': '/authors/' },
     { youtube: 'https://www.youtube' },
   ];
   
