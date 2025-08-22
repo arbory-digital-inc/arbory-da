@@ -72,7 +72,7 @@
 /* Content column - takes remaining space */
 .hero-content-col {
   flex: 1; /* Takes remaining space */
-  padding: 2rem;
+  padding: 1.25rem;
   background-color: var(--bg-color-1); /* Initial color, will be overridden by JS */
   border-radius: 0;
   display: flex;
@@ -86,13 +86,13 @@
 /* Typography */
 .hero-content-col h1 {
   margin: 0 0 1rem 0;
-  font-size: 1.85rem;
+  font-size: 1.5rem;
   line-height: 1.2;
   color: var(--text-color);
 }
 
 .hero-category {
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: var(--link-color);
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -106,14 +106,14 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 0;
-  margin: 1rem 0;
+  margin: 0.5rem 0 0 0;
   list-style: none;
 }
 
 .hero-tags li {
   color: var(--link-color);
   border: 1.5px solid var(--link-color);
-  padding: 4px 8px;
+  padding: 2px 4px;
   border-radius: 2px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -147,7 +147,7 @@
 .hero-author {
   color: var(--text-color);
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 /* Mobile layout - stack vertically */
