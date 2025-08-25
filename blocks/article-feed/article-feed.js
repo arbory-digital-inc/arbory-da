@@ -574,6 +574,25 @@ export default async function init(el) {
     const list = decorateFeed(initialFiltered, opts);
     el.append(list);
     
+    // Add fade-in animation to initial articles
+    const initialArticleElements = list.querySelectorAll('.article-feed-article');
+    initialArticleElements.forEach((article, index) => {
+      // Set initial opacity to 0 to prevent flash
+      article.style.opacity = '0';
+      
+      // Force a reflow before adding the animation class
+      void article.offsetWidth;
+      
+      // Add the fade-in class with staggered delay
+      setTimeout(() => {
+        article.classList.add('fade-in');
+        
+        // Stagger the animations for a cascade effect
+        const delay = 0.1 * index; // 0.1s delay between each card
+        article.style.animationDelay = `${delay}s`;
+      }, 10);
+    });
+    
 
     
     // Show the load more button if there are more articles available than what's initially shown
