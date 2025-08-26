@@ -141,7 +141,6 @@ export default function decorate(block) {
     img.loading = 'eager';
     img.style.maxWidth = '100%';
     img.style.width = '100%';
-    img.style.height = 'auto';
     img.style.boxSizing = 'border-box';
     imageCol.appendChild(img);
   }
