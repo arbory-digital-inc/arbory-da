@@ -54,11 +54,23 @@
   }
 }
 
-/* Image column - 16:9 aspect ratio */
+/* Image column - dynamic sizing based on aspect ratio */
 .hero-image-col {
   flex: 0 0 auto; /* Size based on content */
+  display: flex;
+  align-items: center;
+}
+
+/* 16:9 aspect ratio (default) */
+.hero-image-col.aspect-16-9 {
   width: 700px;
   height: 393.75px; /* 700px * 9/16 = 393.75px for 16:9 aspect ratio */
+}
+
+/* 1:1 aspect ratio (square) */
+.hero-image-col.aspect-1-1 {
+  width: 393.75px;
+  height: 393.75px; /* Square aspect ratio */
 }
 
 .hero-image-col img {
@@ -81,6 +93,17 @@
   box-sizing: border-box;
   min-width: 250px; /* Minimum width for readability */
   height: 393.75px; /* Match image column height */
+}
+
+/* Content column adjustments for different aspect ratios */
+.hero-content-col.with-square-image {
+  /* More space available when image is square */
+  padding: 2rem;
+}
+
+.hero-content-col.with-square-image h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Typography */
@@ -189,7 +212,15 @@
     width: 100% !important;
     max-width: 100%;
     height: auto !important;
-    aspect-ratio: 16/9; /* Maintain 16:9 aspect ratio */
+  }
+  
+  /* Maintain aspect ratios on mobile */
+  .hero-image-col.aspect-16-9 img {
+    aspect-ratio: 16/9;
+  }
+  
+  .hero-image-col.aspect-1-1 img {
+    aspect-ratio: 1/1;
   }
   
   .hero-content-col {

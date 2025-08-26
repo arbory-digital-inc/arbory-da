@@ -142,7 +142,28 @@ export default function decorate(block) {
     img.style.maxWidth = '100%';
     img.style.width = '100%';
     img.style.boxSizing = 'border-box';
+    
+    // Detect aspect ratio when image loads
+    img.onload = function() {
+      const aspectRatio = this.naturalWidth / this.naturalHeight;
+      
+      // Determine if image is closer to 16:9 (1.78) or 1:1 (1.0)
+      if (Math.abs(aspectRatio - 1) < Math.abs(aspectRatio - 1.78)) {
+        // Image is closer to square (1:1)
+        imageCol.classList.add('aspect-1-1');
+        contentCol.classList.add('with-square-image');
+        console.log('Detected square (1:1) aspect ratio:', aspectRatio);
+      } else {
+        // Image is closer to 16:9
+        imageCol.classList.add('aspect-16-9');
+        console.log('Detected 16:9 aspect ratio:', aspectRatio);
+      }
+    };
+    
     imageCol.appendChild(img);
+  } else {
+    // Default to 16:9 if no image
+    imageCol.classList.add('aspect-16-9');
   }
   
   // Create content column
@@ -150,6 +171,9 @@ export default function decorate(block) {
   contentCol.className = 'hero-content-col';
   contentCol.style.maxWidth = '100%';
   contentCol.style.boxSizing = 'border-box';
+  
+  // Store reference for aspect ratio detection
+  window.heroContentCol = contentCol;
   
   // Add title
   if (title) {
