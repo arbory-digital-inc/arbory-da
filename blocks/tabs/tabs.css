@@ -1,46 +1,374 @@
-.tabs .tabs-list {
-  display: flex;
-  gap: 8px;
-  max-width: 100%;
-  overflow-x: auto;
+/* Existing tabs styles remain unchanged */
+.tabs-container {
+  h1,h2,h3,h4,h5,h6,p {
+    text-align: var(--heading-align);
+    font-family: var(--heading-font-family);
+  }
 }
 
-.tabs .tabs-list button {
-  flex: 0 0 max-content;
-  margin: 0;
-  border: 1px solid var(--dark-color);
-  border-radius: 0;
-  padding: 8px 16px;
-  background-color: var(--light-color);
-  color: initial;
-  font-size: unset;
-  font-weight: bold;
-  line-height: unset;
-  text-align: initial;
-  text-overflow: unset;
-  overflow: unset;
-  white-space: unset;
-  transition: background-color 0.2s;
+.tabs {
+  margin: 2rem auto;
+  max-width: var(--desktop-max-width);
+ 
+  .tabs-list {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1rem 0.25rem 1.5rem 0.25rem;
+    margin: 0;
+    flex-wrap: wrap;
+   
+    .tabs-tab {
+      background: var(--background-color-2);
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-color);
+      cursor: pointer;
+      font-family: var(--body-font-family);
+      font-size: var(--body-font-size-s);
+      font-weight: 600;
+      line-height: 1.25;
+      margin: 0;
+      padding: 8px 16px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      img {
+        max-height: 35px;
+        width: auto;
+        object-fit: contain;
+        display: block;
+      }
+      
+      picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        img {
+          max-height: 35px;
+          width: 100%;
+          object-fit: contain;
+          display: block;
+        }
+      }
+    }
+
+    button {
+      flex: 0 0 max-content;
+      margin: 0;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1.5rem;
+      background-color: var(--background-color-2);
+      color: var(--primary-accent-color);
+      font-weight: 600;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      margin: 0;
+     
+      &:hover {
+        opacity: 0.6;
+        color: var(--primary-accent-color);
+        box-shadow: var(--shadow-lg);
+      }
+     
+      p {
+        margin: 0;
+      }
+     
+      &[aria-selected='true'] {
+        background-color: var(--link-hover-color);
+        color: var(--background-color);
+        cursor: default;
+        box-shadow: var(--shadow-xl);
+      }
+    }
+  }
+ 
+  .tabs-panel {
+    padding: 2rem;
+    background-color: var(--background-color-2);
+    border-radius: var(--border-radius);
+    margin-top: 0;
+    box-shadow: var(--shadow-xl);
+    overflow: visible;
+   
+    &[aria-hidden='true'] {
+      display: none;
+    }
+  }
 }
 
-.tabs .tabs-list button[aria-selected="true"] {
-  border-bottom: 1px solid var(--background-color);
-  background-color: var(--background-color);
-  cursor: initial;
+/* Enhanced styles for pros-cons variant */
+.tabs.pros-cons {
+  .tabs-list {
+    button {
+      position: relative;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: var(--primary-accent-color);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+      
+      &[aria-selected='true']:after {
+        width: 80%;
+      }
+    }
+  }
+  
+  .comparison-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    transition: opacity 0.3s ease-in-out;
+    margin: 0.25rem 0;
+  }
+  
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    .platform-name {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-accent-color);
+      margin: 0;
+      text-align: left;
+    }
+    
+    .platform-badge {
+      background: linear-gradient(45deg, var(--primary-accent-color), #764ba2);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: var(--shadow-lg);
+    }
+  }
+  
+  .platform-description {
+    margin-bottom: 1rem;
+    
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      margin: 0;
+    }
+  }
+  
+  .platform-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+    
+    .platform-summary {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      font-weight: 400;
+      flex: 1;
+      
+      img {
+        max-height: 35px;
+        width: auto;
+        object-fit: contain;
+      }
+      
+      picture {
+        display: block;
+        
+        img {
+          max-height: 35px;
+          width: auto;
+          object-fit: contain;
+        }
+      }
+    }
+    
+    .platform-badge {
+      background: var(--link-hover-color, #406e0c);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
+      line-height: 1;
+      white-space: nowrap;
+      align-self: center;
+    }
+    
+    .platform-description {
+      width: 100%;
+      margin-top: 0.5rem;
+      color: var(--text-color-secondary, #666);
+      line-height: 1.5;
+    }
+  }
+  
+  .pros-cons-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+    
+    .benefits, .disadvantages {
+      .benefit-header, .disadvantage-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        
+        .icon {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          font-size: 14px;
+        }
+      }
+      
+      .benefit-header {
+        color: var(--link-color);
+        
+        .icon {
+          background: var(--link-color);
+        }
+      }
+      
+      .disadvantage-header {
+        color: var(--error-color, #ef4444);
+        
+        .icon {
+          background: var(--error-color, #ef4444);
+        }
+      }
+      
+      .benefit-list, .disadvantage-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+          margin-bottom: 0.75rem;
+          padding-left: 1.5rem;
+          position: relative;
+          font-size: 0.9rem;
+          line-height: 1.4;
+          font-family: var(--heading-font-family);
+          
+          &:before {
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 12px;
+          }
+        }
+      }
+      
+      .benefit-list li:before {
+        content: '✓';
+        color: var(--link-color);
+      }
+      
+      .disadvantage-list li:before {
+        content: '✗';
+        color: var(--error-color, #ef4444);
+      }
+    }
+  }
+
+/* Mobile responsive design for pros-cons */
+@media (max-width: 1024px) {
+  .tabs.pros-cons .pros-cons-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
-.tabs .tabs-list button[aria-selected="false"]:hover,
-.tabs .tabs-list button[aria-selected="false"]:focus {
-  background-color: var(--dark-color);
-}
-
-.tabs .tabs-panel {
-  margin-top: -1px;
-  padding: 0 16px;
-  border: 1px solid var(--dark-color);
-  overflow: auto;
-}
-
-.tabs .tabs-panel[aria-hidden="true"] {
-  display: none;
+@media (max-width: 768px) {
+  .tabs {
+    .tabs-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      justify-content: center;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 1rem;
+      
+      .tabs-tab {
+        img {
+          max-height: 28px;
+        }
+        
+        picture {
+          img {
+            max-height: 28px;
+          }
+        }
+      }
+    }
+  }
+  
+  .tabs.pros-cons {
+    margin: 1rem auto;
+  }
+  
+  .tabs.pros-cons .tabs-panel {
+    padding: 1rem;
+  }
+  
+  .tabs.pros-cons .comparison-content-wrapper {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  .tabs.pros-cons .title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .tabs.pros-cons .title-row .platform-name {
+    font-size: 1.5rem;
+  }
+  
+  .tabs.pros-cons .title-row .platform-badge {
+    align-self: flex-end;
+  }
+  
+  .tabs.pros-cons .pros-cons-container {
+    gap: 1.5rem;
+  }
 }
