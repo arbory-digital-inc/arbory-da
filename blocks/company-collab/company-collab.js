@@ -1,13 +1,17 @@
-/* forged in the fires of mount doom by your boy frank */
+/*
+ * Column Embed Block
+ * Show multiple embeds arranged in columns
+ * forged in the fires of mount doom by your boy frank
+ */
 
 export default function decorate(block) {
   // Get all rows
   const rows = [...block.children];
-  
+
   // First row contains the logos and plus sign
   const logoRow = rows[0];
   logoRow.className = 'company-collab-row';
-  
+
   // Add classes to the logo containers
   [...logoRow.children].forEach((col, index) => {
     if (index === 1) {

@@ -1,6 +1,6 @@
-import { getConfig } from '../scripts/nexter.js';
+import { getConfig } from '../nx.js';
 
-const { nxBase } = getConfig();
+const { codeBase } = getConfig();
 
 async function fetchIcon(path) {
   const resp = await fetch(path);
@@ -30,7 +30,7 @@ export async function link2svg(a) {
     const altText = splitText.join('|').trim();
 
     let src = textUrl.hostname.includes('.hlx.') ? textUrl.pathname : textUrl;
-    src = src.startsWith('/nx') ? src.replace('/nx', `${nxBase}`) : src;
+    src = src.startsWith('/nx') ? src.replace('/nx', `${codeBase}`) : src;
     const svg = await getSvg({ paths: [src] });
     const icon = document.createElement('span');
     icon.className = 'nx-link-icon';
@@ -43,7 +43,7 @@ export async function link2svg(a) {
 
     return a;
   } catch (e) {
-    console.log('Failed to create SVG.', e.message);
+    // console.log('Failed to create SVG.', e.message);
     return a;
   }
 }

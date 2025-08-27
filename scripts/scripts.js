@@ -19,7 +19,7 @@ import {
   getLanguageNav,
   getLanguageFooter,
   isLanguageSupported,
-  getSupportedLanguages
+  getSupportedLanguages,
 } from './lang.js';
 
 /**
@@ -27,7 +27,7 @@ import {
  * @param {Element} main The container element
  */
 function buildHeroBlock(main) {
-  // check if the first block is called arbory-blog-hero or blog-post-hero and if it is don't make a default hero
+  // check if the first block is called arbory-blog-hero or blog-post-hero
   const firstBlock = main.querySelector(':scope > div');
   if (firstBlock && (firstBlock.querySelector('.arbory-blog-hero') || firstBlock.querySelector('.blog-post-hero'))) {
     return;
@@ -43,7 +43,6 @@ function buildHeroBlock(main) {
 }
 
 const defaultMetaImage = `${window.location.origin}/icons/arbory-share.jpg`;
-
 
 /**
  * load fonts.css and set a session storage flag
@@ -109,7 +108,7 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
-    
+
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
@@ -138,28 +137,28 @@ function setupLanguagePreservation(doc) {
     // Fallback to basic language prefix for links if the function isn't available
     const lang = getLanguage();
     if (!lang || lang === 'en') return; // Don't modify links if we're on English pages
-    
+
     doc.querySelectorAll('a').forEach((a) => {
       const href = a.getAttribute('href');
       if (!href) return;
-      
+
       // Skip external links, anchors, and special protocols
-      if (href.startsWith('http://') || 
-          href.startsWith('https://') || 
-          href.startsWith('#') || 
-          href.startsWith('javascript:') || 
-          href.startsWith('tel:') || 
-          href.startsWith('mailto:')) {
+      if (href.startsWith('http://')
+        || href.startsWith('https://')
+        || href.startsWith('#')
+        || href.startsWith('javascript:')
+        || href.startsWith('tel:')
+        || href.startsWith('mailto:')) {
         return;
       }
-      
+
       // Skip links that already have the current language code
       if (href.startsWith(`/${lang}/`)) return;
-      
+
       // Skip links to files (like PDFs, images, etc.)
       const fileExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp4', '.mp3', '.zip', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
-      if (fileExtensions.some(ext => href.toLowerCase().endsWith(ext))) return;
-      
+      if (fileExtensions.some((ext) => href.toLowerCase().endsWith(ext))) return;
+
       // Add the current language prefix to the link
       const langUrl = `/${lang}${href.startsWith('/') ? '' : '/'}${href}`;
       a.setAttribute('href', langUrl);
@@ -184,7 +183,7 @@ async function loadLazy(doc) {
   const footerPath = getLanguageFooter();
   loadHeader(doc.querySelector('header'), headerPath);
   loadFooter(doc.querySelector('footer'), footerPath);
-  
+
   // Set up language preservation for links
   setupLanguagePreservation(doc);
 

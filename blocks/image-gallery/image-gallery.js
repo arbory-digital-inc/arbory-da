@@ -1,15 +1,18 @@
-/* I am merely a vessel to this energy - ur boy frank*/
+/**
+ * Decorates the image-gallery block
+ * i am merely a vessel to this energy - ur boy frank
+ */
 
 export default function decorate(block) {
   // Get all picture elements and their containers
   const pictures = Array.from(block.querySelectorAll('picture'));
-  
+
   // Clear existing structure
   block.innerHTML = '';
-  
+
   // Create single row for all pictures
   const row = document.createElement('div');
-  pictures.forEach(picture => {
+  pictures.forEach((picture) => {
     row.appendChild(picture);
   });
   block.appendChild(row);
@@ -42,6 +45,20 @@ export default function decorate(block) {
   const images = block.querySelectorAll('img');
   let currentImageIndex = 0;
 
+  // Lightbox navigation function
+  function showImage(index) {
+    currentImageIndex = index;
+    const img = images[index];
+    const source = img.closest('picture').querySelector('source[media="(min-width: 600px)"]');
+    const fullSizeUrl = source ? source.srcset : img.src;
+    lightboxImg.src = fullSizeUrl;
+    lightboxImg.alt = img.alt;
+
+    // Update navigation visibility
+    prevBtn.style.display = index > 0 ? 'flex' : 'none';
+    nextBtn.style.display = index < images.length - 1 ? 'flex' : 'none';
+  }
+
   // Initialize images
   images.forEach((img, index) => {
     if (!img.getAttribute('alt')) {
@@ -61,20 +78,6 @@ export default function decorate(block) {
       lightbox.classList.add('active');
     });
   });
-
-  // Lightbox navigation
-  function showImage(index) {
-    currentImageIndex = index;
-    const img = images[index];
-    const source = img.closest('picture').querySelector('source[media="(min-width: 600px)"]');
-    const fullSizeUrl = source ? source.srcset : img.src;
-    lightboxImg.src = fullSizeUrl;
-    lightboxImg.alt = img.alt;
-
-    // Update navigation visibility
-    prevBtn.style.display = index > 0 ? 'flex' : 'none';
-    nextBtn.style.display = index < images.length - 1 ? 'flex' : 'none';
-  }
 
   // Close lightbox
   closeBtn.addEventListener('click', () => {
@@ -98,7 +101,7 @@ export default function decorate(block) {
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
-    
+
     if (e.key === 'Escape') {
       lightbox.classList.remove('active');
     } else if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
@@ -117,7 +120,7 @@ export default function decorate(block) {
 
   // Add loading="lazy" to images not in the first viewport
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const img = entry.target;
         if (!img.hasAttribute('loading')) {

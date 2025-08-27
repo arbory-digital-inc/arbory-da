@@ -1,6 +1,8 @@
 const DEF_BREAK = [{ media: '(min-width: 600px)', width: '2000' }, { width: '750' }];
 
-export default function createPicture({ src, alt = '', eager = false, breakpoints = DEF_BREAK }) {
+export default function createPicture({
+  src, alt = '', eager = false, breakpoints = DEF_BREAK,
+}) {
   const url = !src.startsWith('http') ? new URL(src, window.location.href) : new URL(src);
   const picture = document.createElement('picture');
   const { origin, pathname } = url;

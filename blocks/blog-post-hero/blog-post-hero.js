@@ -1,5 +1,55 @@
-// cryptid energy channeled directly into code by ur boy frank
+/**
+ * Decorates the blog-post-hero block
+ * cryptid energy channeled directly into code by ur boy frank
+ */
+
 import { getMetadata } from '../../scripts/aem.js';
+
+// Helper function for animated radial gradient background
+function setupAnimatedBackground(section, isLargeScreen) {
+  if (isLargeScreen.matches) {
+    // Add CSS keyframes and pseudo-element styles if not already added
+    if (!document.querySelector('#hero-pulse-animation')) {
+      const style = document.createElement('style');
+      style.id = 'hero-pulse-animation';
+      style.textContent = `
+        @keyframes pulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
+        
+        .hero-animated-bg::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(
+            circle at 20% 80%, 
+            rgba(98, 168, 20, 0.3) 0%, 
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%, 
+            rgba(64, 110, 12, 0.4) 0%, 
+            transparent 50%
+          );
+          animation: pulse 8s ease-in-out infinite;
+          z-index: -1;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Add the animated background class and ensure relative positioning
+    section.classList.add('hero-animated-bg');
+    section.style.position = 'relative';
+  } else {
+    section.classList.remove('hero-animated-bg');
+    section.style.position = '';
+  }
+}
 
 export default function decorate(block) {
   // Get the background image from the first picture element in the section
@@ -13,127 +63,41 @@ export default function decorate(block) {
   const author = getMetadata('author') || '';
   const publishDate = getMetadata('date') || getMetadata('article:date');
   const metaImage = getMetadata('image') || getMetadata('og:image') || '';
-  // Hardcoded background image URL - replace with your desired image
-  const backgroundImageUrl = '/assets/media_1336129fc41ff30065a3355734cf22c9fe42cb690.jpg';
-  
-  // Debug logging
-  console.log('Blog Hero Metadata:', {
-    title,
-    category,
-    tags,
-    author,
-    publishDate,
-    metaImage,
-    backgroundImageUrl
-  });
-  
+
   // Clear the block content
   block.innerHTML = '';
-  
-  // Set background image - prioritize URL from metadata, fallback to picture element
-  let backgroundImageSrc = '';
-  
-  if (backgroundImageUrl) {
-    // Use URL from metadata
-    backgroundImageSrc = backgroundImageUrl;
-  } else if (backgroundPicture) {
-    // Fallback to picture element
-    const bgImg = backgroundPicture.querySelector('img');
-    if (bgImg) {
-      backgroundImageSrc = bgImg.src;
-    }
-  }
-  
-  if (backgroundImageSrc && window.innerWidth >= 1100) {
-    section.style.backgroundImage = `url(${backgroundImageSrc})`;
-    section.style.backgroundSize = 'cover';
-    section.style.backgroundPosition = 'center bottom'; // Start from bottom for upward parallax
-    section.style.backgroundRepeat = 'no-repeat';
-    
-    // Add parallax effect for desktop only
-    const isDesktop = window.matchMedia('(min-width: 900px)');
+
+  // Set animated radial gradient background for large screens
+  if (window.innerWidth >= 1100) {
     const isLargeScreen = window.matchMedia('(min-width: 1100px)');
-    
-    function updateBackgroundVisibility() {
-      if (isLargeScreen.matches) {
-        section.style.backgroundImage = `url(${backgroundImageSrc})`;
-        section.style.backgroundSize = 'cover';
-        section.style.backgroundPosition = 'center bottom';
-        section.style.backgroundRepeat = 'no-repeat';
-      } else {
-        section.style.backgroundImage = 'none';
-      }
-    }
-    
-    function updateParallax() {
-      const scrolled = window.pageYOffset;
-      const rect = section.getBoundingClientRect();
-      
-      if (isDesktop.matches) {
-        const speed = 0.5; // Parallax speed (0.5 = half speed)
-        
-        // Only apply parallax when section is in viewport
-        if (rect.bottom >= 0 && rect.top <= window.innerHeight) {
-          const yPos = scrolled * speed; // Positive value moves background up when scrolling down
-          section.style.backgroundPosition = `center calc(100% + ${yPos}px)`;
-        }
-      } else {
-        // Reset to normal position on mobile
-        section.style.backgroundPosition = 'center bottom';
-      }
-      
-      // Color transition based on scroll
-      const heroContentCol = section.querySelector('.hero-content-col');
-      if (heroContentCol) {
-        // Calculate scroll progress based on section position
-        const sectionTop = rect.top;
-        const sectionHeight = rect.height;
-        const windowHeight = window.innerHeight;
-        
-        // Calculate progress (0 to 1) based on how much the section has scrolled
-        let progress = 0;
-        if (sectionTop <= 0) {
-          // Section has started scrolling past the top
-          progress = Math.min(Math.abs(sectionTop) / (sectionHeight * 0.5), 1);
-        }
-        
-        // Interpolate between bg-color-1 and bg-color-2
-        // Using CSS custom properties for smooth transition
-        heroContentCol.style.setProperty('--scroll-progress', progress);
-        heroContentCol.style.background = `color-mix(in srgb, var(--bg-color-2) ${progress * 100}%, var(--bg-color-1) ${(1 - progress) * 100}%)`;
-      }
-    }
-    
+
+    const setupBackgroundBound = () => setupAnimatedBackground(section, isLargeScreen);
+
     // Initial setup
-    updateBackgroundVisibility();
-    updateParallax();
-    
-    // Add scroll listener for parallax effect
-    window.addEventListener('scroll', updateParallax, { passive: true });
-    
+    setupBackgroundBound();
+
     // Update on resize
-    isDesktop.addEventListener('change', updateParallax);
-    isLargeScreen.addEventListener('change', updateBackgroundVisibility);
-    
+    isLargeScreen.addEventListener('change', setupBackgroundBound);
+
     // Hide the original picture element if it exists
     if (backgroundPicture) {
       backgroundPicture.style.display = 'none';
     }
   }
-  
+
   // Create the main container
   const container = document.createElement('div');
   container.className = 'blog-post-hero-content';
   container.style.maxWidth = '100%';
   container.style.width = '100%';
   container.style.boxSizing = 'border-box';
-  
+
   // Create image column (80% width)
   const imageCol = document.createElement('div');
   imageCol.className = 'hero-image-col';
   imageCol.style.maxWidth = '100%';
   imageCol.style.boxSizing = 'border-box';
-  
+
   if (metaImage) {
     const img = document.createElement('img');
     img.src = metaImage;
@@ -142,114 +106,108 @@ export default function decorate(block) {
     img.style.maxWidth = '100%';
     img.style.width = '100%';
     img.style.boxSizing = 'border-box';
-    
+
     // Detect aspect ratio when image loads
-    img.onload = function() {
+    img.onload = function handleImageLoad () {
       const aspectRatio = this.naturalWidth / this.naturalHeight;
-      
+
       // Determine if image is closer to 16:9 (1.78) or 1:1 (1.0)
       if (Math.abs(aspectRatio - 1) < Math.abs(aspectRatio - 1.78)) {
         // Image is closer to square (1:1)
         imageCol.classList.add('aspect-1-1');
         contentCol.classList.add('with-square-image');
-        console.log('Detected square (1:1) aspect ratio:', aspectRatio);
       } else {
         // Image is closer to 16:9
         imageCol.classList.add('aspect-16-9');
-        console.log('Detected 16:9 aspect ratio:', aspectRatio);
       }
     };
-    
+
     imageCol.appendChild(img);
   } else {
     // Default to 16:9 if no image
     imageCol.classList.add('aspect-16-9');
   }
-  
+
   // Create content column
   const contentCol = document.createElement('div');
   contentCol.className = 'hero-content-col';
   contentCol.style.maxWidth = '100%';
   contentCol.style.boxSizing = 'border-box';
-  
+
   // Store reference for aspect ratio detection
   window.heroContentCol = contentCol;
-  
+
   // Add title
   if (title) {
     const titleEl = document.createElement('h1');
     titleEl.textContent = title;
     contentCol.appendChild(titleEl);
   }
-  
+
   // Add date in place of category
   if (publishDate) {
     const dateEl = document.createElement('div');
     dateEl.className = 'hero-category'; // Use category styling for the date
-    
+
     // Try to parse the date, with fallback for different formats
     let formattedDate;
     try {
       const date = new Date(publishDate);
-      if (isNaN(date.getTime())) {
+      if (Number.isNaN(date.getTime())) {
         // If date is invalid, just show the raw value
         formattedDate = publishDate;
       } else {
-        formattedDate = date.toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+        formattedDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         });
       }
     } catch (error) {
       formattedDate = publishDate;
     }
-    
+
     dateEl.textContent = formattedDate;
     contentCol.appendChild(dateEl);
   }
-  
 
-  
   // Add author and date
   const metaInfo = document.createElement('div');
   metaInfo.className = 'hero-meta-info';
-  
+
   if (author) {
     const authorEl = document.createElement('span');
     authorEl.className = 'hero-author';
     authorEl.textContent = `By ${author}`;
     metaInfo.appendChild(authorEl);
   }
-  
 
-  
   if (metaInfo.children.length > 0) {
     contentCol.appendChild(metaInfo);
   }
-  
+
   // Add tags
   if (tags) {
     const tagsContainer = document.createElement('div');
     tagsContainer.className = 'hero-tags';
     const tagList = document.createElement('ul');
-    
+
     tags.split(',').forEach(tag => {
       const tagItem = document.createElement('li');
       tagItem.textContent = tag.trim();
       tagList.appendChild(tagItem);
     });
-    
+
     tagsContainer.appendChild(tagList);
     contentCol.appendChild(tagsContainer);
   }
-  
+
   // Append columns to container
   container.appendChild(imageCol);
   container.appendChild(contentCol);
-  
+
   // Append container to block
   block.appendChild(container);
-  
+
   block.classList.add('initialized');
 }

@@ -3,7 +3,7 @@
  * Show multiple embeds arranged in columns
  */
 
-import { default as decorateEmbed } from '../embed/embed.js';
+import decorateEmbed from '../embed/embed.js';
 
 export default function decorate(block) {
   // Get all links from the block
@@ -14,16 +14,16 @@ export default function decorate(block) {
   // Create array of column indices and map them to columns
   Array.from({ length: columnCount }).forEach((_, columnIndex) => {
     const column = document.createElement('div');
-    
+
     // Get all links for this column (every 3rd link)
-    const columnLinks = links.filter((_, index) => index % columnCount === columnIndex);
-    
+    const columnLinks = links.filter((link, index) => index % columnCount === columnIndex);
+
     // Create embed blocks for each link in the column
-    columnLinks.forEach(link => {
+    columnLinks.forEach((link) => {
       const cell = document.createElement('div');
       const embedBlock = document.createElement('div');
       embedBlock.className = 'block embed';
-      
+
       // Create link element
       const newLink = document.createElement('a');
       newLink.href = link.href;

@@ -46,11 +46,24 @@
   margin: 0;
   border-radius: 1rem;
   box-shadow: var(--shadow-xl);
+  border: 1.5px solid #406e0c66;
+  animation: glowPulseHero 10s infinite ease-in-out;
   overflow: hidden;
 }
 @media (max-width: 600px) {
   .blog-post-hero-content {
     border-radius: 0;
+  }
+}
+@keyframes glowPulseHero {
+  0% {
+    border-color: rgba(64, 110, 12, 0.3);
+  }
+  50% {
+    border-color: rgba(64, 110, 12, 1);
+  }
+  100% {
+    border-color: rgba(64, 110, 12, 0.3);
   }
 }
 
@@ -152,7 +165,7 @@
 }
 
 .hero-tags{
-  border-top: 1px solid #333;
+  border-top: 1px solid #406e0c8c;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
   font-family: var(--heading-font-family);

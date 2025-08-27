@@ -1,9 +1,13 @@
-/* crafted under the full moons gaze by yo boy frank */
+/**
+ * Decorates the author-rows block
+ * @param {HTMLElement} block The block element
+ * crafted under the full moons gaze by yo boy frank
+ */
 
 export default function decorate(block) {
     // Ensure images are loaded lazily and have proper alt text
     const images = block.querySelectorAll('img');
-    images.forEach(img => {
+    images.forEach((img) => {
       if (!img.getAttribute('loading')) {
         img.setAttribute('loading', 'lazy');
       }
@@ -14,10 +18,10 @@ export default function decorate(block) {
         }
       }
     });
-  
+
     // Add proper ARIA labels to LinkedIn buttons
     const buttons = block.querySelectorAll('.button');
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       if (!button.getAttribute('aria-label')) {
         button.setAttribute('aria-label', button.textContent);
       }
