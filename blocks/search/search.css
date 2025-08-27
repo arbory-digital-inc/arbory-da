@@ -1,4 +1,8 @@
 /* search box */
+.search {
+  padding: 1rem 0 0 0;
+}
+
 .search .search-box {
   display: grid;
   grid-template-columns: 32px 1fr;
@@ -12,11 +16,16 @@
 
 .search .search-box input {
   width: 100%;
-  border: 1px solid #406E0C;
+  border: none;
   padding: 5px 15px;
   font: inherit;
   margin-bottom: 0;
   max-width: 99%;
+  background-color: transparent;
+
+  &:focus{
+    outline: none;
+  }
 }
 
 .icon.icon-search {
