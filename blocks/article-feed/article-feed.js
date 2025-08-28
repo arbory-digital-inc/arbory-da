@@ -74,6 +74,7 @@ function fetchAuthors() {
         const json = await resp.json();
         resolve(json.data);
       } else {
+        // console.log(`Could not fetch authors from: ${locale.base}${AUTHOR_PATH}`);
         resolve([]);
       }
     });
@@ -394,6 +395,31 @@ function filterByTags(tagString, data) {
   return filtered;
 }
 
+function filterByAuthors(authorString, data) {
+  if (!authorString) return data;
+
+  // Split authors by comma and trim whitespace
+  const authors = authorString.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
+  if (authors.length === 0) {
+    return data;
+  }
+
+  const filtered = data.filter((article) => {
+    // Skip articles without authors
+    if (!article.author) {
+      return false;
+    }
+
+    // Convert article authors to array and lowercase
+    const articleAuthors = article.author.split(' | ').map((author) => author.trim().toLowerCase());
+
+    // Check if any of the article authors match any of the filter authors
+    return authors.some((author) => articleAuthors.includes(author));
+  });
+
+  return filtered;
+}
+
 function sortFeed(data) {
   return data.sort((a, b) => {
     // First compare by date (descending)
@@ -474,6 +500,11 @@ export default async function init(el) {
     // Filter by tags if specified
     if (blockMeta.tags) {
       filtered = filterByTags(blockMeta.tags.text, filtered);
+    }
+
+    // Filter by authors if specified
+    if (blockMeta.authors) {
+      filtered = filterByAuthors(blockMeta.authors.text, filtered);
     }
 
     // Remove any duplicate articles that might have been introduced during filtering
