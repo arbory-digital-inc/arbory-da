@@ -490,10 +490,10 @@ export default async function init(el) {
 
     const { data } = await resp.json();
 
-    const sorted = sortFeed(data);
+    // const sorted = sortFeed(data);
 
     // Apply filters based on block metadata
-    let filtered = sorted;
+    let filtered = data;
 
     // Filter by category if specified
     if (blockMeta.category) {
