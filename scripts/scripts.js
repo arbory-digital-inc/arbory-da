@@ -18,8 +18,6 @@ import {
   getLanguage,
   getLanguageNav,
   getLanguageFooter,
-  isLanguageSupported,
-  getSupportedLanguages,
 } from './lang.js';
 
 /**

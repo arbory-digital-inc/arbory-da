@@ -1,6 +1,6 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
-import { getLanguage, getLangMenuPageUrl, isLanguageSupported } from '../../scripts/lang.js';
+import { getLanguage, isLanguageSupported } from '../../scripts/lang.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -142,7 +142,7 @@ function createLanguageSelector() {
   const currentLangLink = document.createElement('a');
   // Use current page URL for the current language
   currentLangLink.href = window.location.href;
-  currentLangLink.textContent = supportedLanguages.find(l => l.code === currentLang)?.label || 'English';
+  currentLangLink.textContent = supportedLanguages.find((l) => l.code === currentLang)?.label || 'English';
   currentLangLink.classList.add('active');
   // Prevent navigation when clicking on current language
   currentLangLink.addEventListener('click', (e) => {
@@ -158,7 +158,7 @@ function createLanguageSelector() {
   // Add other supported languages
   const loadLanguageOptions = async () => {
     const langPromises = supportedLanguages
-      .filter(lang => isLanguageSupported(lang.code) && lang.code !== currentLang)
+      .filter((lang) => isLanguageSupported(lang.code) && lang.code !== currentLang)
       .map(async (lang) => {
         try {
           // Create a simple language switch link without checking page existence

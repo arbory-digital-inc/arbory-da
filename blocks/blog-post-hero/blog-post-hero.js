@@ -55,10 +55,9 @@ export default function decorate(block) {
   // Get the background image from the first picture element in the section
   const section = block.closest('.section');
   const backgroundPicture = section.querySelector('.default-content-wrapper picture');
-  
+
   // Get metadata
   const title = getMetadata('og:title') || document.querySelector('h1')?.textContent || '';
-  const category = getMetadata('category') || '';
   const tags = getMetadata('article:tag') || getMetadata('tags') || '';
   const author = getMetadata('author') || '';
   const publishDate = getMetadata('date') || getMetadata('article:date');
@@ -92,6 +91,12 @@ export default function decorate(block) {
   container.style.width = '100%';
   container.style.boxSizing = 'border-box';
 
+  // Create content column first (needed for image onload handler)
+  const contentCol = document.createElement('div');
+  contentCol.className = 'hero-content-col';
+  contentCol.style.maxWidth = '100%';
+  contentCol.style.boxSizing = 'border-box';
+
   // Create image column (80% width)
   const imageCol = document.createElement('div');
   imageCol.className = 'hero-image-col';
@@ -108,7 +113,7 @@ export default function decorate(block) {
     img.style.boxSizing = 'border-box';
 
     // Detect aspect ratio when image loads
-    img.onload = function handleImageLoad () {
+    img.onload = function handleImageLoad() {
       const aspectRatio = this.naturalWidth / this.naturalHeight;
 
       // Determine if image is closer to 16:9 (1.78) or 1:1 (1.0)
@@ -127,12 +132,6 @@ export default function decorate(block) {
     // Default to 16:9 if no image
     imageCol.classList.add('aspect-16-9');
   }
-
-  // Create content column
-  const contentCol = document.createElement('div');
-  contentCol.className = 'hero-content-col';
-  contentCol.style.maxWidth = '100%';
-  contentCol.style.boxSizing = 'border-box';
 
   // Store reference for aspect ratio detection
   window.heroContentCol = contentCol;
@@ -192,7 +191,7 @@ export default function decorate(block) {
     tagsContainer.className = 'hero-tags';
     const tagList = document.createElement('ul');
 
-    tags.split(',').forEach(tag => {
+    tags.split(',').forEach((tag) => {
       const tagItem = document.createElement('li');
       tagItem.textContent = tag.trim();
       tagList.appendChild(tagItem);

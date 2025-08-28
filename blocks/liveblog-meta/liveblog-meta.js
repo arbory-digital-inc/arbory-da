@@ -23,8 +23,9 @@ export default function decorate(block) {
   // Format the date
   const formatDate = (dateStr) => {
     try {
-      const [month, day, year] = dateStr.split('-').map(num => parseInt(num.trim(), 10));
-      if (!month || !day || !year || Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) {
+      const [month, day, year] = dateStr.split('-').map((num) => parseInt(num.trim(), 10));
+      if (!month || !day || !year
+        || Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) {
         // console.warn('Invalid date format:', dateStr);
         return dateStr;
       }

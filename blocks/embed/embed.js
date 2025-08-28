@@ -81,21 +81,21 @@ const loadEmbed = (block, link, autoplay) => {
   }
 
   const EMBEDS_CONFIG = [{
-      match: ['youtube', 'youtu.be'],
-      embed: embedYoutube,
-    },
-    {
-      match: ['vimeo'],
-      embed: embedVimeo,
-    },
-    {
-      match: ['twitter'],
-      embed: embedTwitter,
-    },
-    {
-      match: ['vidyard'],
-      embed: embedVidyard,
-    },
+    match: ['youtube', 'youtu.be'],
+    embed: embedYoutube,
+  },
+  {
+    match: ['vimeo'],
+    embed: embedVimeo,
+  },
+  {
+    match: ['twitter'],
+    embed: embedTwitter,
+  },
+  {
+    match: ['vidyard'],
+    embed: embedVidyard,
+  },
   ];
 
   const config = EMBEDS_CONFIG.find((e) => e.match.some((match) => link.includes(match)));

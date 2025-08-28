@@ -49,6 +49,5 @@ export default function decorate(block) {
     const bottomRow = rows[2];
     // Add specific class for the social icons row
     bottomRow.classList.add('footer-bottom');
-
   }
 }

@@ -30,7 +30,7 @@ export default function decorate(block) {
           });
 
           // Update URL with the anchor without page reload
-          history.pushState(null, '', `#${targetId}`);
+          window.history.pushState(null, '', `#${targetId}`);
         }
       });
     }

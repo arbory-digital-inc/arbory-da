@@ -1,7 +1,7 @@
 /**
  * Decorates the article-feed block
  * @param {HTMLElement} block The block element
- * ur boy frank 
+ * ur boy frank
  */
 
 import { getConfig } from '../../scripts/nx.js';
@@ -13,7 +13,6 @@ import { getLanguage, getLanguageIndex } from '../../scripts/lang.js';
 const USE_TEST_FILE = false;
 
 // Get language code from the localization system
-const langcode = getLanguage();
 
 // Define paths for data using the proper localization functions
 const QUERY_PATH = getLanguageIndex();
@@ -26,7 +25,7 @@ const CATEGORIES = {
   'AEM News': '/blog',
   'Arbory Digital News': '/blog',
   'Customer Stories': '/customer-stories',
-  'Podcasts': '/podcast'
+  'Podcasts': '/podcast',
 };
 
 // Map category input to metadata values
@@ -75,12 +74,8 @@ function fetchAuthors() {
         const json = await resp.json();
         resolve(json.data);
       } else {
-        // console.log(`Could not fetch authors from: ${locale.base}${AUTHOR_PATH}`);
         resolve([]);
       }
-    }).catch((err) => {
-      // console.error('Error fetching authors:', err);
-      resolve([]);
     });
   });
 }
@@ -119,7 +114,7 @@ function createAuthorEl(item) {
 function decorateFeed(data, opts) {
   const ul = document.createElement('ul');
   ul.className = 'article-feed-list';
-  
+
   if (!data || data.length === 0) {
     const emptyMessage = document.createElement('div');
     emptyMessage.className = 'article-feed-empty';
@@ -326,9 +321,9 @@ function filterByCategories(categoryString, data) {
   const categoryStringLower = categoryString.toLowerCase();
 
   // Split categories by comma and trim whitespace
-  const categories = categoryStringLower.split(',').map(cat => cat.trim());
+  const categories = categoryStringLower.split(',').map((cat) => cat.trim());
 
-  const filtered = data.filter(article => {
+  const filtered = data.filter((article) => {
     // Only use the article's explicit category field for matching
     if (!article.category) return false;
 
@@ -375,25 +370,25 @@ function filterByTags(tagString, data) {
   if (!tagString) return data;
 
   // Split tags by comma and trim whitespace
-  const tags = tagString.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== '');
+  const tags = tagString.split(',').map((tag) => tag.trim().toLowerCase()).filter((tag) => tag !== '');
   if (tags.length === 0) {
     return data;
   }
 
-  const filtered = data.filter(article => {
+  const filtered = data.filter((article) => {
     // Skip articles without tags
     if (!article.tags) {
       return false;
     }
 
     // Convert article tags to array
-    const articleTags = article.tags.map(v => v.toLowerCase());
+    const articleTags = article.tags.map((v) => v.toLowerCase());
     // console.log(articleTags);
     // console.log(article.title);
     // console.log(articleTags.includes("eds"))
 
     // Check if any of the article tags match any of the filter tags
-    return tags.some(tag => articleTags.includes(tag));
+    return tags.some((tag) => articleTags.includes(tag));
   });
 
   return filtered;
@@ -484,13 +479,13 @@ export default async function init(el) {
     // Remove any duplicate articles that might have been introduced during filtering
     const uniquePaths = new Set();
     const currentPath = window.location.pathname;
-    filtered = filtered.filter(item => {
+    filtered = filtered.filter((item) => {
       if (uniquePaths.has(item.path)) {
         return false;
       }
       if (item.path === currentPath) {
         return false;
-      };
+      }
       uniquePaths.add(item.path);
       return true;
     });
@@ -498,16 +493,16 @@ export default async function init(el) {
     filtered = sortFeed(filtered);
 
     // Limit number of cards if specified
-    let numCards = blockMeta['number of cards'] ? 
-      parseInt(blockMeta['number of cards'].text, 10) : 
-      filtered.length;
+    let numCards = blockMeta['number of cards']
+      ? parseInt(blockMeta['number of cards'].text, 10)
+      : filtered.length;
 
     // Make sure we don't request more cards than we have available
     if (numCards > filtered.length) {
       numCards = filtered.length;
     }
 
-    if (!isNaN(numCards) && numCards > 0) {
+    if (!Number.isNaN(numCards) && numCards > 0) {
       filtered = filtered.slice(0, numCards);
     }
 
@@ -556,7 +551,7 @@ export default async function init(el) {
     const articleFeedState = {
       allArticles: filtered,
       currentShown: initialArticles,
-      cardsPerRow: cardsPerRow,
+      cardsPerRow,
     };
 
     // Store the state reference in a WeakMap for garbage collection friendliness
@@ -580,6 +575,7 @@ export default async function init(el) {
       article.style.opacity = '0';
 
       // Force a reflow before adding the animation class
+      // eslint-disable-next-line no-unused-expressions
       article.offsetWidth;
 
       // Add the fade-in class with staggered delay
@@ -615,7 +611,7 @@ export default async function init(el) {
 
           // Calculate how many more articles to show (one more row)
           const nextBatch = state.allArticles.slice(
-            state.currentShown, 
+            state.currentShown,
             state.currentShown + state.cardsPerRow,
           );
 
@@ -634,6 +630,7 @@ export default async function init(el) {
                 existingList.appendChild(child);
 
                 // Force a reflow before adding the animation class
+                // eslint-disable-next-line no-unused-expressions
                 child.offsetWidth;
 
                 // Add the fade-in class after a small delay to ensure proper sequencing
@@ -669,6 +666,6 @@ export default async function init(el) {
   } catch (error) {
     // Keep error logging for critical errors
     // console.error('Error in article-feed block:', error);
-    el.innerHTML = `<div class="article-feed-error">Unable to load articles</div>`;
+    el.innerHTML = '<div class="article-feed-error">Unable to load articles</div>';
   }
 }

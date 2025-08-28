@@ -1,2 +1,4 @@
 helix-importer-ui
 scripts/highlight.js
+scripts/third-party.js
+.eslintrc.js

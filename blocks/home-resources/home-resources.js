@@ -6,7 +6,7 @@
 export default function decorate(block) {
   // Check if the block exists and has child elements
   if (!block || !block.children || !block.children.length) {
-    //console.warn('No content found in frank-resources block');
+    // console.warn('No content found in frank-resources block');
     return;
   }
 
