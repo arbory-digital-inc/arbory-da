@@ -25,13 +25,13 @@ const CATEGORIES = {
   'AEM News': '/blog',
   'Arbory Digital News': '/blog',
   'Customer Stories': '/customer-stories',
-  'Podcasts': '/podcast',
+  Podcasts: '/podcast',
 };
 
 // Map category input to metadata values
 const CATEGORY_METADATA_MAP = {
-  'podcast': 'Podcast',
-  'podcasts': 'Podcast',
+  podcast: 'Podcast',
+  podcasts: 'Podcast',
   'aem technical help': 'Technical',
   'aem news': 'News',
   'arbory digital news': 'Arbory News',
@@ -315,6 +315,34 @@ function decorateFeed(data, opts) {
   return ul;
 }
 
+function filterByAuthors(authorString, data) {
+  if (!authorString) return data;
+
+  // Split authors by comma and trim whitespace
+  const authors = authorString.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
+  if (authors.length === 0) {
+    return data;
+  }
+
+  const filtered = data.filter((article) => {
+    // Skip articles without authors
+    if (!article.author) {
+      return false;
+    }
+
+    // Convert article authors to array
+    const articleAuthors = article.author.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
+    // console.log(articleTags);
+    // console.log(article.title);
+    // console.log(articleTags.includes("eds"))
+
+    // Check if any of the article authors match any of the filter authors
+    return authors.some((author) => articleAuthors.includes(author));
+  });
+
+  return filtered;
+}
+
 function filterByCategories(categoryString, data) {
   if (!categoryString) return data;
 
@@ -390,31 +418,6 @@ function filterByTags(tagString, data) {
 
     // Check if any of the article tags match any of the filter tags
     return tags.some((tag) => articleTags.includes(tag));
-  });
-
-  return filtered;
-}
-
-function filterByAuthors(authorString, data) {
-  if (!authorString) return data;
-
-  // Split authors by comma and trim whitespace
-  const authors = authorString.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
-  if (authors.length === 0) {
-    return data;
-  }
-
-  const filtered = data.filter((article) => {
-    // Skip articles without authors
-    if (!article.author) {
-      return false;
-    }
-
-    // Convert article authors to array and lowercase
-    const articleAuthors = article.author.split(' | ').map((author) => author.trim().toLowerCase());
-
-    // Check if any of the article authors match any of the filter authors
-    return authors.some((author) => articleAuthors.includes(author));
   });
 
   return filtered;
@@ -502,7 +505,6 @@ export default async function init(el) {
       filtered = filterByTags(blockMeta.tags.text, filtered);
     }
 
-    // Filter by authors if specified
     if (blockMeta.authors) {
       filtered = filterByAuthors(blockMeta.authors.text, filtered);
     }
