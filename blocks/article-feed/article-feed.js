@@ -1,3 +1,9 @@
+/**
+ * Decorates the article-feed block
+ * @param {HTMLElement} block The block element
+ * ur boy frank
+ */
+
 import { getConfig } from '../../scripts/nx.js';
 import createPicture from '../../scripts/utils/picture.js';
 import { getLanguage, getLanguageIndex } from '../../scripts/lang.js';
@@ -7,7 +13,6 @@ import { getLanguage, getLanguageIndex } from '../../scripts/lang.js';
 const USE_TEST_FILE = false;
 
 // Get language code from the localization system
-const langcode = getLanguage();
 
 // Define paths for data using the proper localization functions
 const QUERY_PATH = getLanguageIndex();
@@ -20,42 +25,42 @@ const CATEGORIES = {
   'AEM News': '/blog',
   'Arbory Digital News': '/blog',
   'Customer Stories': '/customer-stories',
-  'Podcasts': '/podcast'
+  Podcasts: '/podcast',
 };
 
 // Map category input to metadata values
 const CATEGORY_METADATA_MAP = {
-  'podcast': 'Podcast',
-  'podcasts': 'Podcast',
+  podcast: 'Podcast',
+  podcasts: 'Podcast',
   'aem technical help': 'Technical',
   'aem news': 'News',
   'arbory digital news': 'Arbory News',
-  'customer stories': 'Customer Story'
+  'customer stories': 'Customer Story',
 };
 
 let fetchingAuthors;
 
 function formatDate(dateString) {
   if (!dateString) return null;
-  
+
   // Parse the date string and force Eastern Standard Time interpretation
   // Add 'T12:00:00-05:00' to ensure it's interpreted as noon EST
   // This prevents timezone-related date shifting
-  const estDateString = dateString + 'T12:00:00-05:00';
+  const estDateString = `${dateString}T12:00:00-05:00`;
   const date = new Date(estDateString);
-  
+
   // Check if the date is valid
-  if (isNaN(date.getTime())) {
+  if (Number.isNaN(date.getTime())) {
     // Fallback to original parsing if our EST approach fails
     const fallbackDate = new Date(dateString);
-    if (isNaN(fallbackDate.getTime())) {
+    if (Number.isNaN(fallbackDate.getTime())) {
       return null;
     }
     // Format the fallback date
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
     return fallbackDate.toLocaleDateString('en-US', options);
   }
-  
+
   // Format the date as "Apr 4, 2023"
   const options = { month: 'short', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
@@ -69,12 +74,9 @@ function fetchAuthors() {
         const json = await resp.json();
         resolve(json.data);
       } else {
-        console.log(`Could not fetch authors from: ${locale.base}${AUTHOR_PATH}`);
+        // console.log(`Could not fetch authors from: ${locale.base}${AUTHOR_PATH}`);
         resolve([]);
       }
-    }).catch(err => {
-      console.error('Error fetching authors:', err);
-      resolve([]);
     });
   });
 }
@@ -113,7 +115,7 @@ function createAuthorEl(item) {
 function decorateFeed(data, opts) {
   const ul = document.createElement('ul');
   ul.className = 'article-feed-list';
-  
+
   if (!data || data.length === 0) {
     const emptyMessage = document.createElement('div');
     emptyMessage.className = 'article-feed-empty';
@@ -121,16 +123,16 @@ function decorateFeed(data, opts) {
     ul.appendChild(emptyMessage);
     return ul;
   }
-  
+
   // Check if we're using a card variant layout (variants are applied as additional classes)
   // We need to check the block parameter, not el which isn't defined in this scope
   const block = opts.block || {};
   const isCardVariant = block.classList && (
-    block.classList.contains('card-2') || 
-    block.classList.contains('card-3') || 
-    block.classList.contains('card-4')
+    block.classList.contains('card-2')
+    || block.classList.contains('card-3')
+    || block.classList.contains('card-4')
   );
-  
+
   data.forEach((item) => {
     const li = document.createElement('li');
     const article = document.createElement('article');
@@ -147,65 +149,65 @@ function decorateFeed(data, opts) {
     // Create a container for the content
     const contentContainer = document.createElement('div');
     contentContainer.className = 'article-feed-content-container';
-    
+
     if (isCardVariant) {
       // For card variants, use a single column layout
       const contentColumn = document.createElement('div');
       contentColumn.className = 'article-feed-content-column';
-      
+
       // Create title element and its link
       const title = document.createElement('h3');
       title.className = 'article-feed-article-title';
       title.innerText = item.title || 'Untitled';
       const titleLink = createArticleLink(item, 'article-feed-article-title-link', title);
-      
+
       // Add title to the content column
       contentColumn.append(titleLink);
-      
+
       // Create separate containers for author and date
       const metadataContainer = document.createElement('div');
       metadataContainer.className = 'article-feed-metadata-container';
-      
+
       // Create author container and add to metadata container
       if (item.author) {
         const authorContainer = document.createElement('div');
         authorContainer.className = 'article-feed-author-container';
-        
+
         const author = createAuthorEl(item);
         author.className = 'article-feed-article-author-wrapper';
         authorContainer.append(author);
-        
+
         metadataContainer.append(authorContainer);
       }
-      
+
       // Create date container and add to metadata container
       if (item.date) {
         const dateContainer = document.createElement('div');
         dateContainer.className = 'article-feed-date-container';
-        
+
         const date = document.createElement('span');
         date.className = 'article-feed-article-date';
         date.innerText = formatDate(item.date);
         dateContainer.append(date);
-        
+
         metadataContainer.append(dateContainer);
       }
-      
+
       // Add the metadata container to the content column
       contentColumn.append(metadataContainer);
-      
+
       // Create tags container if tags exist and add below author-date
       if (item.tags) {
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'article-feed-tags';
-        
-        const tags = item.tags;
+
+        const { tags } = item;
         // Sort tags by length and limit to 5
         const limitedTags = tags
           .sort((a, b) => a.length - b.length || a.localeCompare(b))
           .slice(0, 5);
-          
-        limitedTags.forEach(tag => {
+
+        limitedTags.forEach((tag) => {
           if (tag) {
             const tagEl = document.createElement('span');
             tagEl.className = 'article-feed-tag';
@@ -213,13 +215,13 @@ function decorateFeed(data, opts) {
             tagsContainer.appendChild(tagEl);
           }
         });
-        
+
         // Add tags below author-date if they exist
         if (tagsContainer.children.length > 0) {
           contentColumn.append(tagsContainer);
         }
       }
-      
+
       // Add the content column to the container
       contentContainer.append(contentColumn);
     } else {
@@ -227,64 +229,64 @@ function decorateFeed(data, opts) {
       // Create the left column (80% width)
       const leftColumn = document.createElement('div');
       leftColumn.className = 'article-feed-left-column';
-      
+
       // Create the right column (20% width)
       const rightColumn = document.createElement('div');
       rightColumn.className = 'article-feed-right-column';
-      
+
       // Create title element and its link - this will be added to the left column
       const title = document.createElement('h3');
       title.className = 'article-feed-article-title';
       title.innerText = item.title || 'Untitled';
       const titleLink = createArticleLink(item, 'article-feed-article-title-link', title);
-      
+
       // Add title to the left column
       leftColumn.append(titleLink);
-      
+
       // Create separate containers for author and date
       const metadataContainer = document.createElement('div');
       metadataContainer.className = 'article-feed-metadata-container';
-      
+
       // Create author container and add to metadata container
       if (item.author) {
         const authorContainer = document.createElement('div');
         authorContainer.className = 'article-feed-author-container';
-        
+
         const author = createAuthorEl(item);
         author.className = 'article-feed-article-author-wrapper';
         authorContainer.append(author);
-        
+
         metadataContainer.append(authorContainer);
       }
-      
+
       // Create date container and add to metadata container
       if (item.date) {
         const dateContainer = document.createElement('div');
         dateContainer.className = 'article-feed-date-container';
-        
+
         const date = document.createElement('span');
         date.className = 'article-feed-article-date';
         date.innerText = formatDate(item.date);
         dateContainer.append(date);
-        
+
         metadataContainer.append(dateContainer);
       }
-      
+
       // Add the metadata container to the left column
       leftColumn.append(metadataContainer);
-      
+
       // Create tags container if tags exist and add to right column
       if (item.tags) {
         const tagsContainer = document.createElement('div');
         tagsContainer.className = 'article-feed-tags';
-        
-        const tags = item.tags;
+
+        const { tags } = item;
         // Sort tags by length and limit to 5
         const limitedTags = tags
           .sort((a, b) => a.length - b.length || a.localeCompare(b))
           .slice(0, 5);
-          
-        limitedTags.forEach(tag => {
+
+        limitedTags.forEach((tag) => {
           if (tag) {
             const tagEl = document.createElement('span');
             tagEl.className = 'article-feed-tag';
@@ -292,20 +294,20 @@ function decorateFeed(data, opts) {
             tagsContainer.appendChild(tagEl);
           }
         });
-        
+
         // Add tags to the right column if they exist
         if (tagsContainer.children.length > 0) {
           rightColumn.append(tagsContainer);
         }
       }
-      
+
       // Add both columns to the content container
       contentContainer.append(leftColumn, rightColumn);
     }
-    
+
     // Add the content container after the image
     article.append(contentContainer);
-    
+
     // Add the completed article to the list item
     li.append(article);
     ul.append(li);
@@ -313,58 +315,83 @@ function decorateFeed(data, opts) {
   return ul;
 }
 
+function filterByAuthors(authorString, data) {
+  if (!authorString) return data;
 
+  // Split authors by comma and trim whitespace
+  const authors = authorString.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
+  if (authors.length === 0) {
+    return data;
+  }
+
+  const filtered = data.filter((article) => {
+    // Skip articles without authors
+    if (!article.author) {
+      return false;
+    }
+
+    // Convert article authors to array
+    const articleAuthors = article.author.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
+    // console.log(articleTags);
+    // console.log(article.title);
+    // console.log(articleTags.includes("eds"))
+
+    // Check if any of the article authors match any of the filter authors
+    return authors.some((author) => articleAuthors.includes(author));
+  });
+
+  return filtered;
+}
 
 function filterByCategories(categoryString, data) {
   if (!categoryString) return data;
-  
+
   // Convert to lowercase for case-insensitive comparison
   const categoryStringLower = categoryString.toLowerCase();
-  
+
   // Split categories by comma and trim whitespace
-  const categories = categoryStringLower.split(',').map(cat => cat.trim());
-  
-  const filtered = data.filter(article => {
+  const categories = categoryStringLower.split(',').map((cat) => cat.trim());
+
+  const filtered = data.filter((article) => {
     // Only use the article's explicit category field for matching
     if (!article.category) return false;
-    
+
     const articleCategory = article.category.toLowerCase();
-    
+
     // Check if any of our selected categories match this article's category
-    for (const category of categories) {
+    return categories.some((category) => {
       // Direct match with the category
       if (articleCategory === category) {
         return true;
       }
-      
+
       // Check using the category mapping
       const mappedCategory = CATEGORY_METADATA_MAP[category];
       if (mappedCategory && articleCategory === mappedCategory.toLowerCase()) {
         return true;
       }
-      
+
       // Check if the category is a substring of the article category (for broader categories)
       if (category === 'aem technical help' && articleCategory === 'aem technical help') {
         return true;
       }
-      
+
       if (category === 'aem news' && articleCategory === 'aem news') {
         return true;
       }
-      
+
       if (category === 'arbory digital news' && articleCategory === 'arbory digital news') {
         return true;
       }
-      
+
       if (category === 'podcasts' && articleCategory === 'podcasts') {
         return true;
       }
-    }
-    
-    // If we get here, no category matched
-    return false;
+
+      return false;
+    });
   });
-  
+
   return filtered;
 }
 
@@ -399,30 +426,29 @@ function filterByAuthors(authorString, data) {
 
 function filterByTags(tagString, data) {
   if (!tagString) return data;
-  
-  
+
   // Split tags by comma and trim whitespace
-  const tags = tagString.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== '');
+  const tags = tagString.split(',').map((tag) => tag.trim().toLowerCase()).filter((tag) => tag !== '');
   if (tags.length === 0) {
     return data;
   }
-  
-  const filtered = data.filter(article => {
+
+  const filtered = data.filter((article) => {
     // Skip articles without tags
     if (!article.tags) {
       return false;
     }
-    
+
     // Convert article tags to array
-    const articleTags = article.tags.map(v => v.toLowerCase());;
+    const articleTags = article.tags.map((v) => v.toLowerCase());
     // console.log(articleTags);
     // console.log(article.title);
     // console.log(articleTags.includes("eds"))
-    
+
     // Check if any of the article tags match any of the filter tags
-    return tags.some(tag => articleTags.includes(tag));
+    return tags.some((tag) => articleTags.includes(tag));
   });
-  
+
   return filtered;
 }
 
@@ -433,18 +459,18 @@ function sortFeed(data) {
       // Convert string dates to Date objects for comparison
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      
+
       // Check if dates are valid before comparing
-      if (!isNaN(dateA) && !isNaN(dateB)) {
+      if (!Number.isNaN(dateA) && !Number.isNaN(dateB)) {
         return dateB - dateA; // Descending order (newer first)
       }
     }
-    
+
     // If dates are missing or equal, compare by lastModified if available
     if (a.lastModified && b.lastModified) {
       return b.lastModified - a.lastModified;
     }
-    
+
     // If no valid comparison can be made, maintain original order
     return 0;
   });
@@ -465,9 +491,9 @@ const getBlockMeta = (el) => [...el.childNodes].reduce((rdx, row) => {
 export default async function init(el) {
   const { locale } = getConfig();
   const blockMeta = getBlockMeta(el);
-  
+
   // Process block metadata
-  
+
   // Apply card background color if specified
   if (blockMeta['card-background-color'] && blockMeta['card-background-color'].text) {
     const bgColor = blockMeta['card-background-color'].text.trim();
@@ -476,35 +502,33 @@ export default async function init(el) {
       el.style.setProperty('--card-background-color', bgColor);
     }
   }
-  
+
   try {
     // Determine which JSON file to use based on configuration
     const jsonPath = USE_TEST_FILE ? TEST_PATH : QUERY_PATH;
-    
+
     // Fetch the appropriate JSON file
     const resp = await fetch(`${locale.base}${jsonPath}`);
-    
+
     if (!resp.ok) {
       throw new Error(`Could not fetch ${USE_TEST_FILE ? 'test' : 'live'} index: ${jsonPath}`);
     }
-    
-    console.log(`Successfully loaded JSON from: ${locale.base}${jsonPath}`);
 
     // Kick off the author request
     fetchAuthors();
 
     const { data } = await resp.json();
-    
+
     // const sorted = sortFeed(data);
-    
+
     // Apply filters based on block metadata
     let filtered = data;
-    
+
     // Filter by category if specified
     if (blockMeta.category) {
       filtered = filterByCategories(blockMeta.category.text, filtered);
     }
-    
+
     // Filter by tags if specified
     if (blockMeta.tags) {
       filtered = filterByTags(blockMeta.tags.text, filtered);
@@ -513,34 +537,34 @@ export default async function init(el) {
     if (blockMeta.authors) {
       filtered = filterByAuthors(blockMeta.authors.text, filtered);
     }
-    
+
     // Remove any duplicate articles that might have been introduced during filtering
     const uniquePaths = new Set();
     const currentPath = window.location.pathname;
-    filtered = filtered.filter(item => {
+    filtered = filtered.filter((item) => {
       if (uniquePaths.has(item.path)) {
         return false;
       }
       if (item.path === currentPath) {
         return false;
-      };
+      }
       uniquePaths.add(item.path);
       return true;
     });
 
     filtered = sortFeed(filtered);
-    
+
     // Limit number of cards if specified
-    let numCards = blockMeta['number of cards'] ? 
-      parseInt(blockMeta['number of cards'].text, 10) : 
-      filtered.length;
-    
+    let numCards = blockMeta['number of cards']
+      ? parseInt(blockMeta['number of cards'].text, 10)
+      : filtered.length;
+
     // Make sure we don't request more cards than we have available
     if (numCards > filtered.length) {
       numCards = filtered.length;
     }
-    
-    if (!isNaN(numCards) && numCards > 0) {
+
+    if (!Number.isNaN(numCards) && numCards > 0) {
       filtered = filtered.slice(0, numCards);
     }
 
@@ -566,106 +590,124 @@ export default async function init(el) {
 
     // Default to 1 row initially
     let initialRows = 1;
-    
+
     // For 4-card variant, always use 2 rows initially
     if (el.classList.contains('card-4')) {
       initialRows = 2;
-    }
-    // For other variants, check metadata
-    else if (blockMeta && blockMeta['number of rows'] && blockMeta['number of rows'].text) {
+    } else if (blockMeta && blockMeta['number of rows'] && blockMeta['number of rows'].text) {
+      // For other variants, check metadata
       const rowValue = parseInt(blockMeta['number of rows'].text, 10);
-      if (!isNaN(rowValue) && rowValue > 0) {
+      if (!Number.isNaN(rowValue) && rowValue > 0) {
         initialRows = rowValue;
       }
     }
-    
+
     // Calculate initial articles based on rows
     let initialArticles = initialRows * cardsPerRow;
-    
+
     // Make sure we don't try to show more articles than available
     initialArticles = Math.min(initialArticles, filtered.length);
-    
+
     // Store article data in a closure instead of in the DOM
     // This keeps the HTML clean and reduces page size
     const articleFeedState = {
       allArticles: filtered,
       currentShown: initialArticles,
-      cardsPerRow: cardsPerRow
+      cardsPerRow,
     };
-    
+
     // Store the state reference in a WeakMap for garbage collection friendliness
     if (!window.articleFeedStates) {
       window.articleFeedStates = new WeakMap();
     }
     window.articleFeedStates.set(el, articleFeedState);
-    
+
     // Create a subset of articles for initial display
     const initialFiltered = filtered.slice(0, initialArticles);
-    
+
     // Create and append the feed
     const opts = { block: el };
     const list = decorateFeed(initialFiltered, opts);
     el.append(list);
-    
 
-    
+    // Add fade-in animation to initial articles
+    const initialArticleElements = list.querySelectorAll('.article-feed-article');
+    initialArticleElements.forEach((article, index) => {
+      // Set initial opacity to 0 to prevent flash
+      article.style.opacity = '0';
+
+      // Force a reflow before adding the animation class
+      // eslint-disable-next-line no-unused-expressions
+      article.offsetWidth;
+
+      // Add the fade-in class with staggered delay
+      setTimeout(() => {
+        article.classList.add('fade-in');
+
+        // Stagger the animations for a cascade effect
+        const delay = 0.1 * index; // 0.1s delay between each card
+        article.style.animationDelay = `${delay}s`;
+      }, 10);
+    });
+
     // Show the load more button if there are more articles available than what's initially shown
     if (filtered.length > initialArticles) {
       const loadMoreContainer = document.createElement('div');
       loadMoreContainer.className = 'article-feed-load-more-container';
-      
+
       const loadMoreButton = document.createElement('button');
       loadMoreButton.className = 'article-feed-load-more-button';
-      
+
       // Support for localization
       const loadMoreText = window.placeholders?.default?.loadMore || 'Load More';
       loadMoreButton.textContent = loadMoreText;
-      
+
       loadMoreButton.addEventListener('click', () => {
         try {
           // Get article feed state from WeakMap
           const state = window.articleFeedStates.get(el);
-          
+
           if (!state) {
             return;
           }
-          
+
           // Calculate how many more articles to show (one more row)
           const nextBatch = state.allArticles.slice(
-            state.currentShown, 
-            state.currentShown + state.cardsPerRow
+            state.currentShown,
+            state.currentShown + state.cardsPerRow,
           );
-          
+
           if (nextBatch.length > 0) {
             // Create a new list with just the next batch of articles
             const newList = decorateFeed(nextBatch, { block: el });
-            
+
             // Get the existing list to append to
             const existingList = el.querySelector('.article-feed-list');
-            
+
             if (existingList && newList) {
               // Append each new article to the existing list with fade-in animation
               Array.from(newList.children).forEach((child, index) => {
                 // Set initial opacity to 0 to prevent flash
                 child.style.opacity = '0';
                 existingList.appendChild(child);
-                
+
                 // Force a reflow before adding the animation class
-                void child.offsetWidth;
-                
+                // eslint-disable-next-line no-unused-expressions
+                child.offsetWidth;
+
                 // Add the fade-in class after a small delay to ensure proper sequencing
                 setTimeout(() => {
                   child.classList.add('fade-in');
-                  
+
                   // Stagger the animations for a cascade effect
                   const delay = 0.1 * index; // 0.1s delay between each card
                   child.style.animationDelay = `${delay}s`;
                 }, 10);
               });
-              
+
               // Update current shown count in our state object
               state.currentShown += nextBatch.length;
-              
+
               // Hide load more button if we've shown all articles
               if (state.currentShown >= state.allArticles.length) {
                 loadMoreContainer.style.display = 'none';
@@ -676,19 +718,16 @@ export default async function init(el) {
             loadMoreContainer.style.display = 'none';
           }
         } catch (error) {
-          console.error('Error in load more button click handler:', error);
+          // console.error('Error in load more button click handler:', error);
         }
       });
-      
+
       loadMoreContainer.appendChild(loadMoreButton);
       el.appendChild(loadMoreContainer);
     }
-    
-
-    
   } catch (error) {
     // Keep error logging for critical errors
-    console.error('Error in article-feed block:', error);
-    el.innerHTML = `<div class="article-feed-error">Unable to load articles</div>`;
+    // console.error('Error in article-feed block:', error);
+    el.innerHTML = '<div class="article-feed-error">Unable to load articles</div>';
   }
 }

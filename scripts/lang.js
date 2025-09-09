@@ -1,6 +1,18 @@
-import { getDefaultMetaImage } from './scripts.js';
+// Local implementation to avoid dependency cycle
+function getDefaultMetaImage() {
+  return `${window.location.origin}/icons/arbory-share.jpg`;
+}
 
 const knownObjectProperties = ['options', 'filters'];
+
+/**
+ * Get the list of supported languages
+ * @returns {string[]} Array of supported language codes
+ */
+function getSupportedLanguages() {
+  // Include all languages configured in helix-query.yaml
+  return ['en', 'de', 'fr', 'es', 'it', 'ko', 'ja', 'zh-tw', 'zh-cn'];
+}
 
 /**
  * Returns if a given 2 or 4 digit language is supported
@@ -14,18 +26,9 @@ function isLanguageSupported(language) {
   return languageIndexes.includes(language);
 }
 
-/**
- * Get the list of supported languages
- * @returns {string[]} Array of supported language codes
- */
-function getSupportedLanguages() {
-  // Include all languages configured in helix-query.yaml
-  return ['en', 'de', 'fr', 'es', 'it', 'ko', 'ja', 'zh-tw', 'zh-cn'];
-}
-
 /* Set the html lang property based on the page path. Default to 'en'. */
 const pagePath = window.location.pathname;
-const pageLanguage = pagePath.split('/')[1];
+const [, pageLanguage] = pagePath.split('/');
 const isLangSupported = isLanguageSupported(pageLanguage);
 const lang = isLangSupported ? pageLanguage : 'en';
 document.documentElement.lang = lang;
@@ -103,10 +106,10 @@ function getLanguageFooter(isSKP = null) {
  * Map language codes to their index file names
  */
 const languageIndexMap = {
-  'en': 'en-index.json',
-  'fr': 'fr-index.json',
-  'de': 'de-index.json',
-  'zh-cn': 'zh-cn-index.json'
+  en: 'en-index.json',
+  fr: 'fr-index.json',
+  de: 'de-index.json',
+  'zh-cn': 'zh-cn-index.json',
 };
 
 /**
@@ -116,12 +119,12 @@ const languageIndexMap = {
  */
 function getLanguageIndex(overwriteLanguage = null) {
   const langCode = overwriteLanguage || lang;
-  
+
   if (isLanguageSupported(langCode)) {
     // Get the correct index file for this language
     return `/${languageIndexMap[langCode] || `${langCode}-index.json`}`;
   }
-  
+
   // Default to English index
   return '/en-index.json';
 }
@@ -130,10 +133,10 @@ function getLanguageIndex(overwriteLanguage = null) {
  * Map language codes to their SKP index file names
  */
 const skpLanguageIndexMap = {
-  'en': 'skp-en.json',
-  'fr': 'skp-fr.json',
-  'de': 'skp-de.json',
-  'zh-cn': 'skp-zh-cn.json'
+  en: 'skp-en.json',
+  fr: 'skp-fr.json',
+  de: 'skp-de.json',
+  'zh-cn': 'skp-zh-cn.json',
 };
 
 /**
@@ -146,7 +149,7 @@ function getSKPLanguageIndex() {
     // Get the correct SKP index file for this language
     return `/${skpLanguageIndexMap[lang] || `skp-${lang}.json`}`;
   }
-  
+
   // Default to English SKP index
   return '/skp-en.json';
 }
@@ -254,8 +257,8 @@ function parseBlockOptions(block, rowName) {
 
     tempOptionsArray.forEach((item) => {
       if (item.includes('=')) {
-        const optionsString = item.split('=', 2);
-        optionsObject[optionsString[0]] = optionsString[1];
+        const [key, value] = item.split('=', 2);
+        optionsObject[key] = value;
       } else {
         optionsObject[item] = true;
       }
@@ -290,8 +293,8 @@ function getBlockPropertiesList(block, rowName) {
 
     tempOptionsArray.forEach((item) => {
       if (item.includes('=')) {
-        const optionsString = item.split('=', 2);
-        rowObject[optionsString[0]] = optionsString[1];
+        const [key, value] = item.split('=', 2);
+        rowObject[key] = value;
       } else {
         rowObject[item] = true;
       }
@@ -395,25 +398,6 @@ function pageFilterByFolder(pageSelection, folderPath) {
 }
 
 /**
- * Map language codes to their actual paths on the server
- * Some language codes might have different representations in URLs
- */
-const languageCodeMap = {
-  'cn': 'zh-cn', // Map 'cn' to 'zh-cn' for URL paths
-  'zh-cn': 'zh-cn',
-  'zh-tw': 'zh-tw'
-};
-
-/**
- * Get the correct URL language code for a given language code
- * @param {string} code - The language code to map
- * @returns {string} - The mapped language code for URLs
- */
-function getUrlLanguageCode(code) {
-  return languageCodeMap[code] || code;
-}
-
-/**
  * Get the URL for a page in a specific language for the language menu
  * @param {string} languageCode - The language code to check
  * @returns {string|null} - The URL for the page in the specified language
@@ -421,28 +405,28 @@ function getUrlLanguageCode(code) {
 function getLangMenuPageUrl(languageCode) {
   // Validate input parameters
   if (!languageCode || typeof languageCode !== 'string') {
-    console.warn('Invalid language code provided to getLangMenuPageUrl:', languageCode);
+    // console.warn('Invalid language code provided to getLangMenuPageUrl:', languageCode);
     return null;
   }
-  
+
   // Check if language is supported
   if (!isLanguageSupported(languageCode)) {
-    console.log(`Language ${languageCode} is not in the supported languages list`);
+    // console.log(`Language ${languageCode} is not in the supported languages list`);
     return null;
   }
-  
+
   // If current language is requested, return current path
   if (languageCode === getLanguage()) {
     // Make sure we return a valid URL
     return window.location.pathname || '/';
   }
-  
+
   // Extract the current page path without language prefix
   const pathParts = window.location.pathname.split('/');
   // Remove empty first element and language code if present
   pathParts.splice(0, pathParts[1] && pathParts[1].length <= 5 ? 2 : 1);
   const currPagePath = pathParts.join('/');
-  
+
   // Construct the URL for the page in the specified language
   return `/${languageCode}/${currPagePath}`;
 }
@@ -505,7 +489,7 @@ function getBlockConfig(block) {
         } else if (col.querySelector('ol')) {
           const listItems = [...col.querySelectorAll('li')];
           value = listItems.map((item) => item.textContent);
-        } else value = row.children[1];
+        } else [, value] = row.children;
         config[name] = value;
       }
     }
@@ -658,12 +642,13 @@ function writeImagePropertyInList(propertyName, item) {
  * @param {Element} doc The document element
  */
 function processLinksForLanguage(doc) {
-  const lang = getLanguage();
-  if (!lang || lang === 'en') return; // Don't modify links if we're on English pages
-  
+  const currentLang = getLanguage();
+  if (!currentLang || currentLang === 'en') return; // Don't modify links if we're on English pages
+
   // Function to check if a URL is internal
   function isInternalLink(href) {
     if (!href) return false;
+    // eslint-disable-next-line no-script-url
     if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('tel:') || href.startsWith('mailto:')) return false;
     if (href.startsWith('http://') || href.startsWith('https://')) {
       try {
@@ -675,72 +660,72 @@ function processLinksForLanguage(doc) {
     }
     return true;
   }
-  
+
   // Function to check if a URL has a language prefix
   function hasLanguagePrefix(url) {
     if (!url.startsWith('/')) return false;
-    
+
     const supportedLanguages = getSupportedLanguages();
     const parts = url.split('/');
     // Check if the first path segment is a supported language code
     return parts.length > 1 && supportedLanguages.includes(parts[1]);
   }
-  
+
   // Function to remove existing language prefix
   function removeLanguagePrefix(url) {
     if (!hasLanguagePrefix(url)) return url;
-    
+
     const parts = url.split('/');
     parts.splice(1, 1); // Remove the language part
     return parts.join('/');
   }
-  
+
   // Process all links on the page
   doc.querySelectorAll('a').forEach((a) => {
     const href = a.getAttribute('href');
     if (!href || !isInternalLink(href)) return;
-    
+
     // Skip links that already have the current language code
-    if (href.startsWith(`/${lang}/`)) return;
-    
+    if (href.startsWith(`/${currentLang}/`)) return;
+
     // Skip absolute URLs that include the origin
     if (href.includes('://')) return;
-    
+
     // Skip links to files (like PDFs, images, etc.)
     const fileExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp4', '.mp3', '.zip', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
-    if (fileExtensions.some(ext => href.toLowerCase().endsWith(ext))) return;
-    
+    if (fileExtensions.some((ext) => href.toLowerCase().endsWith(ext))) return;
+
     // Check for malformed URLs that already contain the origin
     if (href.includes(window.location.origin)) {
       try {
         // Extract the path from the URL
         const url = new URL(href);
         let pathOnly = url.pathname;
-        
+
         // Remove any language prefix
         pathOnly = removeLanguagePrefix(pathOnly);
-        
+
         // Create a clean URL with the current language
-        const langUrl = `/${lang}${pathOnly.startsWith('/') ? '' : '/'}${pathOnly}`;
+        const langUrl = `/${currentLang}${pathOnly.startsWith('/') ? '' : '/'}${pathOnly}`;
         a.setAttribute('href', langUrl);
         return;
       } catch (e) {
-        console.error('Error parsing URL:', e);
+        // console.error('Error parsing URL:', e);
       }
     }
-    
+
     // Handle normal relative paths
     let cleanPath = href;
     if (cleanPath.startsWith('/')) {
       // Check if it has a language prefix and remove it
       cleanPath = removeLanguagePrefix(cleanPath);
     }
-    
+
     // Add the current language prefix
-    const langUrl = `/${lang}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
+    const langUrl = `/${currentLang}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
     a.setAttribute('href', langUrl);
   });
-  
+
   // Set up a MutationObserver to handle dynamically added links
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
@@ -751,44 +736,44 @@ function processLinksForLanguage(doc) {
             node.querySelectorAll('a').forEach((a) => {
               const href = a.getAttribute('href');
               if (!href || !isInternalLink(href)) return;
-              
+
               // Skip links that already have the current language code
-              if (href.startsWith(`/${lang}/`)) return;
-              
+              if (href.startsWith(`/${currentLang}/`)) return;
+
               // Skip absolute URLs that include the origin
               if (href.includes('://')) return;
-              
+
               // Skip links to files
               const fileExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mp4', '.mp3', '.zip', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
-              if (fileExtensions.some(ext => href.toLowerCase().endsWith(ext))) return;
-              
+              if (fileExtensions.some((ext) => href.toLowerCase().endsWith(ext))) return;
+
               // Check for malformed URLs that already contain the origin
               if (href.includes(window.location.origin)) {
                 try {
                   // Extract the path from the URL
                   const url = new URL(href);
                   let pathOnly = url.pathname;
-                  
+
                   // Remove any language prefix
                   pathOnly = removeLanguagePrefix(pathOnly);
-                  
+
                   // Create a clean URL with the current language
-                  const langUrl = `/${lang}${pathOnly.startsWith('/') ? '' : '/'}${pathOnly}`;
+                  const langUrl = `/${currentLang}${pathOnly.startsWith('/') ? '' : '/'}${pathOnly}`;
                   a.setAttribute('href', langUrl);
                   return;
                 } catch (e) {
-                  console.error('Error parsing URL:', e);
+                  // console.error('Error parsing URL:', e);
                 }
               }
-              
+
               // Handle normal relative paths
               let cleanPath = href;
               if (cleanPath.startsWith('/')) {
                 cleanPath = removeLanguagePrefix(cleanPath);
               }
-              
+
               // Add the current language prefix
-              const langUrl = `/${lang}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
+              const langUrl = `/${currentLang}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
               a.setAttribute('href', langUrl);
             });
           }
@@ -796,7 +781,7 @@ function processLinksForLanguage(doc) {
       }
     });
   });
-  
+
   // Start observing the document
   observer.observe(doc.body, { childList: true, subtree: true });
 }

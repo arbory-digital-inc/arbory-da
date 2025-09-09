@@ -8,14 +8,13 @@ import { loadFragment } from '../fragment/fragment.js';
 export default async function decorate(block) {
   // Check if a footerPath was provided via the data attribute
   const footerPathFromData = block.closest('footer').dataset.footerPath;
-  
+
   const footerMeta = getMetadata('footer');
   block.textContent = '';
 
   // load footer fragment
   // Use the footerPath if provided, otherwise fall back to metadata or default
   const footerPath = footerPathFromData || (footerMeta ? footerMeta.footer : '/footer');
-  console.log('Loading footer from:', footerPath);
   const fragment = await loadFragment(footerPath);
 
   // decorate footer DOM
