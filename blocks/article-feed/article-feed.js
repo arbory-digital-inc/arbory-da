@@ -1,7 +1,7 @@
 /**
  * Decorates the article-feed block
  * @param {HTMLElement} block The block element
- * ur boy frank
+ * Updated: Fixed filterByAuthors duplicate declaration issue
  */
 
 import { getConfig } from '../../scripts/nx.js';
@@ -332,9 +332,6 @@ function filterByAuthors(authorString, data) {
 
     // Convert article authors to array
     const articleAuthors = article.author.split(',').map((author) => author.trim().toLowerCase()).filter((author) => author !== '');
-    // console.log(articleTags);
-    // console.log(article.title);
-    // console.log(articleTags.includes("eds"))
 
     // Check if any of the article authors match any of the filter authors
     return authors.some((author) => articleAuthors.includes(author));
@@ -395,34 +392,6 @@ function filterByCategories(categoryString, data) {
   return filtered;
 }
 
-function filterByAuthors(authorString, data) {
-  if (!authorString) return data;
-  
-  
-  // Split authors by comma and trim whitespace
-  const authors = authorString.split(',').map(author => author.trim().toLowerCase()).filter(author => author !== '');
-  if (authors.length === 0) {
-    return data;
-  }
-  
-  const filtered = data.filter(article => {
-    // Skip articles without authors
-    if (!article.author) {
-      return false;
-    }
-    
-    // Convert article authors to array
-    const articleAuthors = article.author.split(',').map(author => author.trim().toLowerCase()).filter(author => author !== '');
-    // console.log(articleTags);
-    // console.log(article.title);
-    // console.log(articleTags.includes("eds"))
-    
-    // Check if any of the article authors match any of the filter authors
-    return authors.some(author => articleAuthors.includes(author));
-  });
-  
-  return filtered;
-};
 
 function filterByTags(tagString, data) {
   if (!tagString) return data;
