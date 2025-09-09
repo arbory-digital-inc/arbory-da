@@ -1,0 +1,260 @@
+main .section.customer-spotlight-cta-container[data-section-status="loaded"]{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+.customer-spotlight-cta a{
+    text-decoration: none !important;
+    color: #62A814;
+    transition: all 0.5s ease;
+}
+
+.customer-spotlight-cta a:hover{
+    text-decoration: none !important;
+    color: #406E0C;
+}
+
+.customer-spotlight-cta h1{
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+  font-size: 2.25rem;
+  letter-spacing: -1px;
+  text-align: center;
+}
+  
+  .customer-spotlight-cta {
+    position: relative;
+    min-height: 300px;
+    overflow: hidden;
+    color: white;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    width: 100%;
+  }
+  
+  /* Background image container (1st row) */
+  .customer-spotlight-cta > div:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 1;
+    margin-left: calc((100% - 100vw) / 2); /* Center the image if container is centered */
+  }
+  
+  .customer-spotlight-cta > div:first-child > div {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .customer-spotlight-cta > div:first-child picture {
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
+  
+  .customer-spotlight-cta > div:first-child img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  /* Add an overlay gradient for better text visibility */
+  .customer-spotlight-cta::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    z-index: 1;
+  }
+  
+  /* Logo and title container (2nd row) */
+  .customer-spotlight-cta > div:nth-child(2) {
+    display: none;
+  }
+  
+  
+  /* Must read article title (3rd row) */
+  .customer-spotlight-cta > div:nth-child(3) {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding: 0 20px;
+    margin-top: auto;
+  }
+  
+  .customer-spotlight-cta > div:nth-child(3) > div {
+    display: block;
+    justify-items: center;
+  }
+  
+  .customer-spotlight-cta > div:nth-child(3) p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 20px;
+    font-style: italic;
+    text-align: left;
+    font-family: var(--heading-font-family);
+    padding-top: 32px;
+    text-align: left;
+  }
+  
+  /* Article content (4th row) */
+  .customer-spotlight-cta > div:nth-child(4) {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-self: center;
+    overflow: visible;
+    padding: 0 20px;
+  }
+  
+  .customer-spotlight-cta > div:nth-child(4) > div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+      "article-title article-image"
+      "article-description article-image";
+    gap: 20px;
+    max-height: 100%;
+    padding: 32px;
+    row-gap: 16px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+                0 0 0 1px #406E0C,
+                0 0 20px rgba(98, 168, 20, 0.2);
+    margin: 20px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    transform: scale(1) translateZ(0);
+    backface-visibility: hidden;
+  }
+
+.customer-spotlight-cta > div:nth-child(4) > div:hover {
+    transform: scale(1.02) translateZ(0);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),
+                0 0 0 1px #62a814,
+                0 0 30px rgba(98, 168, 20, 0.4);
+  }
+  
+  .customer-spotlight-cta > div:nth-child(4) picture {
+    grid-area: article-image;
+    max-width: 400px;
+    display: flex;
+    border: 2px solid #406e0c80;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-left: 20px;
+    overflow: hidden;
+  }
+  
+  .customer-spotlight-cta > div:nth-child(4) img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  
+  .customer-spotlight-cta > div:nth-child(4) h3 {
+    grid-area: article-title;
+    font-size: 32px;
+    align-self: flex-start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    font-family: var(--heading-font-family);
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  /* Target the actual paragraph containing description */
+  .customer-spotlight-cta > div:nth-child(4) > div > p {
+    grid-area: article-description;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  
+/* Responsive adjustments */
+
+@media (min-width: 900px){
+  .customer-spotlight-cta-container > .customer-spotlight-cta-wrapper{
+    max-width: 100%;
+  }
+}
+  
+  @media (max-width: 768px) {
+    .customer-spotlight-cta {
+      min-height: 300px;
+      padding: 0;
+    }
+    
+    .customer-spotlight-cta > div:first-child {
+      height: 100%;
+    }
+
+    .customer-spotlight-cta > div:nth-child(3) p {
+        text-align: center;
+    }
+
+    .customer-spotlight-cta > div:nth-child(3) h1 {
+      text-align: center;
+    }
+    
+    .customer-spotlight-cta > div:first-child img {
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    .customer-spotlight-cta > div:nth-child(3) {
+      margin-bottom: 5px;
+      text-align: center;
+      padding: 0;
+    }
+    
+    .customer-spotlight-cta > div:nth-child(4) > div {
+      grid-template-areas: 
+        "article-image"
+        "article-title"
+        "article-description";
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      text-align: center;
+      justify-items: center;
+      margin: 16px;
+      padding: 24px;
+    }
+    
+    .customer-spotlight-cta > div:nth-child(4) picture {
+      max-width: 100%;
+      margin: 0 0 20px 0;
+    }
+
+    .customer-spotlight-cta > div:nth-child(4) img {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .customer-spotlight-cta > div:nth-child(4) h3 {
+      padding-top: 12px;
+      font-size: 24px;
+    }
+  }
