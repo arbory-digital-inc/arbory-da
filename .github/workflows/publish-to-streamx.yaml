@@ -1,0 +1,58 @@
+name: Publish to StreamX
+
+on:
+  repository_dispatch:
+    types:
+      - resource-published
+
+jobs:
+  publish-to-streamx:
+    if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare ingestion variables
+        id: vars
+        shell: bash
+        run: |
+          sleep 1s
+          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
+          page_path=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
+          eds_page_url="${{ vars.EDS_DOMAIN_URL }}$page_path"
+          eds_plain_page_url="${{ vars.EDS_DOMAIN_URL }}$streamx_key.plain.html"
+          echo "Page URL: $eds_page_url"
+          echo "StreamX key: $streamx_key"
+          echo "Plain page URL: $eds_plain_page_url"
+          echo "StreamX plain key: $streamx_key.plain.html"
+          echo "streamx_key=$streamx_key" >> "$GITHUB_OUTPUT"
+          echo "eds_page_url=$eds_page_url" >> "$GITHUB_OUTPUT"
+          echo "streamx_plain_key=$streamx_key.plain.html" >> "$GITHUB_OUTPUT"
+          echo "eds_plain_page_url=$eds_plain_page_url" >> "$GITHUB_OUTPUT"
+
+      - name: Run publish to StreamX
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
+        env:
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+        with:
+          action: publish
+          source-provider: ExternalSourceProvider
+          channel: pages
+          type: 'page/blog'
+          external-resource-url: ${{ steps.vars.outputs.eds_page_url }}
+          key: ${{ steps.vars.outputs.streamx_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
+
+      - name: Run publish plain to StreamX
+        if: (endsWith(steps.vars.outputs.streamx_plain_key, 'nav.plain.html') || endsWith(steps.vars.outputs.streamx_plain_key, 'footer.plain.html'))
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
+        env:
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+        with:
+          action: publish
+          source-provider: ExternalSourceProvider
+          channel: web-resources
+          type: 'web-resource/static'
+          external-resource-url: ${{ steps.vars.outputs.eds_plain_page_url }}
+          key: ${{ steps.vars.outputs.streamx_plain_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}

@@ -1,0 +1,54 @@
+name: Unpublish from StreamX
+
+on:
+  repository_dispatch:
+    types:
+      - resource-unpublished
+
+jobs:
+  check-event-status:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+        run: |
+          echo $CLIENT_PAYLOAD
+          echo "Status: ${{ github.event.client_payload.status }}"
+          echo "Path: ${{ github.event.client_payload.path }}"
+
+  unpublish-from-streamx:
+    if: (github.event.client_payload.status == 200 || github.event.client_payload.status == 204) && endsWith(github.event.client_payload.path, '.md')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare ingestion variables
+        id: vars
+        shell: bash
+        run: |
+          sleep 1s
+          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
+          echo "StreamX key: $streamx_key"
+          echo "StreamX plain key: $streamx_key.plain.html"
+          echo "streamx_key=$streamx_key" >> "$GITHUB_OUTPUT"
+          echo "streamx_plain_key=$streamx_key.plain.html" >> "$GITHUB_OUTPUT"
+
+      - name: Run unpublish from StreamX
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
+        env:
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+        with:
+          action: unpublish
+          channel: pages
+          key: ${{ steps.vars.outputs.streamx_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
+
+      - name: Run unpublish plain from StreamX
+        uses: streamx-dev/streamx-common-github-actions/.github/actions/connector-github@v1
+        env:
+          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
+        with:
+          action: unpublish
+          channel: pages
+          key: ${{ steps.vars.outputs.streamx_plain_key }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
