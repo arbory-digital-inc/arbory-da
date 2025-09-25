@@ -4,7 +4,7 @@
     padding: 2rem 0;
   }
 
-.author-rows-container h2 {
+.author-rows-container .author-rows h2 {
     font-family: var(--heading-font-family);
     font-size: 2.25rem;
     font-weight: 700;
@@ -20,7 +20,7 @@
   .author-rows {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 3rem 1rem;
   }
   
   .author-rows > div {
@@ -97,7 +97,7 @@
       max-width: 300px;
       margin: 0 auto;
     }
-    .author-rows-container h2 {
+    .author-rows-container .author-rows h2 {
       font-size: 2rem;
       text-align: center;
     }

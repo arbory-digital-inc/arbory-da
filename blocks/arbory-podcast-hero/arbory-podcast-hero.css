@@ -1,0 +1,250 @@
+/* unhinged behavior produced this, we move - ur boy frank */
+
+main .section.arbory-podcast-hero-container[data-section-status="loaded"] {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	max-width: 100%;
+}
+
+.arbory-podcast-hero a {
+	text-decoration: none !important;
+	color: #62A814;
+	transition: all 0.5s ease;
+}
+
+.arbory-podcast-hero a:hover {
+	text-decoration: none !important;
+	color: #406E0C;
+}
+
+.arbory-podcast-hero h1 {
+	font-family: var(--heading-font-family);
+	font-weight: 700;
+	font-size: 2.25rem;
+	letter-spacing: -1px;
+	text-align: center;
+}
+
+.arbory-podcast-hero {
+	position: relative;
+	min-height: 300px;
+	overflow: hidden;
+	color: white;
+	display: grid;
+	grid-template-rows: auto auto auto;
+	width: 100%;
+}
+
+/* Background image container (1st row) */
+.arbory-podcast-hero>div:first-child {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100%;
+	z-index: 1;
+	margin-left: calc((100% - 100vw) / 2);
+	/* Center the image if container is centered */
+}
+
+.arbory-podcast-hero>div:first-child>div {
+	height: 100%;
+	width: 100%;
+}
+
+.arbory-podcast-hero>div:first-child picture {
+	height: 100%;
+	width: 100%;
+	display: block;
+}
+
+.arbory-podcast-hero>div:first-child img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+/* Add an overlay gradient for better text visibility */
+.arbory-podcast-hero::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+	z-index: 1;
+}
+
+/* Logo and title container (2nd row) */
+.arbory-podcast-hero>div:nth-child(2) {
+	display: none;
+}
+
+
+/* Must read article title (3rd row) */
+.arbory-podcast-hero>div:nth-child(3) {
+	position: relative;
+	z-index: 3;
+	width: 100%;
+	padding: 0 20px;
+	margin-top: auto;
+}
+
+.arbory-podcast-hero>div:nth-child(3)>div {
+	display: block;
+	justify-items: center;
+}
+
+.arbory-podcast-hero>div:nth-child(3) p {
+	margin: 0;
+	font-weight: 500;
+	font-size: 20px;
+	font-style: italic;
+	text-align: left;
+	font-family: var(--heading-font-family);
+	padding-top: 32px;
+	text-align: left;
+}
+
+/* Article content (4th row) */
+.arbory-podcast-hero>div:nth-child(4) {
+	position: relative;
+	z-index: 3;
+	width: 100%;
+	max-width: 1200px;
+	display: flex;
+	justify-self: center;
+	overflow: hidden;
+}
+
+.arbory-podcast-hero>div:nth-child(4)>div {
+	display: grid;
+	grid-template-columns: 40% 60%;
+	grid-template-rows: auto auto auto;
+	grid-template-areas:
+		"podcast-image podcast-title"
+		"podcast-image podcast-description"
+		". .";
+	gap: 20px;
+	max-height: 100%;
+	padding: 10px 20px 32px 20px;
+	row-gap: 6px;
+	align-items: start;
+}
+
+.arbory-podcast-hero>div:nth-child(4) picture {
+	grid-area: podcast-image;
+	max-width: 100%;
+	display: flex;
+	border: 2px solid #406e0c80;
+	border-radius: 0.5rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Handle the paragraph containing the image */
+.arbory-podcast-hero>div:nth-child(4)>div>p:first-child {
+	grid-area: podcast-image;
+	margin: 0;
+	display: flex;
+}
+
+.arbory-podcast-hero>div:nth-child(4)>div>p:first-child a {
+	display: flex;
+	width: 100%;
+}
+
+.arbory-podcast-hero>div:nth-child(4) img {
+	width: 100%;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.arbory-podcast-hero>div:nth-child(4) h3 {
+	grid-area: podcast-title;
+	font-size: var(--heading-font-size-s);
+	align-self: flex-end;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+	font-family: var(--heading-font-family);
+	margin: 0;
+}
+
+/* Target the actual paragraph containing description */
+.arbory-podcast-hero>div:nth-child(4)>div>p {
+	grid-area: podcast-description;
+	margin: 0;
+	font-size: 18px;
+	line-height: 1.4;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
+/* Responsive adjustments */
+
+@media (min-width: 900px) {
+	.arbory-podcast-hero-container>.arbory-podcast-hero-wrapper {
+		max-width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.arbory-podcast-hero {
+		min-height: 300px;
+		padding: 0;
+	}
+
+	/* Ensure background image covers the entire height on mobile */
+	.arbory-podcast-hero>div:first-child {
+		height: 100%;
+	}
+
+	.arbory-podcast-hero>div:nth-child(3) p {
+		text-align: center;
+	}
+
+	.arbory-podcast-hero>div:nth-child(3) h1 {
+		text-align: center;
+	}
+
+	.arbory-podcast-hero>div:first-child img {
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+
+	.arbory-podcast-hero>div:nth-child(3) {
+		margin-bottom: 5px;
+		text-align: center;
+		padding: 0;
+	}
+
+	.arbory-podcast-hero>div:nth-child(4)>div {
+		grid-template-areas:
+			"podcast-image podcast-image"
+			"podcast-title podcast-title"
+			"podcast-description podcast-description";
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto;
+		text-align: center;
+		justify-items: center;
+	}
+
+	.arbory-podcast-hero>div:nth-child(4) img {
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+		border: none;
+	}
+
+	.arbory-podcast-hero>div:nth-child(4) h3 {
+		padding-top: 12px;
+	}
+
+}

@@ -1,4 +1,7 @@
-/* manifested with light and shadow energy by ur boy frank */
+/**
+ * Decorates the liveblog-meta block
+ * manifested with light and shadow energy by ur boy frank
+ */
 
 export default function decorate(block) {
   // Ensure not processing an already decorated block
@@ -7,10 +10,10 @@ export default function decorate(block) {
   }
 
   const rows = [...block.children];
-  
+
   // Clear the block's content
   block.textContent = '';
-  
+
   // Create semantic containers for each metadata type
   const titleContent = rows[0]?.children[1]?.textContent || '';
   const authorContent = rows[1]?.children[1]?.textContent || '';
@@ -20,24 +23,25 @@ export default function decorate(block) {
   // Format the date
   const formatDate = (dateStr) => {
     try {
-      const [month, day, year] = dateStr.split('-').map(num => parseInt(num.trim(), 10));
-      if (!month || !day || !year || isNaN(month) || isNaN(day) || isNaN(year)) {
-        console.warn('Invalid date format:', dateStr);
+      const [month, day, year] = dateStr.split('-').map((num) => parseInt(num.trim(), 10));
+      if (!month || !day || !year
+        || Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) {
+        // console.warn('Invalid date format:', dateStr);
         return dateStr;
       }
       const date = new Date(2000 + year, month - 1, day);
-      if (isNaN(date.getTime())) {
-        console.warn('Invalid date:', dateStr);
+      if (Number.isNaN(date.getTime())) {
+        // console.warn('Invalid date:', dateStr);
         return dateStr;
       }
       return date.toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
       });
     } catch (error) {
-      console.warn('Error formatting date:', error);
+      // console.warn('Error formatting date:', error);
       return dateStr;
     }
   };
@@ -71,7 +75,7 @@ export default function decorate(block) {
   // Create tags section
   const tagsSection = document.createElement('div');
   tagsSection.className = 'tags';
-  const tagsList = tagsContent.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`);
+  const tagsList = tagsContent.split(',').map((tag) => `<span class="tag">${tag.trim()}</span>`);
   tagsSection.innerHTML = tagsList.join('');
 
   rightColumn.append(dateSection, tagsSection);

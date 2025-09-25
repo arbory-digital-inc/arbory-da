@@ -1,7 +1,8 @@
 footer {
-  padding: 2rem;
   background-color: var(--overlay-background-color);
   font-size: var(--body-font-size-s);
+  font-family: var(--heading-font-family);
+  text-decoration: none;
 }
 
 footer .footer {
@@ -11,4 +12,9 @@ footer .footer {
 
 footer .footer p {
   margin: 0;
+}
+
+footer .footer a {
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
