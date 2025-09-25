@@ -5,10 +5,6 @@ on:
     types:
       - resource-unpublished
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   check-event-status:
     runs-on: ubuntu-latest
@@ -29,7 +25,7 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          streamx_key=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
           echo "StreamX key: $streamx_key"
           echo "StreamX plain key: $streamx_key.plain.html"
           echo "streamx_key=$streamx_key" >> "$GITHUB_OUTPUT"
