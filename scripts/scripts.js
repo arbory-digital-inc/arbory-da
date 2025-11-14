@@ -27,7 +27,7 @@ import {
 function buildHeroBlock(main) {
   // check if the first block is called arbory-blog-hero or blog-post-hero
   const firstBlock = main.querySelector(':scope > div');
-  if (firstBlock && (firstBlock.querySelector('.arbory-blog-hero') || firstBlock.querySelector('.blog-post-hero'))) {
+  if (firstBlock && (firstBlock.querySelector('.arbory-blog-hero') || firstBlock.querySelector('.blog-post-hero') || firstBlock.querySelector('.blog-featured-hero'))) {
     return;
   }
   const h1 = main.querySelector('h1');
