@@ -1,251 +1,295 @@
+// Configuration constants
+const CONFIG = {
+  AUTO_ADVANCE_DELAY: 5000,
+  RESTART_DELAY: 100,
+  HIGH_RES_WIDTHS: ['width=2000', 'width=1920'],
+  DEFAULT_WIDTH_REPLACEMENT: { from: 'width=750', to: 'width=2000' },
+  // Responsive image sizes for carousel (based on actual CSS layout)
+  // Mobile: 100vw minus padding, Tablet: ~50vw, Desktop: ~940px (actual rendered size)
+  CAROUSEL_SIZES: '(max-width: 768px) calc(100vw - 2rem), (max-width: 1200px) 50vw, 940px',
+};
+
+/**
+ * Extracts high-resolution image URL from picture element
+ * @param {HTMLElement} picture Picture element
+ * @returns {string|null} High-resolution image URL
+ */
+function extractHighResImage(picture) {
+  if (!picture) return null;
+
+  // Try to get highest resolution source
+  const sources = picture.querySelectorAll('source');
+  for (const source of sources) {
+    const srcset = source.getAttribute('srcset');
+    if (srcset && CONFIG.HIGH_RES_WIDTHS.some(width => srcset.includes(width))) {
+      return srcset.split(' ')[0];
+    }
+  }
+
+  // Fallback to img src with resolution upgrade
+  const img = picture.querySelector('img');
+  if (img?.src) {
+    return img.src.replace(
+      CONFIG.DEFAULT_WIDTH_REPLACEMENT.from,
+      CONFIG.DEFAULT_WIDTH_REPLACEMENT.to
+    );
+  }
+
+  return null;
+}
+
+/**
+ * Extracts title and link from row element
+ * @param {HTMLElement} row Row element
+ * @returns {Object} Object with title and titleLink properties
+ */
+function extractTitleAndLink(row) {
+  if (!row) return { title: '', titleLink: '' };
+
+  const titleElement = row.querySelector('a, h1, h2, h3, h4, h5, h6');
+  
+  if (!titleElement) {
+    return { title: row.textContent.trim(), titleLink: '' };
+  }
+
+  const title = titleElement.textContent.trim();
+  
+  if (titleElement.tagName === 'A') {
+    return { title, titleLink: titleElement.href };
+  }
+
+  const link = titleElement.querySelector('a');
+  return { title, titleLink: link?.href || '' };
+}
+
+/**
+ * Creates a DOM element with class name and optional text content
+ * @param {string} tag HTML tag name
+ * @param {string} className CSS class name
+ * @param {string} textContent Optional text content
+ * @returns {HTMLElement} Created element
+ */
+function createElement(tag, className, textContent = '') {
+  const element = document.createElement(tag);
+  element.className = className;
+  if (textContent) element.textContent = textContent;
+  return element;
+}
+
 /**
  * Decorates the blog-featured-hero block
- * Featured blog hero with background image, carousel, and content overlay
+ * Transforms EDS table structure into hero layout with background image and carousel
  */
 export default function decorate(block) {
-  // Parse the rows from EDS structure
-  const rows = Array.from(block.children);
+  const rows = [...block.children];
   
-  // Row 1: Background image
-  const backgroundRow = rows[0];
-  // Row 2: Carousel images (contains h3 with link and multiple p tags with pictures)
-  const carouselRow = rows[1];
+  // Extract content from rows
+  const backgroundImage = extractHighResImage(rows[0]?.querySelector('picture'));
+  const carouselImages = [];
+  
+  // Row 2: Carousel images
+  rows[1]?.querySelectorAll('picture').forEach(picture => {
+    const img = picture.querySelector('img');
+    if (img) {
+      carouselImages.push({
+        picture: picture.cloneNode(true),
+        alt: img.alt || '',
+      });
+    }
+  });
+
   // Row 3: Title with link
-  const titleRow = rows[2];
+  const { title, titleLink } = extractTitleAndLink(rows[2]);
+  
   // Row 4: Subtitle
-  const subtitleRow = rows[3];
+  const subtitle = rows[3]?.textContent.trim() || '';
+  
   // Row 5: Description
-  const descriptionRow = rows[4];
+  const description = rows[4]?.textContent.trim() || '';
 
-  // Clear the block
+  // Clear and set background
   block.innerHTML = '';
-
-  // Set background image
-  if (backgroundRow) {
-    const bgPicture = backgroundRow.querySelector('picture');
-    if (bgPicture) {
-      const bgImg = bgPicture.querySelector('img');
-      if (bgImg) {
-        // Set as CSS background using the largest source
-        const sources = bgPicture.querySelectorAll('source');
-        let bgUrl = bgImg.src;
-        
-        // Try to get the highest quality source
-        if (sources.length > 0) {
-          const webpSource = Array.from(sources).find(s => 
-            s.getAttribute('media') === '(min-width: 600px)' && 
-            s.type === 'image/webp'
-          );
-          if (webpSource) {
-            bgUrl = webpSource.srcset.split(' ')[0];
-          }
-        }
-        
-        block.style.backgroundImage = `url('${bgUrl}')`;
-        bgImg.loading = 'eager';
-      }
-    }
+  if (backgroundImage) {
+    Object.assign(block.style, {
+      backgroundImage: `url("${backgroundImage}")`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    });
   }
 
-  // Create overlay container
-  const overlay = document.createElement('div');
-  overlay.className = 'hero-overlay';
+  // Build DOM structure
+  const overlay = createElement('div', 'hero-overlay');
+  const container = createElement('div', 'hero-container');
+  const leftCol = createElement('div', 'hero-left-col');
+  const rightCol = createElement('div', 'hero-right-col');
+  const contentCard = createElement('div', 'hero-content-card');
 
-  // Create content container (grid layout)
-  const contentContainer = document.createElement('div');
-  contentContainer.className = 'hero-content-container';
-
-  // LEFT COLUMN: Carousel
-  const carouselColumn = document.createElement('div');
-  carouselColumn.className = 'hero-carousel-column';
-
-  if (carouselRow) {
-    const carouselContent = carouselRow.querySelector('div');
-    
-    // Extract all images from the carousel row
-    const carouselImages = [];
-    
-    // Get link from h3
-    let carouselLink = '#';
-    const h3 = carouselContent?.querySelector('h3');
-    if (h3) {
-      const linkEl = h3.querySelector('a');
-      if (linkEl) {
-        carouselLink = linkEl.href;
-        // Get image from h3 link
-        const h3Picture = linkEl.querySelector('picture');
-        if (h3Picture) {
-          carouselImages.push(h3Picture.cloneNode(true));
-        }
-      }
-    }
-    
-    // Get images from p tags
-    const paragraphs = carouselContent?.querySelectorAll('p');
-    if (paragraphs) {
-      paragraphs.forEach(p => {
-        const picture = p.querySelector('picture');
-        if (picture) {
-          carouselImages.push(picture.cloneNode(true));
-        }
-      });
-    }
-
-    // Create carousel
-    if (carouselImages.length > 0) {
-      const carousel = document.createElement('div');
-      carousel.className = 'hero-carousel';
-
-      const carouselTrack = document.createElement('div');
-      carouselTrack.className = 'carousel-track';
-
-      carouselImages.forEach((picture, index) => {
-        const slide = document.createElement('div');
-        slide.className = 'carousel-slide';
-        if (index === 0) slide.classList.add('active');
-        
-        // Make images eager loading
-        const img = picture.querySelector('img');
-        if (img) {
-          img.loading = 'eager';
-        }
-        
-        // Wrap in link
-        const slideLink = document.createElement('a');
-        slideLink.href = carouselLink;
-        slideLink.appendChild(picture);
-        slide.appendChild(slideLink);
-        
-        carouselTrack.appendChild(slide);
-      });
-
-      carousel.appendChild(carouselTrack);
-
-      // Add navigation if more than one image
-      if (carouselImages.length > 1) {
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'carousel-btn carousel-prev';
-        prevBtn.innerHTML = '‹';
-        prevBtn.setAttribute('aria-label', 'Previous slide');
-
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'carousel-btn carousel-next';
-        nextBtn.innerHTML = '›';
-        nextBtn.setAttribute('aria-label', 'Next slide');
-
-        carousel.appendChild(prevBtn);
-        carousel.appendChild(nextBtn);
-
-        // Carousel functionality
-        let currentSlide = 0;
-        const slides = carouselTrack.querySelectorAll('.carousel-slide');
-
-        function showSlide(index) {
-          slides.forEach(s => s.classList.remove('active'));
-          slides[index].classList.add('active');
-        }
-
-        function nextSlide() {
-          currentSlide = (currentSlide + 1) % slides.length;
-          showSlide(currentSlide);
-        }
-
-        function prevSlide() {
-          currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-          showSlide(currentSlide);
-        }
-
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
-
-        // Auto-advance every 5 seconds
-        setInterval(nextSlide, 5000);
-      }
-
-      carouselColumn.appendChild(carousel);
-    }
+  // Add carousel
+  if (carouselImages.length > 0) {
+    leftCol.appendChild(createCarousel(carouselImages));
   }
 
-  // RIGHT COLUMN: Content card
-  const contentColumn = document.createElement('div');
-  contentColumn.className = 'hero-content-column';
-
-  const contentCard = document.createElement('div');
-  contentCard.className = 'hero-content-card';
-
-  // Title
-  if (titleRow) {
-    const titleContent = titleRow.querySelector('div');
-    const h3 = titleContent?.querySelector('h3');
-    if (h3) {
-      const title = document.createElement('h2');
-      title.className = 'hero-title';
-      
-      const link = h3.querySelector('a');
-      if (link) {
-        const titleLink = document.createElement('a');
-        titleLink.href = link.href;
-        titleLink.title = link.title || '';
-        titleLink.textContent = link.textContent;
-        title.appendChild(titleLink);
-      } else {
-        title.textContent = h3.textContent;
-      }
-      
-      contentCard.appendChild(title);
+  // Add title
+  if (title) {
+    const titleEl = createElement('h2', 'hero-title');
+    if (titleLink) {
+      const titleLinkEl = document.createElement('a');
+      Object.assign(titleLinkEl, { href: titleLink, textContent: title, title });
+      titleEl.appendChild(titleLinkEl);
+    } else {
+      titleEl.textContent = title;
     }
+    contentCard.appendChild(titleEl);
   }
 
-  // Subtitle
-  if (subtitleRow) {
-    const subtitleContent = subtitleRow.querySelector('div');
-    const p = subtitleContent?.querySelector('p');
-    if (p) {
-      const subtitle = document.createElement('div');
-      subtitle.className = 'hero-subtitle';
-      subtitle.textContent = p.textContent;
-      contentCard.appendChild(subtitle);
-    }
+  // Add subtitle and description
+  if (subtitle) contentCard.appendChild(createElement('p', 'hero-subtitle', subtitle));
+  if (description) contentCard.appendChild(createElement('p', 'hero-description', description));
+
+  // Add "Read More" button
+  if (titleLink) {
+    const readMoreBtn = document.createElement('a');
+    Object.assign(readMoreBtn, {
+      href: titleLink,
+      className: 'hero-read-more-btn',
+      textContent: 'Read More »',
+    });
+    contentCard.appendChild(readMoreBtn);
   }
 
-  // Description
-  if (descriptionRow) {
-    const descContent = descriptionRow.querySelector('div');
-    const p = descContent?.querySelector('p');
-    if (p) {
-      const description = document.createElement('div');
-      description.className = 'hero-description';
-      description.innerHTML = p.innerHTML;
-      contentCard.appendChild(description);
-    }
-  }
-
-  // Read More button
-  if (titleRow) {
-    const titleContent = titleRow.querySelector('div');
-    const h3 = titleContent?.querySelector('h3');
-    const link = h3?.querySelector('a');
-    
-    if (link) {
-      const readMoreBtn = document.createElement('a');
-      readMoreBtn.href = link.href;
-      readMoreBtn.className = 'hero-read-more';
-      readMoreBtn.textContent = 'Read More';
-      contentCard.appendChild(readMoreBtn);
-    }
-  }
-
-  contentColumn.appendChild(contentCard);
-
-  // Assemble the layout
-  contentContainer.appendChild(carouselColumn);
-  contentContainer.appendChild(contentColumn);
-  overlay.appendChild(contentContainer);
+  // Assemble structure
+  rightCol.appendChild(contentCard);
+  container.append(leftCol, rightCol);
+  overlay.appendChild(container);
   block.appendChild(overlay);
 
-  // Make all images load eagerly
-  const images = block.querySelectorAll('img[loading="lazy"]');
-  images.forEach((img) => {
-    img.setAttribute('loading', 'eager');
+  // Optimize all hero images for performance
+  block.querySelectorAll('img').forEach((img, index) => {
+    // First image gets highest priority for LCP
+    if (index === 0) {
+      img.loading = 'eager';
+      img.fetchPriority = 'high';
+      img.decoding = 'async';
+    } else {
+      img.loading = 'eager';
+      img.decoding = 'async';
+    }
+    
+    // Ensure sizes attribute exists for responsive images
+    if (!img.sizes && img.srcset) {
+      img.sizes = CONFIG.CAROUSEL_SIZES;
+    }
   });
+}
+
+/**
+ * Creates a carousel component with navigation controls
+ * @param {Array} images Array of image objects with picture elements
+ * @returns {HTMLElement} Carousel container
+ */
+function createCarousel(images) {
+  const carousel = createElement('div', 'hero-carousel');
+  const slidesContainer = createElement('div', 'carousel-slides');
+
+  // Create slides with responsive image optimization
+  images.forEach((imageObj, index) => {
+    const slide = createElement('div', index === 0 ? 'carousel-slide active' : 'carousel-slide');
+    const picture = imageObj.picture.cloneNode(true);
+    const img = picture.querySelector('img');
+    
+    if (img) {
+      // Optimize first image for LCP (Largest Contentful Paint)
+      if (index === 0) {
+        img.loading = 'eager';
+        img.fetchPriority = 'high';
+        img.decoding = 'async';
+      } else {
+        img.loading = 'eager';
+        img.decoding = 'async';
+      }
+      
+      // Add responsive sizes attribute if not present
+      if (!img.sizes) {
+        img.sizes = CONFIG.CAROUSEL_SIZES;
+      }
+      
+      // Ensure srcset is preserved for responsive loading
+      const sources = picture.querySelectorAll('source');
+      sources.forEach(source => {
+        if (!source.sizes) {
+          source.sizes = CONFIG.CAROUSEL_SIZES;
+        }
+      });
+    }
+    
+    slide.appendChild(picture);
+    slidesContainer.appendChild(slide);
+  });
+
+  carousel.appendChild(slidesContainer);
+
+  // Add navigation for multiple images
+  if (images.length > 1) {
+    const prevBtn = createElement('button', 'carousel-btn carousel-prev', '‹');
+    const nextBtn = createElement('button', 'carousel-btn carousel-next', '›');
+    prevBtn.setAttribute('aria-label', 'Previous image');
+    nextBtn.setAttribute('aria-label', 'Next image');
+
+    carousel.append(prevBtn, nextBtn);
+    initializeCarousel(carousel, images.length);
+  }
+
+  return carousel;
+}
+
+/**
+ * Initializes carousel functionality with navigation and auto-advance
+ * @param {HTMLElement} carousel The carousel container
+ * @param {number} slideCount Number of slides
+ */
+function initializeCarousel(carousel, slideCount) {
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const prevBtn = carousel.querySelector('.carousel-prev');
+  const nextBtn = carousel.querySelector('.carousel-next');
+  
+  let currentSlide = 0;
+  let autoAdvanceInterval = null;
+  let restartTimeout = null;
+
+  const showSlide = (index) => {
+    slides[currentSlide].classList.remove('active');
+    slides[index].classList.add('active');
+    currentSlide = index;
+  };
+
+  const nextSlide = () => showSlide((currentSlide + 1) % slideCount);
+  const prevSlide = () => showSlide((currentSlide - 1 + slideCount) % slideCount);
+
+  const stopAutoAdvance = () => {
+    clearInterval(autoAdvanceInterval);
+    clearTimeout(restartTimeout);
+    autoAdvanceInterval = null;
+    restartTimeout = null;
+  };
+
+  const startAutoAdvance = () => {
+    stopAutoAdvance();
+    autoAdvanceInterval = setInterval(nextSlide, CONFIG.AUTO_ADVANCE_DELAY);
+  };
+
+  const handleNavClick = (slideFunction) => {
+    stopAutoAdvance();
+    slideFunction();
+    restartTimeout = setTimeout(startAutoAdvance, CONFIG.RESTART_DELAY);
+  };
+
+  // Event listeners
+  nextBtn.addEventListener('click', () => handleNavClick(nextSlide));
+  prevBtn.addEventListener('click', () => handleNavClick(prevSlide));
+  carousel.addEventListener('mouseenter', stopAutoAdvance);
+  carousel.addEventListener('mouseleave', startAutoAdvance);
+
+  // Start auto-advance
+  startAutoAdvance();
 }
