@@ -14,7 +14,7 @@
   cursor: pointer;
   list-style: none;
   overflow: auto;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s; 
 }
 
 .accordion details[open] summary {
