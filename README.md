@@ -1,4 +1,3 @@
-# ARBORY BLOG - TESTING IN DARK ALLEY
+# ARBORY BLOG - DARK ALLEY
 
-Testing the Arbory Blog in Dark Alley to test Indexes
-
+This codebase runs the Arbory Digital Blog on Dark Alley.
