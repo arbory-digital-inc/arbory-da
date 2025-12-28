@@ -4,16 +4,50 @@
  */
 
 export default function decorate(block) {
-  // Get all picture elements and their containers
-  const pictures = Array.from(block.querySelectorAll('picture'));
+  // Get all rows from the block
+  const rows = Array.from(block.children);
+  
+  // Create array to hold image data with captions
+  const imageData = [];
+  
+  // Extract images and captions from rows
+  rows.forEach((row) => {
+    const cells = Array.from(row.children);
+    if (cells.length > 0) {
+      const imageCell = cells[0];
+      const captionCell = cells.length > 1 ? cells[1] : null;
+      
+      const picture = imageCell.querySelector('picture');
+      if (picture) {
+        const captionText = captionCell ? captionCell.textContent.trim() : '';
+        imageData.push({
+          picture: picture.cloneNode(true),
+          caption: captionText
+        });
+      }
+    }
+  });
 
   // Clear existing structure
   block.innerHTML = '';
 
-  // Create single row for all pictures
+  // Create single row for all image containers
   const row = document.createElement('div');
-  pictures.forEach((picture) => {
-    row.appendChild(picture);
+  imageData.forEach((data) => {
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'image-gallery-item';
+    
+    imageContainer.appendChild(data.picture);
+    
+    // Only add caption if it has text
+    if (data.caption) {
+      const captionElement = document.createElement('div');
+      captionElement.className = 'image-gallery-caption';
+      captionElement.textContent = data.caption;
+      imageContainer.appendChild(captionElement);
+    }
+    
+    row.appendChild(imageContainer);
   });
   block.appendChild(row);
 
