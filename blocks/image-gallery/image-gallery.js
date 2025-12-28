@@ -54,8 +54,18 @@ export default function decorate(block) {
   // Create lightbox elements
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
+  
+  const lightboxContent = document.createElement('div');
+  lightboxContent.className = 'lightbox-content';
+  
   const lightboxImg = document.createElement('img');
-  lightbox.appendChild(lightboxImg);
+  lightboxContent.appendChild(lightboxImg);
+  
+  const lightboxCaption = document.createElement('div');
+  lightboxCaption.className = 'lightbox-caption';
+  lightboxContent.appendChild(lightboxCaption);
+  
+  lightbox.appendChild(lightboxContent);
 
   // Add navigation buttons
   const closeBtn = document.createElement('button');
@@ -85,8 +95,37 @@ export default function decorate(block) {
     const img = images[index];
     const source = img.closest('picture').querySelector('source[media="(min-width: 600px)"]');
     const fullSizeUrl = source ? source.srcset : img.src;
+    
+    // Hide content until loaded to prevent jump
+    lightboxImg.style.opacity = '0';
+    lightboxCaption.style.opacity = '0';
+    
     lightboxImg.src = fullSizeUrl;
     lightboxImg.alt = img.alt;
+    
+    // Show caption if available
+    const item = img.closest('.image-gallery-item');
+    const caption = item ? item.querySelector('.image-gallery-caption') : null;
+    
+    // Reset caption initially
+    lightboxCaption.style.width = 'auto';
+    
+    if (caption && caption.textContent.trim()) {
+      lightboxCaption.textContent = caption.textContent;
+      lightboxCaption.style.display = 'block';
+    } else {
+      lightboxCaption.style.display = 'none';
+    }
+    
+    // Match caption width to image width after image loads
+    lightboxImg.onload = () => {
+      if (lightboxCaption.style.display !== 'none') {
+        lightboxCaption.style.width = `${lightboxImg.offsetWidth}px`;
+      }
+      // Fade in after sizing is complete
+      lightboxImg.style.opacity = '1';
+      lightboxCaption.style.opacity = '1';
+    };
 
     // Update navigation visibility
     prevBtn.style.display = index > 0 ? 'flex' : 'none';
@@ -100,7 +139,7 @@ export default function decorate(block) {
     }
     img.style.opacity = '0';
     img.addEventListener('load', () => {
-      img.style.transition = 'opacity 0.3s ease';
+      img.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
       img.style.opacity = '1';
     });
 

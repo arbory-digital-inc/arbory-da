@@ -1,7 +1,6 @@
 /* I am merely a vessel to this energy - ur boy frank*/
 
-.image-gallery-wrapper {
-  padding: 20px;
+main .image-gallery-wrapper {
   width: 100%;
   box-sizing: border-box;
   margin: 0 auto;
@@ -24,7 +23,7 @@
 .image-gallery-item {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-self: center;
 }
 
 .image-gallery-item picture {
@@ -33,30 +32,66 @@
   aspect-ratio: 1/1;
   position: relative;
   cursor: pointer;
-  border-radius: 1rem;
+  border-radius: 1rem 1rem 0 0;
   overflow: hidden;
 }
 
-.image-gallery-item img {
+.image-gallery-item picture::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.image-gallery-item picture:hover::after {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.image-gallery.block .image-gallery-item:not(:has(.image-gallery-caption)) picture {
+  border-radius: 1rem;
+}
+
+.image-gallery.block .image-gallery-item picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 1s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
 }
 
-.image-gallery-item img:hover {
+.image-gallery.block .image-gallery-item picture:hover img {
   transform: scale(1.05);
 }
 
 .image-gallery-caption {
-  background: #f5f5f5;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   padding: 12px 14px;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
+  border-radius: 0 0 1rem 1rem;
+  font-size: 16px;
   line-height: 1.4;
-  color: #333;
+  color: var(--text-color);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   word-wrap: break-word;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+.image-gallery-item:hover .image-gallery-caption {
+  filter: brightness(0.8);
 }
 
 /* Lightbox styles */
@@ -72,7 +107,7 @@
   align-items: center;
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .lightbox.active {
@@ -80,10 +115,48 @@
   opacity: 1;
 }
 
-.lightbox img {
-  max-width: 80vw;
+.lightbox-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 90vw;
   max-height: 90vh;
+}
+
+.lightbox-content img {
+  max-width: 80vw;
+  max-height: 80vh;
   object-fit: contain;
+  border-radius: 8px 8px 0 0;
+  align-self: center;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.lightbox-caption {
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  padding: 16px 24px;
+  border-radius: 0 0 8px 8px;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  box-sizing: border-box;
+  align-self: center;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.lightbox-content img:only-child {
   border-radius: 8px;
 }
 
@@ -112,7 +185,7 @@
   color: white;
   font-size: 30px;
   cursor: pointer;
-  background: #406e0c;
+  background: var(--link-hover-color);
   border: none;
   width: 40px;
   height: 35px;
@@ -143,11 +216,6 @@
   
   .image-gallery > div {
     grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-  }
-  
-  .image-gallery-item {
-    gap: 8px;
   }
   
   .image-gallery-caption {
