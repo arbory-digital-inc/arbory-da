@@ -75,34 +75,54 @@ const embedVidyard = (url) => {
   return embedHTML;
 };
 
+
+// Spotify embed
+const embedSpotify = (url) => {
+  // Only handle open.spotify.com URLs
+  // Supported: /track/, /album/, /playlist/, /episode/, /show/
+  const pathMatch = url.pathname.match(/^\/(track|album|playlist|episode|show)\/([\w\d]+)/);
+  if (!pathMatch) return getDefaultEmbed(url);
+  const [, type, id] = pathMatch;
+  // See: https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed
+  const embedSrc = `https://open.spotify.com/embed/${type}/${id}?utm_source=generator`;
+  return `<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 152px;">
+    <iframe src="${embedSrc}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media; clipboard-write; autoplay; fullscreen; picture-in-picture" style="border: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" title="Spotify player" loading="lazy"></iframe>
+  </div>`;
+};
+
 const loadEmbed = (block, link, autoplay) => {
   if (block.classList.contains('embed-is-loaded')) {
     return;
   }
 
-  const EMBEDS_CONFIG = [{
-    match: ['youtube', 'youtu.be'],
-    embed: embedYoutube,
-  },
-  {
-    match: ['vimeo'],
-    embed: embedVimeo,
-  },
-  {
-    match: ['twitter'],
-    embed: embedTwitter,
-  },
-  {
-    match: ['vidyard'],
-    embed: embedVidyard,
-  },
+  const EMBEDS_CONFIG = [
+    {
+      match: ['youtube', 'youtu.be'],
+      embed: embedYoutube,
+    },
+    {
+      match: ['vimeo'],
+      embed: embedVimeo,
+    },
+    {
+      match: ['twitter'],
+      embed: embedTwitter,
+    },
+    {
+      match: ['vidyard'],
+      embed: embedVidyard,
+    },
+    {
+      match: ['open.spotify.com'],
+      embed: embedSpotify,
+    },
   ];
 
   const config = EMBEDS_CONFIG.find((e) => e.match.some((match) => link.includes(match)));
   const url = new URL(link);
   if (config) {
     block.innerHTML = config.embed(url, autoplay);
-    block.classList = `block embed embed-${config.match[0]}`;
+    block.classList = `block embed embed-${config.match[0].replace('.', '-')}`;
   } else {
     block.innerHTML = getDefaultEmbed(url);
     block.classList = 'block embed';
