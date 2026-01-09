@@ -31,7 +31,7 @@ function initThatsFast() {
 
   // Convert number paragraphs to spans with a wrapper
   block.querySelectorAll('div > div > p').forEach((p) => {
-    if (!Number.isNaN(p.textContent)) {
+    if (!Number.isNaN(Number(p.textContent)) && p.textContent.trim()) {
       const wrapper = document.createElement('div');
       wrapper.className = 'number-wrapper';
       const span = document.createElement('span');
