@@ -12,35 +12,40 @@ export default function decorate(block) {
   sidebar.setAttribute('aria-label', 'Section Navigation');
 
   // Helper: Set sidebar top based on hero height
-  function setSidebarTop() {
+  function setSidebarTop(forceTopZero = false) {
+    if (forceTopZero) {
+      sidebar.style.top = '0px';
+      return;
+    }
     // Try to find the hero block (by class or tag)
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
     let top = 80; // fallback default
     if (hero) {
-      const rect = hero.getBoundingClientRect();
-      // Get the bottom of the hero relative to viewport, then add scrollY to get document position
       top = hero.offsetTop + hero.offsetHeight;
     }
     sidebar.style.top = `${top}px`;
   }
   setSidebarTop();
-  window.addEventListener('resize', setSidebarTop);
-  window.addEventListener('load', setSidebarTop);
+  window.addEventListener('resize', () => setSidebarTop());
+  window.addEventListener('load', () => setSidebarTop());
 
   // Show/hide sidebar based on hero visibility
   function updateSidebarVisibility() {
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
     if (hero) {
       const rect = hero.getBoundingClientRect();
-      // If hero bottom is above the top of the viewport, show sidebar
+      // If hero bottom is above the top of the viewport, show sidebar at top
       if (rect.bottom <= 0) {
         sidebar.style.display = 'block';
+        setSidebarTop(true); // force top: 0
       } else {
         sidebar.style.display = 'none';
+        setSidebarTop(); // reset top
       }
     } else {
-      // If no hero, always show
+      // If no hero, always show at top
       sidebar.style.display = 'block';
+      setSidebarTop(true);
     }
   }
   updateSidebarVisibility();

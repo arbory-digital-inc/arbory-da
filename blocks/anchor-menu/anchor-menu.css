@@ -81,7 +81,6 @@
 .anchor-menu-item.active .anchor-menu-link {
   color: var(--link-color);
   border-left-color: var(--link-color);
-  padding-left: 24px;
   font-weight: 600;
   background-color: var(--highlight-background-color);
 }
