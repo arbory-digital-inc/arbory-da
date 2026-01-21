@@ -33,20 +33,34 @@ export default function decorate(block) {
   // Show/hide sidebar based on hero visibility
   function updateSidebarVisibility() {
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
+    const mainContent = document.querySelector('main');
+    // Only apply margin on large screens
+    const isLargeScreen = window.innerWidth > 1399;
     if (hero) {
       const rect = hero.getBoundingClientRect();
-      // If hero bottom is above the top of the viewport, show sidebar at top
       if (rect.bottom <= 0) {
         sidebar.style.display = 'block';
-        setSidebarTop(true); // forceStickyHeaderOffset: true
+        setSidebarTop(true);
+        if (mainContent && isLargeScreen) {
+          mainContent.style.marginLeft = '220px';
+        }
       } else {
         sidebar.style.display = 'none';
-        setSidebarTop(); // reset top
+        setSidebarTop();
+        if (mainContent) {
+          mainContent.style.marginLeft = '';
+        }
       }
     } else {
-      // If no hero, always show at top
       sidebar.style.display = 'block';
       setSidebarTop(true);
+      if (mainContent && isLargeScreen) {
+        mainContent.style.marginLeft = '220px';
+      }
+    }
+    // Remove margin on small screens
+    if (mainContent && !isLargeScreen) {
+      mainContent.style.marginLeft = '';
     }
   }
   updateSidebarVisibility();
