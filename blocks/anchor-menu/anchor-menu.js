@@ -11,6 +11,22 @@ export default function decorate(block) {
   sidebar.className = 'anchor-menu-sidebar';
   sidebar.setAttribute('aria-label', 'Section Navigation');
 
+  // Helper: Set sidebar top based on hero height
+  function setSidebarTop() {
+    // Try to find the hero block (by class or tag)
+    const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
+    let top = 80; // fallback default
+    if (hero) {
+      const rect = hero.getBoundingClientRect();
+      // Get the bottom of the hero relative to viewport, then add scrollY to get document position
+      top = hero.offsetTop + hero.offsetHeight;
+    }
+    sidebar.style.top = `${top}px`;
+  }
+  setSidebarTop();
+  window.addEventListener('resize', setSidebarTop);
+  window.addEventListener('load', setSidebarTop);
+
   // Menu list
   const menuList = document.createElement('ul');
   menuList.className = 'anchor-menu-list';
@@ -57,7 +73,7 @@ export default function decorate(block) {
   sidebar.appendChild(menuList);
   block.appendChild(sidebar);
 
-  // Sticky/fixed behavior is handled by CSS
+  // Sticky/fixed behavior is handled by CSS, but top is set dynamically
 
   // Update active menu item on scroll
   window.addEventListener('scroll', () => {
