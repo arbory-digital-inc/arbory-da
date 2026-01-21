@@ -15,7 +15,7 @@ export default function decorate(block) {
   function setSidebarTop(forceStickyHeaderOffset = false) {
     if (forceStickyHeaderOffset) {
       // Offset for sticky header (adjust as needed, e.g., 64px)
-      sidebar.style.top = '64px';
+      sidebar.style.top = '80px';
       return;
     }
     // Try to find the hero block (by class or tag)
