@@ -27,6 +27,26 @@ export default function decorate(block) {
   window.addEventListener('resize', setSidebarTop);
   window.addEventListener('load', setSidebarTop);
 
+  // Show/hide sidebar based on hero visibility
+  function updateSidebarVisibility() {
+    const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
+    if (hero) {
+      const rect = hero.getBoundingClientRect();
+      // If hero bottom is above the top of the viewport, show sidebar
+      if (rect.bottom <= 0) {
+        sidebar.style.display = 'block';
+      } else {
+        sidebar.style.display = 'none';
+      }
+    } else {
+      // If no hero, always show
+      sidebar.style.display = 'block';
+    }
+  }
+  updateSidebarVisibility();
+  window.addEventListener('scroll', updateSidebarVisibility);
+  window.addEventListener('resize', updateSidebarVisibility);
+
   // Menu list
   const menuList = document.createElement('ul');
   menuList.className = 'anchor-menu-list';
