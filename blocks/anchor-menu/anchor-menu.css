@@ -1,0 +1,88 @@
+.anchor-menu {
+  display: none;
+}
+
+.anchor-menu-container {
+  position: fixed;
+  left: 20px;
+  top: 120px;
+  max-height: calc(100vh - 140px);
+  width: 200px;
+  z-index: 100;
+  display: none;
+}
+
+/* Only show on larger screens */
+@media (min-width: 1400px) {
+  .anchor-menu-container {
+    display: block;
+  }
+}
+
+.anchor-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--overlay-background-color);
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.anchor-menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.anchor-menu-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.anchor-menu-list::-webkit-scrollbar-thumb {
+  background-color: var(--link-color);
+  border-radius: 3px;
+}
+
+.anchor-menu-item {
+  margin: 0;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.anchor-menu-link {
+  display: block;
+  padding: 10px 16px;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-family: var(--body-font-family);
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anchor-menu-link:hover {
+  color: var(--link-color);
+  padding-left: 20px;
+}
+
+.anchor-menu-item.active .anchor-menu-link {
+  color: var(--link-color);
+  border-left-color: var(--link-color);
+  padding-left: 20px;
+  font-weight: 600;
+  background-color: var(--highlight-background-color);
+}
+
+/* Tablet and small desktop */
+@media (max-width: 1399px) {
+  .anchor-menu-container {
+    display: none !important;
+  }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
