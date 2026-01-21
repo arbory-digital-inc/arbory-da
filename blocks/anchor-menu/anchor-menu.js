@@ -37,15 +37,15 @@ export default function decorate(block) {
       const rect = hero.getBoundingClientRect();
       // If hero bottom is above the top of the viewport, show sidebar at top
       if (rect.bottom <= 0) {
-        sidebar.style.display = 'block';
+        sidebar.classList.add('visible');
         setSidebarTop(true); // forceStickyHeaderOffset: true
       } else {
-        sidebar.style.display = 'none';
+        sidebar.classList.remove('visible');
         setSidebarTop(); // reset top
       }
     } else {
       // If no hero, always show at top
-      sidebar.style.display = 'block';
+      sidebar.classList.add('visible');
       setSidebarTop(true);
     }
   }
