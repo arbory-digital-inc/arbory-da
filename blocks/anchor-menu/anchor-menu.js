@@ -12,9 +12,10 @@ export default function decorate(block) {
   sidebar.setAttribute('aria-label', 'Section Navigation');
 
   // Helper: Set sidebar top based on hero height
-  function setSidebarTop(forceTopZero = false) {
-    if (forceTopZero) {
-      sidebar.style.top = '0px';
+  function setSidebarTop(forceStickyHeaderOffset = false) {
+    if (forceStickyHeaderOffset) {
+      // Offset for sticky header (adjust as needed, e.g., 64px)
+      sidebar.style.top = '64px';
       return;
     }
     // Try to find the hero block (by class or tag)
@@ -37,7 +38,7 @@ export default function decorate(block) {
       // If hero bottom is above the top of the viewport, show sidebar at top
       if (rect.bottom <= 0) {
         sidebar.style.display = 'block';
-        setSidebarTop(true); // force top: 0
+        setSidebarTop(true); // forceStickyHeaderOffset: true
       } else {
         sidebar.style.display = 'none';
         setSidebarTop(); // reset top
