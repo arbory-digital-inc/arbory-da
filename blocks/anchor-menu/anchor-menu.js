@@ -4,6 +4,9 @@
  */
 export default function decorate(block) {
   block.classList.add('anchor-menu');
+  
+  // Hide the block itself - the menu is fixed to the side
+  block.style.display = 'none';
 
   // Create the menu container
   const menuContainer = document.createElement('nav');
@@ -13,12 +16,11 @@ export default function decorate(block) {
   const menuList = document.createElement('ul');
   menuList.classList.add('anchor-menu-list');
 
-  // Find all h2 elements in the main content (not in blocks that shouldn't be included)
+  // Find all h2 elements in the main content
   const headings = document.querySelectorAll('main h2');
   
   if (headings.length === 0) {
-    // If no h2s found, hide the block
-    block.style.display = 'none';
+    // If no h2s found, don't create the menu
     return;
   }
 
@@ -53,7 +55,7 @@ export default function decorate(block) {
   });
 
   menuContainer.appendChild(menuList);
-  block.appendChild(menuContainer);
+  document.body.appendChild(menuContainer);
 
   // Update active menu item on scroll
   window.addEventListener('scroll', () => {
