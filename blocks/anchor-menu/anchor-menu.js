@@ -33,20 +33,51 @@ export default function decorate(block) {
   // Show/hide sidebar based on hero visibility
   function updateSidebarVisibility() {
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
+    const mainContent = document.querySelector('main');
+    const isLargeScreen = window.innerWidth > 1399;
+    let sidebarShouldShow = false;
     if (hero) {
       const rect = hero.getBoundingClientRect();
-      // If hero bottom is above the top of the viewport, show sidebar at top
       if (rect.bottom <= 0) {
-        sidebar.style.display = 'block';
-        setSidebarTop(true); // forceStickyHeaderOffset: true
-      } else {
-        sidebar.style.display = 'none';
-        setSidebarTop(); // reset top
+        sidebarShouldShow = true;
       }
     } else {
-      // If no hero, always show at top
+      sidebarShouldShow = true;
+    }
+
+    // Check if sidebar would overlap/move text
+    let wouldOverlapText = false;
+    if (sidebarShouldShow && mainContent && isLargeScreen) {
+      // Find first visible child in main content
+      const children = Array.from(mainContent.children);
+      for (const child of children) {
+        const style = window.getComputedStyle(child);
+        if (style.display !== 'none' && child.offsetParent !== null) {
+          const rect = child.getBoundingClientRect();
+          if (rect.left < 220) {
+            wouldOverlapText = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if (sidebarShouldShow && !wouldOverlapText && isLargeScreen) {
       sidebar.style.display = 'block';
       setSidebarTop(true);
+      if (mainContent) {
+        mainContent.style.marginLeft = '220px';
+      }
+    } else {
+      sidebar.style.display = 'none';
+      setSidebarTop();
+      if (mainContent) {
+        mainContent.style.marginLeft = '';
+      }
+    }
+    // Remove margin on small screens
+    if (mainContent && !isLargeScreen) {
+      mainContent.style.marginLeft = '';
     }
   }
   updateSidebarVisibility();
