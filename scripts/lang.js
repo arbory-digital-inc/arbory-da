@@ -11,12 +11,12 @@ const knownObjectProperties = ['options', 'filters'];
  */
 function getSupportedLanguages() {
   // Include all languages configured in helix-query.yaml
-  return ['en', 'de', 'fr', 'es', 'it', 'ko', 'ja', 'zh-tw', 'zh-cn'];
+  return ['en', 'de', 'fr', 'es', 'it', 'pl', 'pt', 'ko', 'ja', 'zh-tw', 'zh-cn'];
 }
 
 /**
- * Returns if a given 2 or 4 digit language is supported
- * by JMP. Support means that it should have it's own
+ * Returns if a given 2 or 4 digit language is supported.
+ * Support means that it should have it's own
  * directory, index, and nav.
  * @param {string} language
  * @returns {Boolean} true if the index should exist.
