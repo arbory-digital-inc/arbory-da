@@ -53,7 +53,7 @@
   --body-font-family: roboto, roboto-fallback;
   --heading-font-family: poppins-var, poppins-bold, 'Segoe UI', Helvetica, Arial, sans-serif;
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
-  --code-font-family: "Roboto Mono", source-code-pro, "Courier New", monospace;
+  --code-font-family: Consolas, Monaco, "Courier New", monospace;
 
   /* body sizes */
   --body-font-size-m: 22px;
