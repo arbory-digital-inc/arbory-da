@@ -1,10 +1,4 @@
-
-.anchor-menu {
-  /* The block itself is just a container, no display needed */
-}
-
-
-.anchor-menu-sidebar {
+.block .anchor-menu-sidebar {
   position: fixed;
   top: 80px;
   left: 0;
@@ -28,7 +22,11 @@
     transform: translateX(0);
     opacity: 1;
   }
-
+.anchor-menu-sidebar.hidden {
+        transform: translateX(-100%);
+        opacity: 0;
+  pointer-events: auto;
+}
 
 @media (max-width: 1399px) {
   .anchor-menu-sidebar {
@@ -84,12 +82,13 @@
   padding-left: 24px;
   border-left-color: var(--link-color);
   background: var(--highlight-background-color);
+  text-decoration: none;
 }
 
 .anchor-menu-item.active .anchor-menu-link {
   color: var(--link-color);
   border-left-color: var(--link-color);
-  font-weight: 600;
+  font-weight: 500;
   background-color: var(--highlight-background-color);
 }
 

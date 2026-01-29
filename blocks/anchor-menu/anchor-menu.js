@@ -11,42 +11,23 @@ export default function decorate(block) {
   sidebar.className = 'anchor-menu-sidebar';
   sidebar.setAttribute('aria-label', 'Section Navigation');
 
-  // Helper: Set sidebar top based on hero height
-  function setSidebarTop(forceStickyHeaderOffset = false) {
-    if (forceStickyHeaderOffset) {
-      // Offset for sticky header (adjust as needed, e.g., 64px)
-      sidebar.style.top = '80px';
-      return;
-    }
-    // Try to find the hero block (by class or tag)
-    const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
-    let top = 80; // fallback default
-    if (hero) {
-      top = hero.offsetTop + hero.offsetHeight;
-    }
-    sidebar.style.top = `${top}px`;
-  }
-  setSidebarTop();
-  window.addEventListener('resize', () => setSidebarTop());
-  window.addEventListener('load', () => setSidebarTop());
+  // Remove dynamic top offset logic; sidebar stays at its default position
+  // (CSS handles the top position)
 
   // Show/hide sidebar based on hero visibility
   function updateSidebarVisibility() {
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
     if (hero) {
       const rect = hero.getBoundingClientRect();
-      // If hero bottom is above the top of the viewport, show sidebar at top
-      if (rect.bottom <= 0) {
-        sidebar.classList.add('visible');
-        setSidebarTop(true); // forceStickyHeaderOffset: true
-      } else {
+      // Hide sidebar if any part of hero is visible at the top of the viewport
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
         sidebar.classList.remove('visible');
-        setSidebarTop(); // reset top
+      } else {
+        sidebar.classList.add('visible');
       }
     } else {
-      // If no hero, always show at top
-      sidebar.classList.add('visible');
-      setSidebarTop(true);
+      // If no hero, always hide sidebar (or you can choose to always show)
+      sidebar.classList.remove('visible');
     }
   }
   updateSidebarVisibility();
@@ -57,11 +38,15 @@ export default function decorate(block) {
   const menuList = document.createElement('ul');
   menuList.className = 'anchor-menu-list';
 
-  // Find all h2 elements in the main content
-  const headings = document.querySelectorAll('main h2');
+  // Find all h2 and h3 elements in the main content, ignoring specific headings
+  const headings = Array.from(document.querySelectorAll('main h2, main h3'))
+    .filter((heading) => {
+      const text = heading.textContent.trim();
+      return text !== 'About the Authors' && text !== 'Podcast Episodes & Blog Posts';
+    });
   if (headings.length === 0) return;
 
-  // Create menu items from h2s
+  // Create menu items from headings
   headings.forEach((heading, index) => {
     const headingId = heading.id || `section-${index}`;
     if (!heading.id) heading.id = headingId;
