@@ -1,0 +1,51 @@
+{
+  "data": {
+    "total": 3,
+    "offset": 0,
+    "limit": 3,
+    "data": [
+      {
+        "title": "AEM Live Documentation",
+        "description": "",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.aem.live/docs/"
+      },
+      {
+        "title": "Helix Development Best Practices",
+        "description": "Development Collaboration and Good Practices",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.aem.live/docs/dev-collab-and-good-practices"
+      },
+      {
+        "title": "Adobe’s Helix Sites list",
+        "description": "Github repos for sites built on AEM Edge Delivery",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/hlxsites/"
+      }
+    ]
+  },
+  "categories": {
+    "total": 2,
+    "offset": 0,
+    "limit": 2,
+    "data": [
+      {
+        "Category": "Edge Delivery Documentation",
+        "Description": "Official Edge Delivery Documentation & Adobe Resources"
+      },
+      {
+        "Category": "Edge Delivery Site Repositories",
+        "Description": "Repos for existing Edge Delivery sites & projects"
+      }
+    ]
+  },
+  ":version": 3,
+  ":names": [
+    "data",
+    "categories"
+  ],
+  ":type": "multi-sheet"
+}
