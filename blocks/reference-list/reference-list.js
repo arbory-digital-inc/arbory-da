@@ -1,10 +1,8 @@
-import { toClassName } from '../../scripts/aem.js';
-
 // CONFIGURATION
 // Set to true to use local test JSON file, false to use live URL
 const USE_LOCAL_JSON = true;
-const LOCAL_JSON_PATH = '/reference-list.json';
-const LIVE_JSON_URL = 'https://main--arbory-da--arbory-digital-inc.aem.page/en/reference-links.json';
+const LOCAL_JSON_PATH = '/tools/json/reference-list.json';
+const LIVE_JSON_URL = '/en/reference-links.json';
 
 /**
  * Creates a reference card element
@@ -21,49 +19,47 @@ function createReferenceCard(item) {
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
 
-  const header = document.createElement('div');
-  header.className = 'reference-header';
+  const imageUrl = item['image-url'] || item.image;
+  if (imageUrl && imageUrl.trim() !== '') {
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'reference-image-wrapper';
+
+    const image = document.createElement('img');
+    image.className = 'reference-image';
+    image.src = imageUrl;
+    image.alt = item.title;
+    image.loading = 'lazy';
+
+    imageWrapper.appendChild(image);
+    link.appendChild(imageWrapper);
+  }
+
+  const contentWrapper = document.createElement('div');
+  contentWrapper.className = 'reference-content';
 
   const title = document.createElement('h3');
   title.className = 'reference-title';
   title.textContent = item.title;
-  header.appendChild(title);
+  contentWrapper.appendChild(title);
 
   if (item.tag) {
     const tag = document.createElement('span');
     tag.className = 'reference-tag';
     tag.textContent = item.tag;
-    header.appendChild(tag);
+    contentWrapper.appendChild(tag);
   }
-
-  link.appendChild(header);
 
   if (item.description) {
     const description = document.createElement('p');
     description.className = 'reference-description';
     description.textContent = item.description;
-    link.appendChild(description);
+    contentWrapper.appendChild(description);
   }
+
+  link.appendChild(contentWrapper);
 
   card.appendChild(link);
   return card;
-}
-
-function createTabPanel(category, references) {
-  const panel = document.createElement('div');
-  panel.className = 'reference-list-panel';
-  panel.setAttribute('role', 'tabpanel');
-
-  const grid = document.createElement('div');
-  grid.className = 'reference-grid';
-
-  references.forEach((ref) => {
-    const card = createReferenceCard(ref);
-    grid.appendChild(card);
-  });
-
-  panel.appendChild(grid);
-  return panel;
 }
 
 function getBlockMeta(block) {
@@ -135,17 +131,37 @@ export default async function decorate(block) {
 
     block.innerHTML = '';
 
-    const tablist = document.createElement('div');
-    tablist.className = 'reference-list-tabs';
-    tablist.setAttribute('role', 'tablist');
+    const filterContainer = document.createElement('div');
+    filterContainer.className = 'reference-list-filters';
 
-    const panelsContainer = document.createElement('div');
-    panelsContainer.className = 'reference-list-panels';
+    const filterLabel = document.createElement('span');
+    filterLabel.className = 'filter-label';
+    filterLabel.textContent = 'Category';
+    filterContainer.appendChild(filterLabel);
 
-    selectedCategories.forEach((cat, index) => {
+    const activeCategories = new Set();
+    selectedCategories.forEach((cat) => activeCategories.add(cat.Category));
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'filter-buttons';
+
+    const referencesContainer = document.createElement('div');
+    referencesContainer.className = 'reference-grid';
+
+    const updateReferenceDisplay = () => {
+      const cards = referencesContainer.querySelectorAll('.reference-card');
+      cards.forEach((card) => {
+        const cardCategory = card.getAttribute('data-category');
+        if (activeCategories.has(cardCategory)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    };
+
+    selectedCategories.forEach((cat) => {
       const categoryName = cat.Category;
-      const categoryId = toClassName(categoryName);
-
       const categoryRefs = filteredReferences.filter(
         (ref) => ref.category === categoryName,
       );
@@ -153,50 +169,49 @@ export default async function decorate(block) {
       if (categoryRefs.length === 0) return;
 
       const button = document.createElement('button');
-      button.className = 'reference-list-tab';
-      button.id = `tab-${categoryId}`;
-      button.setAttribute('aria-controls', `panel-${categoryId}`);
-      button.setAttribute('aria-selected', index === 0);
-      button.setAttribute('role', 'tab');
+      button.className = 'category-filter-button active';
+      button.setAttribute('data-category', categoryName);
       button.setAttribute('type', 'button');
 
-      const tabTitle = document.createElement('span');
-      tabTitle.className = 'tab-title';
-      tabTitle.textContent = categoryName;
-      button.appendChild(tabTitle);
+      const icon = document.createElement('span');
+      icon.className = 'filter-icon';
+      icon.textContent = '−';
+      button.appendChild(icon);
 
-      const tabCount = document.createElement('span');
-      tabCount.className = 'tab-count';
-      tabCount.textContent = categoryRefs.length;
-      button.appendChild(tabCount);
+      const text = document.createElement('span');
+      text.textContent = categoryName;
+      button.appendChild(text);
 
       if (cat.Description) {
         button.setAttribute('title', cat.Description);
       }
 
-      const panel = createTabPanel(categoryName, categoryRefs);
-      panel.id = `panel-${categoryId}`;
-      panel.setAttribute('aria-labelledby', `tab-${categoryId}`);
-      panel.setAttribute('aria-hidden', index !== 0);
-
       button.addEventListener('click', () => {
-        tablist.querySelectorAll('button').forEach((btn) => {
-          btn.setAttribute('aria-selected', false);
-        });
-        button.setAttribute('aria-selected', true);
-
-        panelsContainer.querySelectorAll('.reference-list-panel').forEach((p) => {
-          p.setAttribute('aria-hidden', true);
-        });
-        panel.setAttribute('aria-hidden', false);
+        if (button.classList.contains('active')) {
+          button.classList.remove('active');
+          icon.textContent = '+';
+          activeCategories.delete(categoryName);
+        } else {
+          button.classList.add('active');
+          icon.textContent = '−';
+          activeCategories.add(categoryName);
+        }
+        updateReferenceDisplay();
       });
 
-      tablist.appendChild(button);
-      panelsContainer.appendChild(panel);
+      buttonContainer.appendChild(button);
     });
 
-    block.appendChild(tablist);
-    block.appendChild(panelsContainer);
+    filterContainer.appendChild(buttonContainer);
+
+    filteredReferences.forEach((ref) => {
+      const card = createReferenceCard(ref);
+      card.setAttribute('data-category', ref.category);
+      referencesContainer.appendChild(card);
+    });
+
+    block.appendChild(filterContainer);
+    block.appendChild(referencesContainer);
   } catch (error) {
     block.innerHTML = `<div class="reference-list-error">Unable to load references: ${error.message}</div>`;
   }

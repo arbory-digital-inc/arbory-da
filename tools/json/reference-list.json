@@ -1,0 +1,342 @@
+{
+  "data": {
+    "total": 38,
+    "offset": 0,
+    "limit": 38,
+    "data": [
+      {
+        "title": "AEM Live Documentation",
+        "description": "Documentation",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.aem.live/docs/",
+        "image-url": "https://www.aem.live/default-social.png?width=1200&format=pjpg&optimize=medium"
+      },
+      {
+        "title": "Helix Development Best Practices",
+        "description": "Development Collaboration and Good Practices",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.aem.live/docs/dev-collab-and-good-practices",
+        "image-url": "https://www.aem.live/docs/media_14b00b877f0e91728c42d63fc1c5d0f28e3e34c71.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Adobe’s Helix Sites list",
+        "description": "Github repos for sites built on AEM Edge Delivery",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/hlxsites/",
+        "image-url": "https://avatars.githubusercontent.com/u/97695152?s=280&amp;v=4"
+      },
+      {
+        "title": "AEM-LIVE Youtube Channel",
+        "description": "",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.youtube.com/@aem-live",
+        "image-url": "https://www.aem.live/default-social.png?width=1200&format=pjpg&optimize=medium"
+      },
+      {
+        "title": "AEM Edge Delivery Discord",
+        "description": "",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://discord.com/channels/1131492224371277874/1131589071634956298",
+        "image-url": "https://cdn.discordapp.com/assets/og_img_discord_home.png"
+      },
+      {
+        "title": "AEM Community",
+        "description": "AEM Live community with Edge Delivery & AEM-related discussion, events and recordings",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://www.aem.live/community",
+        "image-url": "https://www.aem.live/media_1934000410d1a3059466383afeb91205fe2f9af8d.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Google Docs Dev Tutorials",
+        "description": "",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://aem.live/developer/tutorial",
+        "image-url": "https://www.aem.live/developer/media_1d00989ba18e942fbddc9bb108add01e153029f22.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Document Authoring Dev Tutorials",
+        "description": "",
+        "category": "Edge Delivery Documentation",
+        "tag": "Official",
+        "url": "https://aem.live/developer/da-tutorial",
+        "image-url": "https://www.aem.live/developer/media_1d00989ba18e942fbddc9bb108add01e153029f22.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "AEM Importer html2jcr Branch",
+        "description": "used for sites that will be authored in Universal Editor & stored in the JCR as opposed to document-based Edge Delivery",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/adobe/helix-importer/tree/html2jcr",
+        "image-url": "https://opengraph.githubassets.com/93b4cf0854103d770fb70b3929561c590593aa80a30289a1c734307e458fb012/adobe/helix-importer"
+      },
+      {
+        "title": "Adobe DA Sites list",
+        "description": "",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/da-sites/",
+        "image-url": "https://avatars.githubusercontent.com/u/163202259?s=280&amp;v=4"
+      },
+      {
+        "title": "AEM Importer",
+        "description": "",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/adobe/helix-importer/tree/main",
+        "image-url": "https://opengraph.githubassets.com/93b4cf0854103d770fb70b3929561c590593aa80a30289a1c734307e458fb012/adobe/helix-importer"
+      },
+      {
+        "title": "Netcentric’s eddys-collection",
+        "description": "",
+        "category": "Edge Delivery Site Repositories",
+        "tag": "Official | Github",
+        "url": "https://github.com/Netcentric/eddys-collection",
+        "image-url": "https://opengraph.githubassets.com/0a308e68e8faa4ae2ec34bed6b08dcab5bee5cd4b2d3f26776a502fdae962b4a/Netcentric/eddys-collection"
+      },
+      {
+        "title": "What is AEM Edge Delivery Services/Helix/AEM Franklin/Next Gen Composability?",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Arbory",
+        "url": "https://blog.arborydigital.com/what-is-aem-edge-delivery-services",
+        "image-url": "https://blog.arborydigital.com/en/blog/media_1585d98d410e7fb0b24ca456273937f1c56a9f408.jpg?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "An Introduction to Document Authoring (DA) for Edge Delivery Services",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Arbory",
+        "url": "https://blog.arborydigital.com/en/blog/what-is-document-authoring-for-edge-delivery",
+        "image-url": "https://blog.arborydigital.com/en/blog/media_1c9ae38f3f215f2a31c968884419d3af02010c689.jpg?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Know the 6 Ways to do Redirects on AEM and Edge Delivery Services",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Arbory",
+        "url": "https://blog.arborydigital.com/en/blog/redirects-on-aem-and-edge-delivery",
+        "image-url": "https://blog.arborydigital.com/en/blog/media_166fe73898f20adfacbda48e13271a939021547be.jpg?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Configuration Examples for Managed CDN on Edge Delivery Services & AEM as a Cloud Service",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Arbory",
+        "url": "https://blog.arborydigital.com/config-examples-for-managed-cdn-on-aem-as-a-cloud-service",
+        "image-url": "https://blog.arborydigital.com/en/blog/media_173faa9dc719e768de2218a4cc3fc96cc32c77546.jpg?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Dynamic Page Publishing in AEM Edge Delivery with BYOM and App Builder",
+        "description": "Edge Delivery Services, Bring-your-own-Markup, App Builder (AIO) to make for Dynamic Page Publishing",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://medium.com/@lars.auffarth/dynamic-page-publishing-in-aem-edge-delivery-with-byom-and-app-builder-a2da50d9de84",
+        "image-url": "https://miro.medium.com/v2/resize:fit:720/format:webp/0*2XjK3LJe-mtSDw4x"
+      },
+      {
+        "title": "Arun’s custom taxonomy & tagging library for Edge Delivery",
+        "description": "Customize Sidekick Library in Adobe Edge Delivery Service: Tagging Integration Guide for Document-Based Authoring",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://medium.com/@arunpatidar26/tagging-customize-sidekick-library-in-eds-65f06ff7bb88",
+        "image-url": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*BtbRlEMXodFpr2PNLMtAkg.jpeg"
+      },
+      {
+        "title": "Mayur's step-by-step project guide for EDS setup",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://medium.com/@mayursatav/getting-started-with-eds-step-by-step-project-setup-guide-87f6b83dde52",
+        "image-url": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-EXDDb1l6Ii50FRUq1PHVQ.png"
+      },
+      {
+        "title": "Imran's overview article on the Edge Delivery code structure",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://medium.com/@toimrank/17-edge-delivery-services-code-structure-2d86b522c42c",
+        "image-url": "https://miro.medium.com/v2/resize:fit:336/1*TeRB5glGSu7CwCiVXstBJA.png"
+      },
+      {
+        "title": "Using the AEM Universal Editor with Edge Delivery Services",
+        "description": "",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://www.theaemmaven.com/post/three-laps-around-the-universal-editor",
+        "image-url": "https://static.wixstatic.com/media/nsplsh_41706a346e53656d6b7a6b~mv2_d_5400_3557_s_4_2.jpg/v1/fill/w_2500,h_1646,al_c/nsplsh_41706a346e53656d6b7a6b~mv2_d_5400_3557_s_4_2.jpg"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 0",
+        "description": "Introduction to Document Authoring with Edge Delivery Services",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-0",
+        "image-url": "https://allabout.network/blogs/ddt/media_179bbd2158f9fa3a6a53bca48d55b8a13bf8e0dcc.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 1",
+        "description": "Basics blocks & block variations",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-1",
+        "image-url": "https://allabout.network/blogs/ddt/media_1d9d96b6449d96d62d720eff7f57510e5b4498d30.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 2",
+        "description": "Basic blocks",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-2",
+        "image-url": "https://allabout.network/blogs/ddt/media_19fa2d4025f84bfe045a403f243ea856581a8e274.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 3",
+        "description": "using spreadsheets",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-3",
+        "image-url": "https://allabout.network/blogs/ddt/media_1be6266d75f1dfe4f548567f03126997023212f31.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 4",
+        "description": "Building an App with Json",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-4",
+        "image-url": "https://allabout.network/blogs/ddt/media_1ef226910ab0f6223b29f73f09a8a22480c557fe7.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 5",
+        "description": "Building a React app with documents as the source",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-5",
+        "image-url": "https://allabout.network/blogs/ddt/media_16570a6e0424a32e57fa85efdbbda3c2c3533e303.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 6",
+        "description": "Json and Github",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-6",
+        "image-url": "https://allabout.network/blogs/ddt/media_1bcacddad23dbcdc82f54c37352ea624f06fc87ee.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 7",
+        "description": "additional blocks",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-7",
+        "image-url": "https://allabout.network/blogs/ddt/media_151efecfe0430ed1e37c7444ca8db86982c28d9a7.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 8 (allabout.network)",
+        "description": "how to use AI effectively with Edge Delivery Services",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-8",
+        "image-url": "https://allabout.network/blogs/ddt/media_1819684cff75871771cc8ea01ae1a29fe48227b9c.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "Developer Guide to Document Authoring with Edge Delivery Services - Part 9",
+        "description": "Comprehensive Guide to AEM Edge Delivery Services Development",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://allabout.network/blogs/ddt/developer-guide-to-document-authoring-with-edge-delivery-services-part-9",
+        "image-url": "https://allabout.network/blogs/ddt/media_1baaa119c1c4b6af4adccf00624b45b21303d1382.png?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      },
+      {
+        "title": "AEM Edge Delivery Services - Consider these 5 things",
+        "description": "Raf Winterpacht on EDS considerations",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://www.linkedin.com/pulse/aem-edge-delivery-services-consider-5-things-raf-winterpacht-t6t2c/?trackingId=0pqGORuCQ2ebeYqCT9kgyg%3D%3D",
+        "image-url": "https://media.licdn.com/dms/image/v2/D5612AQEM0CckpMq9IA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1714323365596?e=2147483647&v=beta&t=q3s_46A5VYShb_wkH0QxOaIUok8cnFb4dkvHi8l7U4w"
+      },
+      {
+        "title": "Search Utility for Edge Delivery Services",
+        "description": "Bounteous Edge Delivery Search utility (written in Rust, plug-in search service)",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://www.bounteous.com/insights/2024/09/04/introducing-our-search-utility-edge-delivery-services/?utm_source=Arbory",
+        "image-url": "https://www.bounteous.com/sites/default/files/insights/2024-09/previews/image-20240905-131242_0.png"
+      },
+      {
+        "title": "Edge Delivery Performance demystified",
+        "description": "article by Meticulous Digital on measuring EDS performance",
+        "category": "Community Articles & Blogs on Edge Delivery",
+        "tag": "Community",
+        "url": "https://meticulous.digital/blog/f/adobe-edge-delivery-demystified",
+        "image-url": "https://img1.wsimg.com/isteam/ip/c2fc732f-18b1-4439-ad92-2e5061e06a5d/Screenshot%202024-07-03%20at%2023.27.59.png"
+      },
+      {
+        "title": "Mastering the CMS Maze: How Adobe.com Standardizes for Scale and Speed",
+        "description": "On Adobe.com moving to Edge Delivery",
+        "category": "Video Presentations",
+        "tag": "Official",
+        "url": "https://business.adobe.com/summit/2024/sessions/mastering-the-cms-maze-how-adobecom-standardizes-f-s411.html",
+        "image-url": "https://business.adobe.com/content/dam/dx/us/en/summit/2024/sessions/image_1.jpg"
+      },
+      {
+        "title": "E-Comm Masterclass: HanesBrands Creates the World’s Fastest Storefront",
+        "description": "Edge Delivery & E-Commerce at Hanes",
+        "category": "Video Presentations",
+        "tag": "Official",
+        "url": "https://business.adobe.com/summit/2024/sessions/ecomm-masterclass-hanesbrands-creates-the-worlds-f-s435.html",
+        "image-url": "https://business.adobe.com/content/dam/dx/us/en/summit/2024/sessions/image_2.jpg"
+      },
+      {
+        "title": "Accelerating CMS projects with Edge Delivery Services in AEM Sites",
+        "description": "Edge Delivery tooling overview",
+        "category": "Video Presentations",
+        "tag": "Official",
+        "url": "https://business.adobe.com/summit/2024/sessions/accelerating-cms-projects-with-edge-delivery-servi-s409.html",
+        "image-url": "https://business.adobe.com/content/dam/dx/us/en/summit/2024/sessions/image_1.jpg"
+      },
+      {
+        "title": "The adaptTo() 2024 Conference Recap: Highlights, Reflections & Takeaways",
+        "description": "",
+        "category": "Video Presentations",
+        "tag": "Arbory",
+        "url": "https://blog.arborydigital.com/en/podcast/adaptto-2024-recap",
+        "image-url": "https://blog.arborydigital.com/en/podcast/media_148411e433d0589ebf1fa7f70104872c1ef843d9c.jpg?width=1200&#x26;format=pjpg&#x26;optimize=medium"
+      }
+    ]
+  },
+  "categories": {
+    "total": 4,
+    "offset": 0,
+    "limit": 4,
+    "data": [
+      {
+        "Category": "Edge Delivery Documentation",
+        "Description": "Official Edge Delivery Documentation & Adobe Resources"
+      },
+      {
+        "Category": "Edge Delivery Site Repositories",
+        "Description": "Repos for existing Edge Delivery sites & projects"
+      },
+      {
+        "Category": "Community Articles & Blogs on Edge Delivery",
+        "Description": "Helpful Articles and Blogs for Edge Delivery Services"
+      },
+      {
+        "Category": "Video Presentations",
+        "Description": "Presentations from Adobe Summit, adaptTo(), and other Podcasts"
+      }
+    ]
+  },
+  ":version": 3,
+  ":names": [
+    "data",
+    "categories"
+  ],
+  ":type": "multi-sheet"
+}
