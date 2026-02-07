@@ -5,8 +5,24 @@
  * @param {HTMLElement} block The block element
  */
 
-const SERVLET_BASE = '/services/damservlet?path=';
+const SERVLET_PATH = '/services/damservlet?path=';
 const RENDITION_NAME = 'cq5dam.web.1280.1280.jpeg';
+
+// When running locally, proxy servlet calls to the dev environment
+const DEV_ORIGIN = 'https://blog-dev.arborydigital.com';
+
+/**
+ * Build the full servlet URL. On localhost the request is routed
+ * to the dev CDN so the backend servlet is reachable.
+ * @param {string} filepath DAM path (e.g. /content/dam/meetup/pdf)
+ * @returns {string}
+ */
+function getServletUrl(filepath) {
+  const isLocal = window.location.hostname === 'localhost'
+    || window.location.hostname === '127.0.0.1';
+  const origin = isLocal ? DEV_ORIGIN : '';
+  return `${origin}${SERVLET_PATH}${encodeURIComponent(filepath)}`;
+}
 
 /**
  * Extract the filepath value from the authored block content.
@@ -143,8 +159,8 @@ export default async function decorate(block) {
     return;
   }
 
-  // Build the servlet URL relative to the current origin
-  const servletUrl = `${SERVLET_BASE}${encodeURIComponent(filepath)}`;
+  // Build the servlet URL (routes to dev origin on localhost)
+  const servletUrl = getServletUrl(filepath);
 
   // Clear authored content
   block.textContent = '';
