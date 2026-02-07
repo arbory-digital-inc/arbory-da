@@ -56,6 +56,18 @@ function getImagePath(renditions) {
 }
 
 /**
+ * Format file size in bytes to megabytes with single-digit precision.
+ * @param {string|number} bytes - File size in bytes
+ * @returns {string} Formatted size (e.g., "19.7 MB")
+ */
+function formatSizeInMB(bytes) {
+  const numBytes = Number(bytes);
+  if (Number.isNaN(numBytes) || numBytes <= 0) return '';
+  const mb = numBytes / (1024 * 1024);
+  return `${mb.toFixed(1)} MB`;
+}
+
+/**
  * Create a single PDF card element.
  * @param {Object} pdf - PDF metadata object from the servlet
  * @returns {HTMLElement}
@@ -116,7 +128,8 @@ function createPdfCard(pdf) {
   // PDF badge
   const badge = document.createElement('span');
   badge.className = 'pdf-display-badge';
-  badge.textContent = 'PDF';
+  const sizeStr = formatSizeInMB(pdf['dam:size']);
+  badge.textContent = sizeStr ? `PDF | ${sizeStr}` : 'PDF';
   content.append(badge);
 
   card.append(content);
