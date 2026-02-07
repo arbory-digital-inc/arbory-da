@@ -1,0 +1,262 @@
+/*
+ * PDF Display Block
+ * Styled to match article-feed card-3 variant: 3-up card grid with
+ * dark background, glow animation, hover effects, and centered content.
+ */
+
+/* Custom Properties */
+:root {
+  --pdf-spacing-xs: 4px;
+  --pdf-spacing-sm: 6px;
+  --pdf-spacing-md: 12px;
+  --pdf-spacing-lg: 16px;
+  --pdf-spacing-xl: 24px;
+  --pdf-spacing-2xl: 32px;
+  --pdf-border-radius: 10px;
+  --pdf-border-radius-sm: 6px;
+  --pdf-font-size-sm: 11px;
+  --pdf-font-size-md: 12px;
+  --pdf-font-size-lg: 14px;
+  --pdf-font-size-xl: 1.1rem;
+  --pdf-font-size-2xl: 1.2rem;
+  --pdf-color-muted: #b5b5b5;
+  --pdf-color-error: #cc0000;
+  --pdf-color-error-bg: #fff0f0;
+  --pdf-color-empty: #666;
+  --pdf-color-empty-bg: #f9f9f9;
+  --pdf-card-bg: #191b22;
+  --pdf-transition: all 0.3s ease;
+}
+
+/* Base Block */
+main .pdf-display {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--pdf-spacing-xl) 0;
+}
+
+/* List / Grid */
+main .pdf-display .pdf-display-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card Item */
+main .pdf-display .pdf-display-item {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+/* Glow animation matching article-feed card-3 */
+@keyframes pdfGlowPulse {
+  0% {
+    box-shadow:
+      0 1px 3px rgba(0 0 0 / 12%),
+      0 1px 2px rgba(0 0 0 / 24%),
+      0 0 8px rgba(64 110 12 / 20%);
+    border-color: rgba(64 110 12 / 20%);
+    background: linear-gradient(to bottom, rgba(64 110 12 / 5%) 0%, rgba(64 110 12 / 0%) 100%);
+  }
+
+  50% {
+    box-shadow:
+      0 1px 3px rgba(0 0 0 / 12%),
+      0 1px 2px rgba(0 0 0 / 24%),
+      0 0 12px rgba(64 110 12 / 50%);
+    border-color: rgba(64 110 12 / 40%);
+    background: linear-gradient(to bottom, rgba(64 110 12 / 10%) 0%, rgba(64 110 12 / 2%) 100%);
+  }
+
+  100% {
+    box-shadow:
+      0 1px 3px rgba(0 0 0 / 12%),
+      0 1px 2px rgba(0 0 0 / 24%),
+      0 0 8px rgba(64 110 12 / 20%);
+    border-color: rgba(64 110 12 / 20%);
+    background: linear-gradient(to bottom, rgba(64 110 12 / 5%) 0%, rgba(64 110 12 / 0%) 100%);
+  }
+}
+
+/* Card */
+main .pdf-display .pdf-display-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--pdf-border-radius);
+  overflow: hidden;
+  transition: var(--pdf-transition);
+  background-color: var(--pdf-card-bg);
+  text-align: center;
+  animation: pdfGlowPulse 3s infinite ease-in-out;
+}
+
+main .pdf-display .pdf-display-card:hover {
+  transform: translateY(-5px);
+  animation-play-state: paused;
+  box-shadow:
+    0 4px 8px rgba(0 0 0 / 20%),
+    0 3px 6px rgba(0 0 0 / 15%),
+    0 0 15px rgba(64 110 12 / 70%);
+  border-color: rgba(64 110 12 / 60%);
+  background: linear-gradient(to bottom, rgba(64 110 12 / 15%) 0%, rgba(64 110 12 / 5%) 100%);
+}
+
+/* Image */
+main .pdf-display .pdf-display-image-link {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 55.6%; /* 16:9 aspect ratio */
+  background-color: var(--pdf-card-bg);
+}
+
+main .pdf-display .pdf-display-image-link img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--pdf-border-radius) var(--pdf-border-radius) 0 0;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.5s ease;
+}
+
+main .pdf-display .pdf-display-image-link:hover img {
+  transform: scale(1.05);
+}
+
+/* Content Container */
+main .pdf-display .pdf-display-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  padding: 28px 20px 32px;
+  background-color: var(--pdf-card-bg);
+}
+
+/* Title */
+main .pdf-display .pdf-display-title-link {
+  display: block;
+  margin-bottom: var(--pdf-spacing-sm);
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+main .pdf-display .pdf-display-title-link:hover {
+  color: var(--link-hover-color);
+}
+
+main .pdf-display .pdf-display-title {
+  font-weight: 600;
+  margin: 0;
+  font-size: var(--pdf-font-size-2xl);
+  text-wrap: wrap;
+  line-height: 1.3;
+  color: var(--link-color);
+  letter-spacing: -1px;
+}
+
+/* Description */
+main .pdf-display .pdf-display-description {
+  margin: var(--pdf-spacing-md) 0 0;
+  font-size: var(--pdf-font-size-lg);
+  color: var(--pdf-color-muted);
+  line-height: 1.5;
+  font-family: var(--body-font-family);
+}
+
+/* PDF Badge */
+main .pdf-display .pdf-display-badge {
+  display: inline-block;
+  margin-top: auto;
+  padding-top: var(--pdf-spacing-lg);
+  font-size: var(--pdf-font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: var(--link-color);
+  color: var(--pdf-card-bg);
+  border-radius: var(--pdf-border-radius-sm);
+  padding: 3px var(--pdf-spacing-sm) 2px;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--heading-font-family);
+}
+
+/* States */
+main .pdf-display .pdf-display-loading {
+  text-align: center;
+  padding: var(--pdf-spacing-2xl);
+  color: var(--pdf-color-muted);
+  font-style: italic;
+}
+
+main .pdf-display .pdf-display-empty {
+  text-align: center;
+  padding: var(--pdf-spacing-xl);
+  color: var(--pdf-color-empty);
+  font-style: italic;
+  background-color: var(--pdf-color-empty-bg);
+  border-radius: var(--pdf-border-radius-sm);
+}
+
+main .pdf-display .pdf-display-error {
+  text-align: center;
+  padding: var(--pdf-spacing-xl);
+  color: var(--pdf-color-error);
+  background-color: var(--pdf-color-error-bg);
+  border-radius: var(--pdf-border-radius-sm);
+}
+
+/* Fade-in animation for cards */
+@keyframes pdfFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main .pdf-display .pdf-display-item {
+  opacity: 0;
+  animation: pdfFadeIn 0.6s ease-out forwards;
+}
+
+main .pdf-display .pdf-display-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+main .pdf-display .pdf-display-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+main .pdf-display .pdf-display-item:nth-child(n+4) {
+  animation-delay: 0.3s;
+}
+
+/* ==============================
+   Responsive: 3-up grid (desktop)
+   ============================== */
+
+/* Desktop: 3 columns */
+@media (width >= 900px) {
+  main .pdf-display .pdf-display-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet: 2 columns */
+@media (width >= 600px) and (width < 900px) {
+  main .pdf-display .pdf-display-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column (default above) */
