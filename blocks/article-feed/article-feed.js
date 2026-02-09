@@ -341,7 +341,23 @@ function filterByAuthors(authorString, data) {
 }
 
 function filterByCategories(categoryString, data) {
-  if (!categoryString) return data;
+  // Define allowed paths
+  const allowedPaths = ['/blog/', '/podcast/', '/customer-stories/'];
+  
+  // First filter by allowed paths - this happens regardless of category
+  let filtered = data.filter((article) => {
+    if (!article.path) return false;
+    // Check if the article path starts with any of the allowed paths
+    return allowedPaths.some(allowedPath => {
+      const lang = getLanguage();
+      // Handle both with and without language prefix
+      return article.path.startsWith(allowedPath) || 
+             article.path.startsWith(`/${lang}${allowedPath}`);
+    });
+  });
+
+  // If no category specified, return path-filtered data
+  if (!categoryString) return filtered;
 
   // Convert to lowercase for case-insensitive comparison
   const categoryStringLower = categoryString.toLowerCase();
@@ -349,7 +365,7 @@ function filterByCategories(categoryString, data) {
   // Split categories by comma and trim whitespace
   const categories = categoryStringLower.split(',').map((cat) => cat.trim());
 
-  const filtered = data.filter((article) => {
+  filtered = filtered.filter((article) => {
     // Only use the article's explicit category field for matching
     if (!article.category) return false;
 
@@ -391,7 +407,6 @@ function filterByCategories(categoryString, data) {
 
   return filtered;
 }
-
 
 function filterByTags(tagString, data) {
   if (!tagString) return data;
