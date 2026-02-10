@@ -19,14 +19,7 @@ const QUERY_PATH = getLanguageIndex();
 const TEST_PATH = '/en-index-test.json'; // Always use en-index-test.json for testing
 const AUTHOR_PATH = USE_TEST_FILE ? TEST_PATH : getLanguageIndex();
 
-// Define available categories and their paths
-const CATEGORIES = {
-  'AEM Technical Help': '/blog',
-  'AEM News': '/blog',
-  'Arbory Digital News': '/blog',
-  'Customer Stories': '/customer-stories',
-  Podcasts: '/podcast',
-};
+
 
 // Map category input to metadata values
 const CATEGORY_METADATA_MAP = {
@@ -343,16 +336,16 @@ function filterByAuthors(authorString, data) {
 function filterByCategories(categoryString, data) {
   // Define allowed paths
   const allowedPaths = ['/blog/', '/podcast/', '/customer-stories/'];
-  
+
   // First filter by allowed paths - this happens regardless of category
   let filtered = data.filter((article) => {
     if (!article.path) return false;
     // Check if the article path starts with any of the allowed paths
-    return allowedPaths.some(allowedPath => {
+    return allowedPaths.some((allowedPath) => {
       const lang = getLanguage();
       // Handle both with and without language prefix
-      return article.path.startsWith(allowedPath) || 
-             article.path.startsWith(`/${lang}${allowedPath}`);
+      return article.path.startsWith(allowedPath)
+             || article.path.startsWith(`/${lang}${allowedPath}`);
     });
   });
 
