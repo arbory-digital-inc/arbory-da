@@ -21,14 +21,14 @@
   --article-transform-hover: translateY(-3px);
   --article-transform-active: translateY(0);
   --article-color-muted: #b5b5b5;
-  --article-color-error: #cc0000;
+  --article-color-error: #c00;
   --article-color-error-bg: #fff0f0;
   --article-color-empty: #666;
   --article-color-empty-bg: #f9f9f9;
   --article-color-dark: rgb(47 47 47);
   --grid-container-width: 1200px;
   --bg-color-1: #191b22;
-  --bg-color-2: #272B36;
+  --bg-color-2: #272b36;
   --card-background-color: var(--bg-color-1);
 }
 
@@ -194,12 +194,12 @@
 /* Card Variants Base Styles */
 .article-feed.card-2 .article-feed-content-container,
 .article-feed.card-3 .article-feed-content-container {
-  padding: 28px 20px 32px 20px;
+  padding: 28px 20px 32px;
   background-color: inherit;
 }
 
 .article-feed.card-4 .article-feed-content-container {
-  padding: 16px 8px 16px 8px;
+  padding: 16px 8px;
   background-color: inherit;
 }
 
@@ -212,19 +212,21 @@
 
 @keyframes glowPulse {
   0% {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24), 0 0 8px rgba(64, 110, 12, 0.2);
-    border-color: rgba(64, 110, 12, 0.2);
-    background: linear-gradient(to bottom, rgba(64, 110, 12, 0.05) 0%, rgba(64, 110, 12, 0) 100%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%), 0 0 8px rgb(64 110 12 / 20%);
+    border-color: rgb(64 110 12 / 20%);
+    background: linear-gradient(to bottom, rgb(64 110 12 / 5%) 0%, rgb(64 110 12 / 0%) 100%);
   }
+
   50% {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24), 0 0 12px rgba(64, 110, 12, 0.5);
-    border-color: rgba(64, 110, 12, 0.4);
-    background: linear-gradient(to bottom, rgba(64, 110, 12, 0.1) 0%, rgba(64, 110, 12, 0.02) 100%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%), 0 0 12px rgb(64 110 12 / 50%);
+    border-color: rgb(64 110 12 / 40%);
+    background: linear-gradient(to bottom, rgb(64 110 12 / 10%) 0%, rgb(64 110 12 / 2%) 100%);
   }
+
   100% {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24), 0 0 8px rgba(64, 110, 12, 0.2);
-    border-color: rgba(64, 110, 12, 0.2);
-    background: linear-gradient(to bottom, rgba(64, 110, 12, 0.05) 0%, rgba(64, 110, 12, 0) 100%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%), 0 0 8px rgb(64 110 12 / 20%);
+    border-color: rgb(64 110 12 / 20%);
+    background: linear-gradient(to bottom, rgb(64 110 12 / 5%) 0%, rgb(64 110 12 / 0%) 100%);
   }
 }
 
@@ -247,9 +249,9 @@
 .article-feed.card-4 article:hover {
   transform: translateY(-5px);
   animation-play-state: paused;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 15px rgba(64, 110, 12, 0.7);
-  border-color: rgba(64, 110, 12, 0.6);
-  background: linear-gradient(to bottom, rgba(64, 110, 12, 0.15) 0%, rgba(64, 110, 12, 0.05) 100%);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%), 0 3px 6px rgb(0 0 0 / 15%), 0 0 15px rgb(64 110 12 / 70%);
+  border-color: rgb(64 110 12 / 60%);
+  background: linear-gradient(to bottom, rgb(64 110 12 / 15%) 0%, rgb(64 110 12 / 5%) 100%);
 }
 
 .article-feed.card-2 .article-feed-article-image-link,
@@ -343,8 +345,6 @@
 .article-feed.card-4 .article-feed-article-date {
   font-size: 1rem;
 }
-
-
 
 /* Smaller tags for card-4 variant */
 .article-feed.card-4 .article-feed-tags {
@@ -507,7 +507,7 @@ a.article-feed-article-title-link {
   background-color: var(--background-color-2);
   box-shadow: var(--shadow-lg);
 
-  .article-feed-tag{
+  .article-feed-tag {
     background-color: var(--link-color);
     color: var(--background-color);
   }
@@ -519,6 +519,7 @@ a.article-feed-article-title-link {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -531,6 +532,7 @@ a.article-feed-article-title-link {
 }
 
 /* Responsive Design */
+
 /* Force grid layout for all screen sizes */
 .article-feed.card-2 .article-feed-list {
   display: grid !important;
@@ -584,7 +586,7 @@ a.article-feed-article-title-link {
   .article-feed.card-3 .article-feed-list {
     grid-template-columns: repeat(2, 1fr) !important;
   }
-  
+
   .article-feed.card-4 .article-feed-list {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -594,11 +596,11 @@ a.article-feed-article-title-link {
   .article-feed.card-2 .article-feed-list {
     grid-template-columns: repeat(1, 1fr) !important;
   }
-  
+
   .article-feed.card-3 .article-feed-list {
     grid-template-columns: repeat(1, 1fr) !important;
   }
-  
+
   .article-feed.card-4 .article-feed-list {
     grid-template-columns: repeat(1, 1fr) !important;
   }
