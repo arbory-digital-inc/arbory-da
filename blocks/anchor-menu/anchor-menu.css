@@ -100,7 +100,7 @@
 
 
 /* Hide sidebar on smaller screens */
-@media (max-width: 1399px) {
+@media (max-width: 1700px) {
   .anchor-menu-sidebar {
     display: none;
   }

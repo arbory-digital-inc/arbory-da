@@ -11,22 +11,28 @@ export default function decorate(block) {
   sidebar.className = 'anchor-menu-sidebar';
   sidebar.setAttribute('aria-label', 'Section Navigation');
 
-  // Remove dynamic top offset logic; sidebar stays at its default position
-  // (CSS handles the top position)
+  // Dynamically match page background color
+  function updateSidebarBackground() {
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+      const bgColor = window.getComputedStyle(mainElement).backgroundColor;
+      sidebar.style.backgroundColor = bgColor;
+    }
+  }
+  updateSidebarBackground();
+  window.addEventListener('resize', updateSidebarBackground);
 
   // Show/hide sidebar based on hero visibility
   function updateSidebarVisibility() {
     const hero = document.querySelector('main .hero, main .arbory-blog-hero, main .blog-post-hero');
     if (hero) {
       const rect = hero.getBoundingClientRect();
-      // Hide sidebar if any part of hero is visible at the top of the viewport
       if (rect.top < window.innerHeight && rect.bottom > 0) {
         sidebar.classList.remove('visible');
       } else {
         sidebar.classList.add('visible');
       }
     } else {
-      // If no hero, always hide sidebar (or you can choose to always show)
       sidebar.classList.remove('visible');
     }
   }
@@ -38,7 +44,6 @@ export default function decorate(block) {
   const menuList = document.createElement('ul');
   menuList.className = 'anchor-menu-list';
 
-  // Find all h2 and h3 elements in the main content, ignoring specific headings
   const headings = Array.from(document.querySelectorAll('main h2, main h3'))
     .filter((heading) => {
       const text = heading.textContent.trim();
@@ -46,7 +51,6 @@ export default function decorate(block) {
     });
   if (headings.length === 0) return;
 
-  // Create menu items from headings
   headings.forEach((heading, index) => {
     const headingId = heading.id || `section-${index}`;
     if (!heading.id) heading.id = headingId;
@@ -64,7 +68,6 @@ export default function decorate(block) {
     li.appendChild(link);
     menuList.appendChild(li);
 
-    // Smooth scroll and focus
     link.addEventListener('click', (e) => {
       e.preventDefault();
       heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -84,9 +87,6 @@ export default function decorate(block) {
   sidebar.appendChild(menuList);
   block.appendChild(sidebar);
 
-  // Sticky/fixed behavior is handled by CSS, but top is set dynamically
-
-  // Update active menu item on scroll
   window.addEventListener('scroll', () => {
     let currentHeading = null;
     headings.forEach((heading) => {
