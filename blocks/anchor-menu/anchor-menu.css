@@ -1,0 +1,112 @@
+
+.block .anchor-menu-sidebar {
+  position: fixed;
+  top: 5rem;
+  left: 0;
+  height: calc(100vh - 6.25rem);
+  width: 13.75rem;
+  z-index: 9999;
+  padding: 1.25rem 0.625rem 1.25rem 0;
+  background-color: var(--background-color);
+  border-right: 0.0625rem solid var(--overlay-background-color);
+  box-sizing: border-box;
+  overflow-y: auto;
+  min-height: 18.75rem;
+  max-height: calc(100vh - 6.25rem);
+  pointer-events: auto;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.anchor-menu-sidebar.visible {
+    transform: translateX(0);
+    opacity: 1;
+  }
+.anchor-menu-sidebar.hidden {
+        transform: translateX(-100%);
+        opacity: 0;
+  pointer-events: auto;
+}
+
+@media (max-width: 1399px) {
+  .anchor-menu-sidebar {
+    display: none;
+  }
+}
+
+
+.anchor-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.anchor-menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.anchor-menu-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.anchor-menu-list::-webkit-scrollbar-thumb {
+  background-color: var(--link-color);
+  border-radius: 3px;
+}
+
+.anchor-menu-item {
+  margin: 0;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+
+
+.anchor-menu-link {
+  display: block;
+  padding: 0.625em 0.75em 0.625em 1.125em;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-family: var(--body-font-family);
+  border-left: 0.1875rem solid transparent;
+  transition: all 0.2s ease;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.3;
+  outline: none;
+}
+
+
+.anchor-menu-link:hover,
+.anchor-menu-link:focus {
+  color: var(--link-color);
+  padding-left: 1.5em;
+  border-left-color: var(--link-color);
+  background: var(--highlight-background-color);
+  text-decoration: none;
+}
+
+
+.anchor-menu-item.active .anchor-menu-link {
+  color: var(--link-color);
+  border-left-color: var(--link-color);
+  font-weight: 600;
+  background-color: var(--highlight-background-color);
+  white-space: normal;
+  word-break: break-word;
+}
+
+
+/* Hide sidebar on smaller screens */
+@media (max-width: 1700px) {
+  .anchor-menu-sidebar {
+    display: none;
+  }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
