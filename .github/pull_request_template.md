@@ -3,5 +3,5 @@ Please always provide the [GitHub issue(s)](../issues) your PR is for, as well a
 Fix #<gh-issue-id>
 
 Test URLs:
-- Before: https://main--helix-block-collection--adobe.hlx.page
-- After: https://<branch>--helix-block-collection--adobe.hlx.page
+- Before: https://main--arbory-da--arbory-digital-inc.aem.page/en/
+- After: https://<branch>--arbory-da--arbory-digital-inc.aem.page/en/
