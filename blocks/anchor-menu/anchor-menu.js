@@ -44,11 +44,10 @@ export default function decorate(block) {
   const menuList = document.createElement('ul');
   menuList.className = 'anchor-menu-list';
 
-  const headings = Array.from(document.querySelectorAll('main h2, main h3'))
-    .filter((heading) => {
-      const text = heading.textContent.trim();
-      return text !== 'About the Authors' && text !== 'Podcast Episodes & Blog Posts';
-    });
+  const allHeadings = Array.from(document.querySelectorAll('main h2, main h3'));
+  const cutoffIndex = allHeadings.findIndex((heading) => /^about the authors?$/i.test(heading.textContent.trim()));
+  const headings = (cutoffIndex === -1 ? allHeadings : allHeadings.slice(0, cutoffIndex))
+    .filter((heading) => heading.textContent.trim() !== 'Podcast Episodes & Blog Posts');
   if (headings.length === 0) return;
 
   headings.forEach((heading, index) => {
