@@ -206,8 +206,60 @@ function createLanguageSelector() {
   // Start loading language options
   loadLanguageOptions();
 
+  // Build and show mobile full-screen modal
+  const openMobileModal = () => {
+    const overlay = document.createElement('div');
+    overlay.className = 'language-modal-overlay';
+
+    const modal = document.createElement('div');
+    modal.className = 'language-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Select language');
+
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'language-modal-header';
+
+    const title = document.createElement('span');
+    title.textContent = 'Select Language';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'language-modal-close';
+    closeBtn.setAttribute('aria-label', 'Close language selector');
+    closeBtn.innerHTML = '&times;';
+
+    modalHeader.appendChild(title);
+    modalHeader.appendChild(closeBtn);
+
+    const langList = document.createElement('ul');
+    langList.className = 'language-modal-list';
+    Array.from(langDropdown.children).forEach((item) => {
+      langList.appendChild(item.cloneNode(true));
+    });
+
+    modal.appendChild(modalHeader);
+    modal.appendChild(langList);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    const close = () => overlay.remove();
+
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
+    langList.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link && !link.classList.contains('active')) close();
+    });
+  };
+
   // Add event listeners
   currentLangButton.addEventListener('click', () => {
+    if (!isDesktop.matches) {
+      openMobileModal();
+      return;
+    }
     const expanded = currentLangButton.getAttribute('aria-expanded') === 'true';
     currentLangButton.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     langDropdown.style.display = expanded ? 'none' : 'block';
