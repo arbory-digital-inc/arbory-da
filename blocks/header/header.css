@@ -4,6 +4,7 @@ header .nav-wrapper {
   width: 100%;
   z-index: 99;
   position: fixed;
+  overflow: visible;
 }
 
 header nav {
@@ -356,17 +357,94 @@ header nav .nav-tools {
 
 @media (max-width: 900px) {
   .language-selector {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
   }
-  
+
   .language-selector .language-dropdown {
-    position: static;
-    width: 100%;
-    margin-top: 0.5rem;
-    box-shadow: none;
-    border: none;
-    background-color: transparent;
+    display: none !important;
   }
+}
+
+/* Mobile language modal */
+.language-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.language-modal {
+  background-color: var(--background-color, #fff);
+  width: 100%;
+  max-height: 75vh;
+  border-radius: 1rem 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.language-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.language-modal-header span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.language-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0.25rem 0.5rem;
+}
+
+.language-modal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.language-modal-list li {
+  padding: 0;
+}
+
+.language-modal-list a {
+  display: block;
+  padding: 0.85rem 1.25rem;
+  text-decoration: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.language-modal-list a.active {
+  font-weight: 700;
+  color: var(--link-color);
+}
+
+.language-modal-list li:last-child a {
+  border-bottom: none;
 }
 
 .nav-wrapper{
