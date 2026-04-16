@@ -1,5 +1,9 @@
 /* made with earth energy crystals by ur boy frank */
 
+.global-footer-container {
+    overflow-x: hidden;
+}
+
 .global-footer-wrapper {
     max-width: 100%;
 }
@@ -63,6 +67,7 @@
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     width: 100%;
+    padding-bottom: 2rem;
 }
 .global-footer-container .footer-row-2 div{
     display: flex;
@@ -79,7 +84,7 @@
     justify-self: end;
     color: #f7f7f7;
     display: inline-flex;
-    padding: 0.75rem;
+    padding: 0.75rem 0;
     margin: 0.25rem;
     align-self: center;
     transition: all 500ms ease;
@@ -100,9 +105,14 @@
     height: auto !important;
 }
 
+.global-footer-container .footer-bottom {
+    padding-top: 2rem;
+}
+
 .global-footer-container .footer-bottom div{
     display: flex;
     justify-content: center;
+    max-width: 100%;
 }
 
 .global-footer-container .footer-bottom div p{
@@ -115,4 +125,51 @@
     font-weight: 300;
     font-family: var(--heading-font-family);
     font-size: 0.6em;
+    white-space: normal;
+    max-width: 100%;
+}
+
+.global-footer-container .footer-languages {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0;
+}
+
+.global-footer-container .footer-languages a:not(:last-child)::after {
+    content: '|';
+    margin-inline: 0.5rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 900px) {
+    .global-footer-container .footer-row-2 {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 1rem;
+    }
+
+    .global-footer-container .footer-row-2 > div {
+        justify-self: center;
+    }
+
+    .global-footer-container .footer-row-2 > div:first-child {
+        justify-self: center;
+    }
+
+    .global-footer-container .footer-languages {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        justify-content: center;
+        text-align: center;
+        gap: 0.5rem 1rem;
+    }
+
+    .global-footer-container .footer-languages a:not(:last-child)::after {
+        content: none;
+    }
+
+    .global-footer-container .footer-bottom div {
+        flex-wrap: wrap;
+    }
 }
