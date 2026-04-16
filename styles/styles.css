@@ -165,7 +165,7 @@ code, samp {
 }
 
 pre {
-  overflow: scroll;
+  overflow-x: auto;
 }
 
 main pre {
@@ -332,7 +332,8 @@ code:not(pre > code) {
 
 pre {
   width: 100%;
-  
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 main table pre {

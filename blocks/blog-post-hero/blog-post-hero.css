@@ -186,10 +186,15 @@
   font-size: 1rem;
 }
 
+/* Space after hero to offset the negative margin overlap */
+.blog-post-hero-container + .section {
+  padding-top: 6rem;
+}
+
 /* Mobile layout - stack vertically */
 @media (max-width: 858px) {
   .blog-post-hero-container {
-    width: 100vw;
+    width: 100%;
     max-width: 100%;
     overflow-x: hidden;
   }
