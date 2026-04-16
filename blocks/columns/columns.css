@@ -3,6 +3,8 @@
   flex-direction: column;
   padding-top: 20px;
   padding-bottom: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .columns img {
@@ -53,5 +55,16 @@
   .columns > div > div {
     flex: 1;
     order: unset;
+  }
+
+  /* 12-column grid variants */
+  .columns.columns-grid > div {
+    display: grid;
+    grid-template-columns: var(--columns-grid-template);
+    gap: 32px;
+  }
+
+  .columns.columns-grid > div > div {
+    flex: unset;
   }
 }

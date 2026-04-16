@@ -47,7 +47,17 @@ export default function decorate(block) {
   // Handle the third row (company privacy policy)
   if (rows[2]) {
     const bottomRow = rows[2];
-    // Add specific class for the social icons row
     bottomRow.classList.add('footer-bottom');
+
+    // Convert language links from inline text into a grid-friendly list
+    const langDiv = bottomRow.querySelector('div');
+    const langLinks = langDiv?.querySelectorAll('a');
+    if (langLinks && langLinks.length > 1) {
+      const langGrid = document.createElement('div');
+      langGrid.className = 'footer-languages';
+      langLinks.forEach((link) => langGrid.append(link));
+      langDiv.querySelector('p')?.remove();
+      langDiv.prepend(langGrid);
+    }
   }
 }
