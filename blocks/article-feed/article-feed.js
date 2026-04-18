@@ -202,9 +202,10 @@ function decorateFeed(data, opts) {
 
         limitedTags.forEach((tag) => {
           if (tag) {
-            const tagEl = document.createElement('span');
+            const tagEl = document.createElement('a');
             tagEl.className = 'article-feed-tag';
             tagEl.textContent = tag;
+            tagEl.href = `/${getLanguage()}/taglist?tag=${encodeURIComponent(tag)}`;
             tagsContainer.appendChild(tagEl);
           }
         });
@@ -281,9 +282,10 @@ function decorateFeed(data, opts) {
 
         limitedTags.forEach((tag) => {
           if (tag) {
-            const tagEl = document.createElement('span');
+            const tagEl = document.createElement('a');
             tagEl.className = 'article-feed-tag';
             tagEl.textContent = tag;
+            tagEl.href = `/${getLanguage()}/taglist?tag=${encodeURIComponent(tag)}`;
             tagsContainer.appendChild(tagEl);
           }
         });

@@ -422,6 +422,13 @@
   padding: 1px 6px;
   font-size: var(--article-font-size-md);
   color: var(--bg-color-1);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.article-feed-tag:hover {
+  background-color: var(--link-hover-color);
+  color: #fff;
 }
 
 /* Article Title */
