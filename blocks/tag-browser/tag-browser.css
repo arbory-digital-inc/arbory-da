@@ -1,0 +1,240 @@
+/* Tag Browser Block */
+
+/* Base */
+main .tag-browser {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Header */
+main .tag-browser .tag-browser-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+main .tag-browser .tag-browser-heading {
+  font-size: var(--heading-font-size-l);
+  font-weight: 600;
+  color: var(--link-color);
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+main .tag-browser .tag-browser-count {
+  font-size: var(--body-font-size-xs);
+  color: #b5b5b5;
+  margin: 0;
+}
+
+/* Grid */
+main .tag-browser .tag-browser-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 600px) {
+  main .tag-browser .tag-browser-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  main .tag-browser .tag-browser-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Card */
+main .tag-browser .tag-browser-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #191b22;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-lg);
+}
+
+main .tag-browser .tag-browser-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%), 0 0 8px rgb(64 110 12 / 30%);
+}
+
+/* Card Image */
+main .tag-browser .tag-browser-card-image {
+  display: block;
+  position: relative;
+  padding-bottom: 55.6%;
+  background-color: #191b22;
+}
+
+main .tag-browser .tag-browser-card-image picture {
+  position: absolute;
+  inset: 0;
+}
+
+main .tag-browser .tag-browser-card-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Card Content */
+main .tag-browser .tag-browser-card-content {
+  padding: 20px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+main .tag-browser .tag-browser-card-category {
+  font-size: 11px;
+  font-family: var(--heading-font-family);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--link-color);
+  margin-bottom: 8px;
+}
+
+main .tag-browser .tag-browser-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 10px;
+}
+
+main .tag-browser .tag-browser-card-title a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+main .tag-browser .tag-browser-card-title a:hover {
+  color: var(--link-color);
+}
+
+main .tag-browser .tag-browser-card-description {
+  font-size: 14px;
+  color: #b5b5b5;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Card Meta */
+main .tag-browser .tag-browser-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 12px;
+  font-family: var(--heading-font-family);
+  color: #b5b5b5;
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+
+main .tag-browser .tag-browser-card-author {
+  display: inline;
+}
+
+main .tag-browser .tag-browser-card-date {
+  display: inline;
+}
+
+/* Tag pills */
+main .tag-browser .tag-browser-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+main .tag-browser .tag-browser-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-family: var(--heading-font-family);
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: rgb(64 110 12 / 15%);
+  color: var(--link-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+main .tag-browser .tag-browser-tag:hover {
+  background-color: rgb(64 110 12 / 30%);
+  color: #fff;
+}
+
+/* States */
+main .tag-browser .tag-browser-empty {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: var(--body-font-size-xs);
+  color: #999;
+  font-style: italic;
+  background-color: #191b22;
+  border-radius: 10px;
+}
+
+main .tag-browser .tag-browser-error {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: var(--body-font-size-xs);
+  color: #c00;
+  background-color: #fff0f0;
+  border-radius: 10px;
+}
+
+main .tag-browser .tag-browser-loading {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: var(--body-font-size-xs);
+  color: #b5b5b5;
+}
+
+/* Load More */
+main .tag-browser .tag-browser-load-more {
+  text-align: center;
+  margin-top: 40px;
+}
+
+main .tag-browser .tag-browser-load-more-button {
+  font-family: var(--heading-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 32px;
+  border: 2px solid var(--link-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--link-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+main .tag-browser .tag-browser-load-more-button:hover {
+  background-color: var(--link-color);
+  color: #fff;
+}
+
+/* Fade-in animation */
+@keyframes tagBrowserFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main .tag-browser .tag-browser-card.fade-in {
+  animation: tagBrowserFadeIn 0.4s ease forwards;
+}
