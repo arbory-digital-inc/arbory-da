@@ -414,14 +414,21 @@
 
 .article-feed-tag {
   display: inline-block;
-  background-color: var(--link-color);
+  background-color: rgb(64 110 12 / 15%);
   border-radius: var(--article-border-radius-sm);
   font-weight: 600;
   text-transform: uppercase;
   box-shadow: var(--shadow-sm);
   padding: 1px 6px;
   font-size: var(--article-font-size-md);
-  color: var(--bg-color-1);
+  color: var(--link-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.article-feed-tag:hover {
+  background-color: rgb(64 110 12 / 30%);
+  color: #fff;
 }
 
 /* Article Title */
