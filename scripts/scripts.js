@@ -40,6 +40,40 @@ function buildHeroBlock(main) {
   }
 }
 
+function getBoundaryTextNode(root, searchForward = true) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  let current = walker.nextNode();
+  while (current) {
+    if (current.textContent.trim()) {
+      textNodes.push(current);
+    }
+    current = walker.nextNode();
+  }
+
+  return searchForward ? textNodes[0] : textNodes[textNodes.length - 1];
+}
+
+function normalizeBlockquoteQuotes(blockquote) {
+  const firstTextNode = getBoundaryTextNode(blockquote);
+  const lastTextNode = getBoundaryTextNode(blockquote, false);
+
+  if (firstTextNode) {
+    firstTextNode.textContent = firstTextNode.textContent.replace(/^(\s*)["“]/u, '$1');
+  }
+
+  if (lastTextNode) {
+    lastTextNode.textContent = lastTextNode.textContent.replace(/["”](\s*)$/u, '$1');
+  }
+}
+
+function buildAutoblockedBlockquotes(main) {
+  main.querySelectorAll(':scope > div > blockquote').forEach((blockquote) => {
+    blockquote.classList.add('autoblocked-blockquote');
+    normalizeBlockquoteQuotes(blockquote);
+  });
+}
+
 const defaultMetaImage = `${window.location.origin}/icons/arbory-share.jpg`;
 
 /**
@@ -61,6 +95,7 @@ async function loadFonts() {
 function buildAutoBlocks(main) {
   try {
     buildHeroBlock(main);
+    buildAutoblockedBlockquotes(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
