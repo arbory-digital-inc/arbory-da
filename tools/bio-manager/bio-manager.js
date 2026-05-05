@@ -123,25 +123,64 @@ async function ensureFolderChain() {
   }
 }
 
+let sheetEnvelope = null;
+
 async function fetchSheet() {
   const url = `${ADMIN_BASE}/${ORG}/${SITE}${SHEET_PATH}.json`;
   const resp = await fetch(url, { headers: authHeaders() });
-  if (resp.status === 404) return [];
+  if (resp.status === 404) {
+    sheetEnvelope = { kind: 'single' };
+    return [];
+  }
   if (!resp.ok) throw new Error(`Failed to load sheet (${resp.status})`);
   const json = await resp.json();
-  return Array.isArray(json?.data) ? json.data : [];
+
+  if (Array.isArray(json?.data)) {
+    sheetEnvelope = { kind: 'single' };
+    return json.data;
+  }
+
+  if (Array.isArray(json?.[':names'])) {
+    const names = json[':names'];
+    const sheetName = names.includes('data') ? 'data' : names[0];
+    const inner = json[sheetName];
+    const rows = Array.isArray(inner?.data) ? inner.data : [];
+    sheetEnvelope = { kind: 'multi', names, primary: sheetName, raw: json };
+    return rows;
+  }
+
+  sheetEnvelope = { kind: 'single' };
+  return [];
 }
 
-async function saveSheet(rows) {
-  const sheetJson = {
+function buildSingleSheetJson(rows) {
+  return {
     total: rows.length,
     limit: rows.length,
     offset: 0,
     data: rows,
     ':type': 'sheet',
   };
+}
+
+async function saveSheet(rows) {
+  let payload;
+  if (sheetEnvelope?.kind === 'multi') {
+    const cloned = { ...sheetEnvelope.raw };
+    cloned[sheetEnvelope.primary] = {
+      total: rows.length,
+      limit: rows.length,
+      offset: 0,
+      data: rows,
+    };
+    cloned[':type'] = 'multi-sheet';
+    cloned[':names'] = sheetEnvelope.names;
+    payload = cloned;
+  } else {
+    payload = buildSingleSheetJson(rows);
+  }
   const url = `${ADMIN_BASE}/${ORG}/${SITE}${SHEET_PATH}.json`;
-  const blob = new Blob([JSON.stringify(sheetJson)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
   const formData = new FormData();
   formData.append('data', blob);
   const resp = await fetch(url, {
