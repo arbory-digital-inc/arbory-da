@@ -1,8 +1,11 @@
 import DA_SDK from 'https://da.live/nx/utils/sdk.js';
 
+const ASSET_SELECTOR_URL = 'https://experience.adobe.com/solutions/CQ-assets-selectors/static-assets/resources/assets-selectors.js';
+const DAM_DEFAULT_PATH = '/content/dam/blog/hero-images/';
+const DEFAULT_ASSET_BASE_PATH = 'adobe/assets';
+
 const SHEET_PATH = '/private-bios';
 const FRAGMENTS_FOLDER = '/en/fragments/bios';
-const MEDIA_FOLDER = '/en/fragments/bios/media';
 
 const COL_EMAIL = 'Email';
 const COL_PATH = 'DA Fragment URL';
@@ -10,24 +13,24 @@ const COL_NAME = 'Name';
 const COL_CREATED = 'Created';
 
 const ADMIN_BASE = 'https://admin.da.live/source';
-const CONTENT_BASE = 'https://content.da.live';
 const EDIT_BASE = 'https://da.live/edit';
 
 const FOLDER_CHAIN = [
   '/en',
   '/en/fragments',
   '/en/fragments/bios',
-  '/en/fragments/bios/media',
 ];
 
 let SDK_TOKEN = '';
 let ORG = '';
 let SITE = '';
+let REPO_CONFIG = null;
+let assetSelectorScriptPromise = null;
 
 const els = {};
 let activeTab = 'create';
-let selectedImage = null;
-let lastUploadedImageUrl = null;
+let selectedImageUrl = '';
+let selectedImageMeta = null;
 let bannerRetryHandler = null;
 let manageRows = [];
 let manageSearch = '';
@@ -72,18 +75,6 @@ function slugify(name) {
 
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function formatBytes(bytes) {
-  if (!bytes) return '0 B';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let i = 0;
-  let v = bytes;
-  while (v >= 1024 && i < units.length - 1) {
-    v /= 1024;
-    i += 1;
-  }
-  return `${v.toFixed(v < 10 && i > 0 ? 1 : 0)} ${units[i]}`;
 }
 
 function showBanner(type, message, retry) {
@@ -212,36 +203,186 @@ async function resolveUniqueSlug(base) {
   return candidate;
 }
 
-function sanitizeFilename(name) {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9.\-_]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+async function fetchRepoConfig(org, site) {
+  const urls = [
+    `https://admin.da.live/config/${org}/${site}/`,
+    `https://admin.da.live/config/${org}/`,
+  ];
+  const configs = [];
+  for (const url of urls) {
+    // eslint-disable-next-line no-await-in-loop
+    const resp = await fetch(url, { headers: authHeaders() });
+    if (!resp.ok) {
+      configs.push(null);
+      continue;
+    }
+    // eslint-disable-next-line no-await-in-loop
+    const json = await resp.json().catch(() => null);
+    configs.push(json);
+  }
+
+  const entries = configs
+    .reverse()
+    .flatMap((cfg) => {
+      if (!cfg) return [];
+      if (Array.isArray(cfg.data)) return cfg.data;
+      const names = cfg[':names'];
+      if (Array.isArray(names) && names.length) {
+        const first = cfg[names[0]];
+        if (Array.isArray(first?.data)) return first.data;
+      }
+      return [];
+    });
+
+  const getValue = (key) => entries.find((e) => e?.key === key)?.value || null;
+
+  const repositoryId = getValue('aem.repositoryId');
+  if (!repositoryId) return null;
+
+  const tierType = repositoryId.startsWith('delivery') ? 'delivery' : 'author';
+
+  const customOrigin = getValue('aem.assets.prod.origin');
+  const customBasePath = getValue('aem.assets.prod.basepath');
+  const isDmDeliveryFlag = getValue('aem.asset.dm.delivery') === 'on';
+  const isSmartCrop = getValue('aem.asset.smartcrop.select') === 'on';
+  const isDmEnabled = isSmartCrop || isDmDeliveryFlag
+    || customOrigin?.startsWith('delivery-') || tierType === 'delivery';
+
+  let assetOrigin;
+  if (customOrigin) {
+    assetOrigin = customOrigin;
+  } else if (tierType === 'delivery') {
+    assetOrigin = repositoryId;
+  } else if (isDmEnabled) {
+    assetOrigin = repositoryId.replace('author', 'delivery');
+  } else {
+    assetOrigin = repositoryId.replace('author', 'publish');
+  }
+
+  return {
+    repositoryId,
+    tierType,
+    assetOrigin,
+    assetBasePath: customBasePath || DEFAULT_ASSET_BASE_PATH,
+    isDmEnabled,
+  };
 }
 
-async function uploadImage(file, slug) {
-  const ext = (file.name.match(/\.[a-z0-9]+$/i)?.[0] || '').toLowerCase() || '.jpg';
-  const baseName = sanitizeFilename(file.name.replace(/\.[a-z0-9]+$/i, '')) || slug;
-  const filename = `${slug}-${baseName}${ext}`.replace(/\.{2,}/g, '.');
-  const url = `${ADMIN_BASE}/${ORG}/${SITE}${MEDIA_FOLDER}/${filename}`;
-  const formData = new FormData();
-  formData.append('data', file, filename);
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: formData,
+function resolveBasePath(basePath = DEFAULT_ASSET_BASE_PATH) {
+  return `/${basePath}`.replace(/^\/+/, '/').replace(/\/+$/, '') || DEFAULT_ASSET_BASE_PATH;
+}
+
+function getAssetAlt(asset) {
+  const meta = asset?._embedded?.['http://ns.adobe.com/adobecloud/rel/metadata/asset'];
+  return meta?.['dc:description'] || meta?.['dc:title'] || '';
+}
+
+function buildAuthorUrl(asset, publishOrigin) {
+  return `https://${publishOrigin}${asset.path}`;
+}
+
+function buildDmUrl(asset, host, basePath) {
+  const base = `https://${host}${resolveBasePath(basePath)}/${asset['repo:id']}`;
+  const name = asset.name || '';
+  const seoName = name.includes('.') ? name.split('.').slice(0, -1).join('.') : name;
+  return `${base}/as/${seoName}.avif`;
+}
+
+function buildDeliveryUrl(asset, overrideHost, basePath) {
+  const host = overrideHost || asset['repo:repositoryId'];
+  const assetId = asset['repo:assetId'];
+  const fullName = asset['repo:name'] || '';
+  const base = `https://${host}${resolveBasePath(basePath)}/${assetId}`;
+  const seoName = fullName.includes('.') ? fullName.split('.').slice(0, -1).join('.') : fullName;
+  return `${base}/as/${seoName}.avif`;
+}
+
+function resolveAssetUrl(asset, repoConfig) {
+  if (repoConfig.tierType === 'delivery') {
+    return buildDeliveryUrl(asset, repoConfig.assetOrigin, repoConfig.assetBasePath);
+  }
+  if (repoConfig.isDmEnabled) {
+    return buildDmUrl(asset, repoConfig.assetOrigin, repoConfig.assetBasePath);
+  }
+  return buildAuthorUrl(asset, repoConfig.assetOrigin);
+}
+
+function loadAssetSelectorScript() {
+  if (assetSelectorScriptPromise) return assetSelectorScriptPromise;
+  assetSelectorScriptPromise = new Promise((resolve, reject) => {
+    if (window.PureJSSelectors?.renderAssetSelector) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = ASSET_SELECTOR_URL;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load AEM Asset Selector script'));
+    document.head.appendChild(script);
   });
-  if (!resp.ok) throw new Error(`Image upload failed (${resp.status})`);
-  let json = null;
+  return assetSelectorScriptPromise;
+}
+
+async function openDamPicker() {
+  if (!REPO_CONFIG) {
+    showBanner('error', 'AEM repository config is not available — cannot open the asset picker.');
+    return;
+  }
   try {
-    json = await resp.json();
-  } catch (e) { /* no body */ }
-  const contentUrl = json?.source?.contentUrl;
-  if (contentUrl) return contentUrl;
-  const altUrl = json?.url || json?.source?.url || json?.aem?.previewUrl;
-  if (altUrl) return altUrl;
-  return `${CONTENT_BASE}/${ORG}/${SITE}${MEDIA_FOLDER}/${filename}`;
+    await loadAssetSelectorScript();
+  } catch (err) {
+    showBanner('error', err.message);
+    return;
+  }
+  if (!window.PureJSSelectors?.renderAssetSelector) {
+    showBanner('error', 'AEM Asset Selector did not load.');
+    return;
+  }
+
+  let dialog = document.querySelector('.bm-asset-dialog');
+  let container;
+  if (dialog) {
+    dialog.innerHTML = '';
+    container = document.createElement('div');
+    container.className = 'bm-asset-dialog-inner';
+    dialog.appendChild(container);
+    dialog.showModal();
+  } else {
+    dialog = document.createElement('dialog');
+    dialog.className = 'bm-asset-dialog';
+    container = document.createElement('div');
+    container.className = 'bm-asset-dialog-inner';
+    dialog.appendChild(container);
+    document.body.appendChild(dialog);
+    dialog.addEventListener('cancel', () => dialog.close());
+    dialog.showModal();
+  }
+
+  const props = {
+    imsToken: SDK_TOKEN,
+    repositoryId: REPO_CONFIG.repositoryId,
+    aemTierType: REPO_CONFIG.tierType,
+    featureSet: ['collections', 'detail-panel', 'advisor'],
+    path: DAM_DEFAULT_PATH,
+    onClose: () => dialog.close(),
+    handleSelection: (assets) => {
+      const [asset] = assets || [];
+      if (!asset) return;
+      const mimetype = (asset.mimetype || asset['dc:format'] || '').toLowerCase();
+      if (!mimetype.startsWith('image/')) {
+        showBanner('error', 'Please select an image asset.');
+        return;
+      }
+      const url = resolveAssetUrl(asset, REPO_CONFIG);
+      const alt = getAssetAlt(asset) || '';
+      const name = asset['repo:name'] || asset.name || asset.path?.split('/').pop() || 'asset';
+      dialog.close();
+      setSelectedImage({ url, alt, name });
+    },
+  };
+
+  window.PureJSSelectors.renderAssetSelector(container, props);
 }
 
 function buildFragmentHtml({ name, title, imageUrl, imageAlt, bodyHtml }) {
@@ -318,22 +459,33 @@ function buildLayout() {
         </div>
 
         <div class="bm-field">
-          <label class="bm-label">Hero image<span class="bm-required">*</span></label>
+          <label class="bm-label">
+            Hero image<span class="bm-required">*</span>
+            <code class="bm-label-path">${DAM_DEFAULT_PATH}</code>
+          </label>
           <div class="bm-image-drop" data-image-drop>
-            <div class="bm-image-empty" data-image-empty>
-              <strong>Browse for an image</strong>
-              <div>JPG, PNG, or WebP recommended.</div>
+            <div class="bm-image-col bm-image-col--left">
+              <div class="bm-image-empty-text">Choose a headshot from the AEM DAM.</div>
+              <button type="button" class="bm-btn" data-open-dam>Open DAM</button>
             </div>
-            <div class="bm-image-preview" data-image-preview hidden>
-              <img class="bm-image-thumb" data-image-thumb alt="" />
-              <div class="bm-image-meta">
-                <div class="bm-image-name" data-image-name></div>
-                <div class="bm-image-size" data-image-size></div>
+            <div class="bm-image-col bm-image-col--right">
+              <div class="bm-image-placeholder" data-image-placeholder>
+                <div class="bm-image-thumb bm-image-thumb--empty" aria-hidden="true"></div>
+                <div class="bm-image-placeholder-text">No image selected</div>
               </div>
-              <button type="button" class="bm-image-remove" data-image-remove>Remove</button>
+              <div class="bm-image-preview" data-image-preview hidden>
+                <img class="bm-image-thumb" data-image-thumb alt="" />
+                <div class="bm-image-meta">
+                  <div class="bm-image-name" data-image-name></div>
+                  <div class="bm-image-url" data-image-url></div>
+                </div>
+                <div class="bm-image-actions">
+                  <button type="button" class="bm-btn bm-btn--secondary bm-btn--small" data-change-dam>Change</button>
+                  <button type="button" class="bm-image-remove" data-image-remove>Remove</button>
+                </div>
+              </div>
             </div>
           </div>
-          <input type="file" accept="image/*" hidden data-image-input />
           <div class="bm-error-msg" data-error="image"></div>
         </div>
 
@@ -396,13 +548,14 @@ function buildLayout() {
   els.altField = app.querySelector('[data-alt-field]');
   els.slugPreview = app.querySelector('[data-slug-preview]');
   els.imageDrop = app.querySelector('[data-image-drop]');
-  els.imageInput = app.querySelector('[data-image-input]');
-  els.imageEmpty = app.querySelector('[data-image-empty]');
+  els.imagePlaceholder = app.querySelector('[data-image-placeholder]');
   els.imagePreview = app.querySelector('[data-image-preview]');
   els.imageThumb = app.querySelector('[data-image-thumb]');
   els.imageName = app.querySelector('[data-image-name]');
-  els.imageSize = app.querySelector('[data-image-size]');
+  els.imageUrlMeta = app.querySelector('[data-image-url]');
   els.imageRemove = app.querySelector('[data-image-remove]');
+  els.openDamBtn = app.querySelector('[data-open-dam]');
+  els.changeDamBtn = app.querySelector('[data-change-dam]');
   els.rte = app.querySelector('[data-rte]');
   els.rteToolbar = app.querySelector('[data-rte-toolbar]');
   els.rteContent = app.querySelector('[data-rte-content]');
@@ -456,26 +609,27 @@ function updateSlugPreview() {
   els.slugPreview.textContent = `${FRAGMENTS_FOLDER}/${slug}`;
 }
 
-function setSelectedImage(file) {
-  selectedImage = file;
-  lastUploadedImageUrl = null;
-  if (!file) {
-    els.imageInput.value = '';
-    els.imageEmpty.hidden = false;
+function setSelectedImage(asset) {
+  if (!asset) {
+    selectedImageUrl = '';
+    selectedImageMeta = null;
     els.imagePreview.hidden = true;
+    els.imagePlaceholder.hidden = false;
     els.imageThumb.removeAttribute('src');
     els.imageDrop.classList.remove('has-image');
     els.altField.hidden = true;
     return;
   }
-  const url = URL.createObjectURL(file);
-  els.imageThumb.src = url;
-  els.imageName.textContent = file.name;
-  els.imageSize.textContent = formatBytes(file.size);
-  els.imageEmpty.hidden = true;
+  selectedImageUrl = asset.url;
+  selectedImageMeta = asset;
+  els.imageThumb.src = asset.url;
+  els.imageName.textContent = asset.name || 'Selected asset';
+  els.imageUrlMeta.textContent = asset.url;
+  els.imagePlaceholder.hidden = true;
   els.imagePreview.hidden = false;
   els.imageDrop.classList.add('has-image');
   els.altField.hidden = false;
+  if (asset.alt && !els.alt.value) els.alt.value = asset.alt;
   setError('image', '');
 }
 
@@ -510,13 +664,13 @@ function bindEvents() {
   els.title.addEventListener('input', () => setError('title', ''));
   els.email.addEventListener('input', () => setError('email', ''));
 
-  els.imageDrop.addEventListener('click', (ev) => {
-    if (ev.target.closest('[data-image-remove]')) return;
-    if (!selectedImage) els.imageInput.click();
+  els.openDamBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    openDamPicker();
   });
-  els.imageInput.addEventListener('change', () => {
-    const file = els.imageInput.files?.[0];
-    if (file) setSelectedImage(file);
+  els.changeDamBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    openDamPicker();
   });
   els.imageRemove.addEventListener('click', (ev) => {
     ev.stopPropagation();
@@ -564,7 +718,7 @@ async function handleSave() {
   let firstInvalid = null;
   if (!name) { setError('name', 'Author name is required.'); firstInvalid = firstInvalid || els.name; }
   if (!title) { setError('title', 'Title is required.'); firstInvalid = firstInvalid || els.title; }
-  if (!selectedImage) { setError('image', 'Hero image is required.'); firstInvalid = firstInvalid || els.imageDrop; }
+  if (!selectedImageUrl) { setError('image', 'Hero image is required. Click “Open DAM” to choose one.'); firstInvalid = firstInvalid || els.openDamBtn; }
   if (!email) { setError('email', 'Email is required.'); firstInvalid = firstInvalid || els.email; }
   else if (!isValidEmail(email)) { setError('email', 'Enter a valid email address.'); firstInvalid = firstInvalid || els.email; }
   if (!bodyHtml || !els.rteContent.textContent.trim()) {
@@ -581,7 +735,6 @@ async function handleSave() {
 
   let rows = [];
   let uniqueSlug = '';
-  let imageUrl = '';
 
   try {
     await ensureFolderChain();
@@ -602,29 +755,10 @@ async function handleSave() {
     const baseSlug = slugify(name);
     uniqueSlug = await resolveUniqueSlug(baseSlug);
 
-    if (lastUploadedImageUrl) {
-      imageUrl = lastUploadedImageUrl;
-    } else {
-      try {
-        imageUrl = await uploadImage(selectedImage, uniqueSlug);
-        lastUploadedImageUrl = imageUrl;
-      } catch (err) {
-        setSaving(false);
-        showBanner('error', `Image upload failed: ${err.message}`, {
-          label: 'Retry upload',
-          handler: () => {
-            hideBanner();
-            handleSave();
-          },
-        });
-        return;
-      }
-    }
-
     const html = buildFragmentHtml({
       name,
       title,
-      imageUrl,
+      imageUrl: selectedImageUrl,
       imageAlt: altRaw || name,
       bodyHtml,
     });
@@ -889,6 +1023,18 @@ function showInitError(message) {
     buildLayout();
     bindEvents();
     updateSlugPreview();
+
+    try {
+      REPO_CONFIG = await fetchRepoConfig(ORG, SITE);
+    } catch (err) {
+      REPO_CONFIG = null;
+    }
+    if (!REPO_CONFIG) {
+      showBanner('warning',
+        'AEM repository config (aem.repositoryId) was not found for this site, '
+        + 'so the AEM Asset picker is disabled.');
+      if (els.openDamBtn) els.openDamBtn.disabled = true;
+    }
   } catch (err) {
     showInitError(`Initialization failed: ${err?.message || err}`);
   }
