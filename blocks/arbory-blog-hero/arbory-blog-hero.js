@@ -106,9 +106,9 @@ export default function decorate(block) {
     }
   }
 
-  // Make all images load eagerly for better performance
-  const images = block.querySelectorAll('img[loading="lazy"]');
-  images.forEach((img) => {
-    img.setAttribute('loading', 'eager');
-  });
+  const primaryHeroImage = block.querySelector(':scope > div:first-child img');
+  if (primaryHeroImage) {
+    primaryHeroImage.setAttribute('loading', 'eager');
+    primaryHeroImage.setAttribute('fetchpriority', 'high');
+  }
 }
