@@ -283,6 +283,63 @@ function createLanguageSelector() {
 }
 
 /**
+ * Builds an expanding search box from the search icon authored in the nav document
+ * @param {Element} icon The authored search icon span
+ * @returns {Element} The nav search element
+ */
+function createNavSearch(icon) {
+  const navSearch = document.createElement('div');
+  navSearch.className = 'nav-search';
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'nav-search-toggle';
+  toggle.setAttribute('aria-label', 'Open search');
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.append(icon);
+
+  const form = document.createElement('form');
+  form.className = 'nav-search-form';
+  form.setAttribute('role', 'search');
+
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.className = 'nav-search-input';
+  input.placeholder = 'Search…';
+  input.setAttribute('aria-label', 'Search');
+  form.append(input);
+
+  // search is not wired to an endpoint yet
+  form.addEventListener('submit', (e) => e.preventDefault());
+
+  const setExpanded = (expanded) => {
+    navSearch.classList.toggle('expanded', expanded);
+    toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    toggle.setAttribute('aria-label', expanded ? 'Close search' : 'Open search');
+    if (expanded) input.focus();
+  };
+
+  toggle.addEventListener('click', () => {
+    setExpanded(!navSearch.classList.contains('expanded'));
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape') {
+      setExpanded(false);
+      toggle.focus();
+    }
+  });
+
+  // collapse when clicking outside the search element
+  document.addEventListener('click', (e) => {
+    if (!navSearch.contains(e.target)) setExpanded(false);
+  });
+
+  navSearch.append(toggle, form);
+  return navSearch;
+}
+
+/**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
@@ -332,6 +389,15 @@ export default async function decorate(block) {
   // Add language selector to tools section
   const navTools = nav.querySelector('.nav-tools');
   if (navTools) {
+    // decorate the authored search icon into an expanding search box
+    const searchIcon = navTools.querySelector('span.icon-search');
+    if (searchIcon) {
+      const iconContainer = searchIcon.closest('p');
+      const navSearch = createNavSearch(searchIcon);
+      if (iconContainer) iconContainer.replaceWith(navSearch);
+      else navTools.prepend(navSearch);
+    }
+
     const langSelector = createLanguageSelector();
     if (langSelector) {
       navTools.appendChild(langSelector);
