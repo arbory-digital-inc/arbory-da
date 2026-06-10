@@ -317,6 +317,8 @@ function createNavSearch(icon) {
     toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     toggle.setAttribute('aria-label', expanded ? 'Close search' : 'Open search');
     if (expanded) input.focus();
+    // the mobile takeover is transient: dismissing it also clears the query
+    else if (!isDesktop.matches) input.value = '';
   };
 
   toggle.addEventListener('click', () => {

@@ -382,16 +382,29 @@ header nav .nav-search.expanded .nav-search-input {
   box-shadow:
     0 18px 40px rgb(10 12 14 / 60%),
     0 0 18px rgb(98 168 20 / 30%);
+  transition:
+    width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    box-shadow 0.45s ease,
+    visibility 0s;
 }
 
-/* full-width search box inside the expanded mobile menu */
+/* mobile: expanded search becomes a full-width takeover bar over the header */
 @media (max-width: 899px) {
-  header nav[aria-expanded="true"] .nav-search,
-  header nav[aria-expanded="true"] .nav-search-form {
-    flex: 1 1 auto;
+  header nav .nav-search.expanded .nav-search-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    box-sizing: border-box;
+    padding: 0 1rem;
+    background-color: var(--background-color);
+    z-index: 10;
   }
 
-  header nav[aria-expanded="true"] .nav-search.expanded .nav-search-input {
+  header nav .nav-search.expanded .nav-search-input {
     width: 100%;
   }
 }
