@@ -29,8 +29,8 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_namespace=$(echo "$path" | sed -nE 's|^/([a-z]{2,5}(-[a-z]{2,5})?)/.*|\1:|p')
-          streamx_subject=${streamx_namespace}$(echo "$path" | sed -E 's|\.md$||')
+          streamx_subject=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          streamx_namespace=$(echo "$streamx_subject" | sed -nE 's|^/([a-z]{2,5}(-[a-z]{2,5})?)/.*|\1|p')
           page_path=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
           eds_page_url="${{ vars.EDS_DOMAIN_URL }}$page_path"
           eds_plain_page_url="${{ vars.EDS_DOMAIN_URL }}$streamx_subject.plain.html"
@@ -38,7 +38,7 @@ jobs:
           echo "CloudEvent subject: ${streamx_subject}"
           echo "Plain page URL: $eds_plain_page_url"
           echo "CloudEvent subject plain: $streamx_subject.plain.html"
-          echo "streamx_subject=${streamx_subject}" >> "$GITHUB_OUTPUT"
+          echo "streamx_subject=${streamx_namespace}${streamx_subject}" >> "$GITHUB_OUTPUT"
           echo "eds_page_url=$eds_page_url" >> "$GITHUB_OUTPUT"
           echo "streamx_subject_plain=$streamx_subject.plain.html" >> "$GITHUB_OUTPUT"
           echo "eds_plain_page_url=$eds_plain_page_url" >> "$GITHUB_OUTPUT"
