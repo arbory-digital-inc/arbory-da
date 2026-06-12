@@ -29,7 +29,8 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_subject=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')        
+          streamx_namespace=$(echo "$path" | sed -nE 's|^/([a-z]{2,5}(-[a-z]{2,5})?)/.*|\1:|p')
+          streamx_subject=${streamx_namespace}$(echo "$path" | sed -E 's|\.md$||')        
           echo "CloudEvent subject: ${streamx_subject}"
           echo "CloudEvent subject plain:: $streamx_subject.plain.html"
           echo "streamx_subject=${streamx_subject}" >> "$GITHUB_OUTPUT"

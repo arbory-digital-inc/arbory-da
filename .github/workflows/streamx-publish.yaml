@@ -29,7 +29,8 @@ jobs:
         shell: bash
         run: |
           sleep 1s
-          streamx_subject=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g')
+          streamx_namespace=$(echo "$path" | sed -nE 's|^/([a-z]{2,5}(-[a-z]{2,5})?)/.*|\1:|p')
+          streamx_subject=${streamx_namespace}$(echo "$path" | sed -E 's|\.md$||')
           page_path=$(echo "${{ github.event.client_payload.path }}" | sed 's/\.md$//g' | sed 's/index//g')
           eds_page_url="${{ vars.EDS_DOMAIN_URL }}$page_path"
           eds_plain_page_url="${{ vars.EDS_DOMAIN_URL }}$streamx_subject.plain.html"
