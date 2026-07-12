@@ -1,0 +1,176 @@
+.keyboard-shortcuts {
+  --keyboard-shortcuts-accent: var(--link-color);
+  --keyboard-shortcuts-border: rgb(255 255 255 / 10%);
+  --keyboard-shortcuts-hit: #ffc857;
+
+  font-size: 0.9rem;
+}
+
+/* try-it banner */
+.keyboard-shortcuts .keyboard-shortcuts-tryit {
+  margin: 0 0 1.25rem;
+  padding: 0 0 0.75rem;
+  border-bottom: 1px solid var(--keyboard-shortcuts-border);
+  font-family: var(--fixed-font-family);
+  font-size: 0.78rem;
+  color: rgb(255 255 255 / 55%);
+  letter-spacing: 0.01em;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-sections {
+  column-width: 16rem;
+  column-count: 2;
+  column-gap: 2.5rem;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-section {
+  min-width: 0;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-section h3 {
+  margin: 0 0 0.35rem;
+  padding: 0 0 0.35rem;
+  border-bottom: 1px solid var(--keyboard-shortcuts-border);
+  font-family: var(--heading-font-family);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgb(255 255 255 / 45%);
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.3rem 0.4rem;
+  margin: 0 -0.4rem;
+  border-radius: 0.3rem;
+  line-height: 1.3;
+  transition: background 0.15s ease;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-list li:hover {
+  background: rgb(0 0 0 / 15%);
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-action {
+  flex: 1;
+  color: var(--text-color);
+}
+
+.keyboard-shortcuts kbd {
+  display: inline-block;
+  padding: 0.05em 0.4em;
+  margin: 0 0.05em;
+  font-family: var(--fixed-font-family);
+  font-size: 0.78em;
+  font-weight: 500;
+  color: rgb(255 255 255 / 85%);
+  background: rgb(255 255 255 / 6%);
+  border: 1px solid var(--keyboard-shortcuts-border);
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15em;
+  color: rgb(255 255 255 / 35%);
+  font-size: 0.85em;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-note {
+  color: rgb(255 255 255 / 45%);
+  font-size: 0.8em;
+}
+
+/* sheet variant: live jspreadsheet grid the reader can try shortcuts in */
+.keyboard-shortcuts .keyboard-shortcuts-playground {
+  margin: 0 0 1.5rem;
+}
+
+.keyboard-shortcuts .keyboard-shortcuts-playground-grid {
+  overflow-x: auto;
+  border: 1px solid var(--keyboard-shortcuts-border);
+  border-radius: 0.4rem;
+}
+
+/* jspreadsheet ships a light-only skin: its cells inherit our page's white
+   text color onto its white background, so it needs an explicit dark skin
+   rather than just a border wrapper. Its class names use underscores, not
+   our kebab-case convention, since they belong to the vendor's stylesheet */
+/* stylelint-disable-next-line selector-class-pattern */
+.keyboard-shortcuts-playground-grid .jexcel_container,
+.keyboard-shortcuts-playground-grid .jexcel {
+  background-color: var(--background-color-2);
+  border-color: var(--keyboard-shortcuts-border);
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.keyboard-shortcuts-playground-grid .jexcel_content {
+  scrollbar-color: rgb(255 255 255 / 30%) transparent;
+}
+
+.keyboard-shortcuts-playground-grid .jexcel > tbody > tr > td {
+  border-color: var(--keyboard-shortcuts-border);
+  color: var(--text-color);
+}
+
+.keyboard-shortcuts-playground-grid .jexcel > thead > tr > td,
+.keyboard-shortcuts-playground-grid .jexcel > tfoot > tr > td,
+.keyboard-shortcuts-playground-grid .jexcel > tbody > tr > td:first-child {
+  background-color: var(--background-color);
+  border-color: var(--keyboard-shortcuts-border);
+  color: rgb(255 255 255 / 55%);
+}
+
+.keyboard-shortcuts-playground-grid .jexcel > thead > tr > td.selected,
+.keyboard-shortcuts-playground-grid .jexcel > tbody > tr.selected > td:first-child {
+  background-color: var(--background-color-2);
+  color: var(--text-color);
+}
+
+.keyboard-shortcuts-playground-grid .jexcel > tbody > tr > td.readonly {
+  color: rgb(255 255 255 / 30%);
+}
+
+.keyboard-shortcuts-playground-grid .jexcel .highlight,
+.keyboard-shortcuts-playground-grid .jexcel .selection {
+  background-color: rgb(255 255 255 / 8%);
+}
+
+.keyboard-shortcuts-playground-grid .jexcel .highlight-top,
+.keyboard-shortcuts-playground-grid .jexcel .highlight-left,
+.keyboard-shortcuts-playground-grid .jexcel .highlight-right,
+.keyboard-shortcuts-playground-grid .jexcel .highlight-bottom {
+  border-color: var(--keyboard-shortcuts-accent);
+  box-shadow: none;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.keyboard-shortcuts-playground-grid .jexcel_corner {
+  background-color: var(--keyboard-shortcuts-accent);
+  border-color: var(--background-color-2);
+}
+
+/* hit / active state */
+.keyboard-shortcuts li.keyboard-shortcuts-hit .keyboard-shortcuts-action {
+  color: var(--keyboard-shortcuts-hit);
+}
+
+.keyboard-shortcuts li.keyboard-shortcuts-hit kbd {
+  color: #1a1406;
+  background: var(--keyboard-shortcuts-hit);
+  border-color: var(--keyboard-shortcuts-hit);
+}
