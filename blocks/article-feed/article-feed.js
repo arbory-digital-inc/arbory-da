@@ -33,29 +33,49 @@ const CATEGORY_METADATA_MAP = {
 
 let fetchingAuthors;
 
-function formatDate(dateString) {
+/**
+ * Parses a date string into a Date object, handling multiple formats.
+ * Supported formats include:
+ *   - ISO / numeric: "2026-04-26", "2026/04/26"
+ *   - Day Month Year: "1 July 2026", "26 April 2026"
+ *   - Month Day, Year: "July 1, 2026", "Apr 4, 2023"
+ * Dates are interpreted at noon Eastern to avoid timezone-related day shifting.
+ * @param {string} dateString The raw date value from the index
+ * @returns {Date|null} A valid Date, or null if it cannot be parsed
+ */
+function parseArticleDate(dateString) {
   if (!dateString) return null;
 
-  // Parse the date string and force Eastern Standard Time interpretation
-  // Add 'T12:00:00-05:00' to ensure it's interpreted as noon EST
-  // This prevents timezone-related date shifting
-  const estDateString = `${dateString}T12:00:00-05:00`;
-  const date = new Date(estDateString);
+  const raw = String(dateString).trim();
+  if (!raw) return null;
 
-  // Check if the date is valid
-  if (Number.isNaN(date.getTime())) {
-    // Fallback to original parsing if our EST approach fails
-    const fallbackDate = new Date(dateString);
-    if (Number.isNaN(fallbackDate.getTime())) {
-      return null;
-    }
-    // Format the fallback date
-    const options = { month: 'short', day: 'numeric', year: 'numeric' };
-    return fallbackDate.toLocaleDateString('en-US', options);
+  // ISO-style dates (YYYY-MM-DD or YYYY/MM/DD): pin to noon EST to avoid
+  // the date shifting a day backwards in western timezones.
+  const isoMatch = raw.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+  if (isoMatch) {
+    const [, y, m, d] = isoMatch;
+    const iso = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}T12:00:00-05:00`;
+    const date = new Date(iso);
+    if (!Number.isNaN(date.getTime())) return date;
   }
 
-  // Format the date as "Apr 4, 2023"
-  const options = { month: 'short', day: 'numeric', year: 'numeric' };
+  // Fall back to the native parser, which handles the textual month formats
+  // like "1 July 2026" and "July 1, 2026". Appending noon local time keeps
+  // these away from midnight boundaries.
+  let date = new Date(`${raw} 12:00:00`);
+  if (Number.isNaN(date.getTime())) {
+    date = new Date(raw);
+  }
+
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(dateString) {
+  const date = parseArticleDate(dateString);
+  if (!date) return null;
+
+  // Format the date as "April 4, 2023"
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
@@ -364,39 +384,24 @@ function filterByCategories(categoryString, data) {
     // Only use the article's explicit category field for matching
     if (!article.category) return false;
 
-    const articleCategory = article.category.toLowerCase();
+    // An article can list multiple categories in one comma-separated field,
+    // e.g. "AEM News, Arbory Digital News". Split it so each is matched
+    // individually — otherwise the whole string never equals a single category.
+    const articleCategories = article.category
+      .toLowerCase()
+      .split(',')
+      .map((cat) => cat.trim())
+      .filter((cat) => cat !== '');
 
-    // Check if any of our selected categories match this article's category
+    // Check if any of our selected categories match any of the article's categories
     return categories.some((category) => {
-      // Direct match with the category
-      if (articleCategory === category) {
-        return true;
-      }
-
-      // Check using the category mapping
       const mappedCategory = CATEGORY_METADATA_MAP[category];
-      if (mappedCategory && articleCategory === mappedCategory.toLowerCase()) {
-        return true;
-      }
-
-      // Check if the category is a substring of the article category (for broader categories)
-      if (category === 'aem technical help' && articleCategory === 'aem technical help') {
-        return true;
-      }
-
-      if (category === 'aem news' && articleCategory === 'aem news') {
-        return true;
-      }
-
-      if (category === 'arbory digital news' && articleCategory === 'arbory digital news') {
-        return true;
-      }
-
-      if (category === 'podcasts' && articleCategory === 'podcasts') {
-        return true;
-      }
-
-      return false;
+      return articleCategories.some((articleCategory) => (
+        // Direct match with the category
+        articleCategory === category
+        // Match via the category mapping (e.g. "podcasts" -> "Podcast")
+        || (mappedCategory && articleCategory === mappedCategory.toLowerCase())
+      ));
     });
   });
 
@@ -434,16 +439,18 @@ function filterByTags(tagString, data) {
 function sortFeed(data) {
   return data.sort((a, b) => {
     // First compare by date (descending)
-    if (a.date && b.date) {
-      // Convert string dates to Date objects for comparison
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
+    const dateA = parseArticleDate(a.date);
+    const dateB = parseArticleDate(b.date);
 
-      // Check if dates are valid before comparing
-      if (!Number.isNaN(dateA) && !Number.isNaN(dateB)) {
-        return dateB - dateA; // Descending order (newer first)
-      }
+    // Only compare when BOTH dates parsed successfully. Comparing against an
+    // unparseable date would yield NaN and corrupt the overall sort order.
+    if (dateA && dateB) {
+      return dateB.getTime() - dateA.getTime(); // Descending order (newer first)
     }
+
+    // A parseable date should always rank ahead of an unparseable one.
+    if (dateA && !dateB) return -1;
+    if (!dateA && dateB) return 1;
 
     // If dates are missing or equal, compare by lastModified if available
     if (a.lastModified && b.lastModified) {
