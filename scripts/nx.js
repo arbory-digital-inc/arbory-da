@@ -2,7 +2,10 @@ const AUTO_BLOCKS = [{
   fragment: '/fragments/',
 },
 {
-  youtube: 'https://www.youtube',
+  youtube: 'youtube.com',
+},
+{
+  youtube: 'youtu.be',
 },
 ];
 

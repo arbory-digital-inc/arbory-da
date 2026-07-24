@@ -276,6 +276,11 @@ main img {
   height: auto;
 }
 
+main .default-content-wrapper > p > picture:only-child img {
+  border-radius: 1rem;
+  box-shadow: var(--shadow-xl);
+}
+
 .icon {
   display: inline-block;
   height: 24px;
