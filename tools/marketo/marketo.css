@@ -1,0 +1,585 @@
+/*
+ * Marketo Forms Block — Styles
+ *
+ * Cosmetic overrides only. Marketo's MktoForms2 owns the field layout (columns,
+ * rows), so we do NOT strip its styles — we override the cosmetic properties
+ * (label/heading typography, input appearance, submit button) with block-scoped
+ * rules, using !important where Marketo sets the property inline or via an
+ * injected <style> tag inside the form.
+ *
+ * NOTE: the block element is `.marketo-form`. Selectors key off that class; if
+ * your EDS setup also adds a `block` class they still match.
+ *
+ * ── THEMING ──────────────────────────────────────────────────────────────
+ * Every colour, font, radius and width in this file resolves through a
+ * `--mkto-*` custom property declared on `.marketo-form` below. The defaults
+ * are deliberately brand-neutral, so the block looks correct with zero setup.
+ *
+ * To brand the form, map the tokens to your own design tokens ONCE, anywhere
+ * your site CSS loads. Nothing else in this file needs to change:
+ *
+ *   .marketo-form {
+ *     --mkto-accent:       var(--color-brand);
+ *     --mkto-accent-hover: var(--color-brand-dark);
+ *     --mkto-font-family:  var(--body-font-family);
+ *     --mkto-max-width:    var(--grid-container-width);
+ *     --mkto-radius:       4px;
+ *   }
+ *
+ * Section-level concerns (rail-to-rail backgrounds, narrower containers) are
+ * authored via Section Metadata, NOT here.
+ */
+
+/* Block wrapper — cap at the content rail and centre. A section container
+   modifier, if your site has one, narrows it further. */
+.marketo-form {
+  /* ── theming tokens — override these; see the header comment ── */
+
+  /* Shared type size for every field, label, input & option in the form.
+     Change here to rescale the whole form's text. */
+  --mkto-font-size: 18px;
+  --mkto-font-family: inherit;
+
+  /* Outer width of the block. Set to your site's content-rail token. */
+  --mkto-max-width: 1280px;
+
+  /* Brand accent — focus states, checked controls, submit button. */
+  --mkto-accent: #1473e6;
+  --mkto-accent-hover: #0d66d0;
+  --mkto-accent-tint: color-mix(in srgb, var(--mkto-accent) 8%, transparent);
+  --mkto-accent-ring: color-mix(in srgb, var(--mkto-accent) 25%, transparent);
+
+  /* Neutrals. */
+  --mkto-text: #16181d;
+  --mkto-label-color: #16181d;
+  --mkto-surface: #fff;
+  --mkto-border: #cacaca;
+
+  /* Error / validation states. */
+  --mkto-error: #d7373f;
+  --mkto-error-dark: #b42318;
+  --mkto-error-bg: #fef3f2;
+
+  /* Corner radius on inputs, buttons and controls. 0 = square. */
+  --mkto-radius: 0;
+  --mkto-transition: 0.2s ease;
+
+  /* ── layout ── */
+  max-width: var(--mkto-max-width);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.marketo-form .marketo-form-container {
+  padding: 0;
+}
+
+/* Title — h2, centered to match the mock. */
+.marketo-form .marketo-form-title {
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+/* Subtitle — h3, centered, lighter weight to sit beneath the title. */
+.marketo-form .marketo-form-description {
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+/* ---- Layout: force labels ABOVE fields and full-width, overriding Marketo ----
+   Marketo emits `mktoLayoutLeft` with inline pixel widths on the form, labels,
+   fields and gutter (e.g. width:571px on the form, width:150px on labels).
+   Those inline styles ignore the section container and force labels beside
+   fields. We override every inline width so the form fills its container
+   (container-8) and each field stacks label-over-input. */
+.marketo-form .mktoForm {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-top: 38px;
+}
+
+/* Each field row fills the width. NO margin here — hidden-input rows and empty
+   .mktoPlaceholder rows are also .mktoFormRow, so row spacing would create
+   phantom gaps. Spacing lives on .mktoFieldWrap, which only visible fields have. */
+.marketo-form .mktoForm .mktoFormRow,
+.marketo-form .mktoForm .mktoFieldDescriptor.mktoFormCol {
+  width: 100% !important;
+  float: none !important;
+}
+
+/* Columns and rich-text blocks that are NOT .mktoFieldDescriptor — the rule above
+   misses them, and Marketo gives each a hard pixel width: a
+   <fieldset class="mktoFormCol"> wrapping a checkbox group, the second column of a
+   two-column row (the visible text beside a checkbox), and every
+   `.mktoHtmlText.mktoHasWidth` (e.g. inline width:800px on consent copy). They are
+   floated, so they shrink-wrap to that pixel width and blow past the container on
+   any viewport narrower than it — that was the horizontal scroll on tablet
+   (~600-1024px), where the 800px consent block pushed the page to 838px wide.
+   Force them to the container width so the form reflows like the rest of the site. */
+.marketo-form .mktoForm .mktoFormCol,
+.marketo-form .mktoForm fieldset.mktoFormCol,
+.marketo-form .mktoForm .mktoHtmlText,
+.marketo-form .mktoForm .mktoHtmlText.mktoHasWidth {
+  width: 100% !important;
+  max-width: 100% !important;
+  float: none !important;
+  box-sizing: border-box;
+}
+
+/* The wrap that holds label + gutter + field — only present on visible fields.
+   Stack its children vertically and carry the inter-field spacing. */
+.marketo-form .mktoForm .mktoFieldWrap {
+  width: 100% !important;
+  float: none !important;
+  margin-bottom: 36px !important;
+  position: relative;   /* anchor for the absolutely-positioned .mktoError bubble */
+}
+
+/* Collapse hidden-field & empty-placeholder rows entirely so they add no gap.
+   Marketo puts margin-bottom:10px inline on hidden inputs and their column
+   divs; empty .mktoPlaceholder rows carry no field. Kill both. */
+.marketo-form .mktoForm .mktoFormRow input[type="hidden"],
+.marketo-form .mktoForm .mktoFormRow input[type="hidden"] + .mktoClear {
+  margin: 0 !important;
+}
+
+.marketo-form .mktoForm .mktoPlaceholder:empty {
+  display: none !important;
+}
+
+/* Label on its own line, full width, above the field. (display is set to flex
+   in the asterisk-ordering rule below — don't set it here or it clobbers it.) */
+.marketo-form .mktoForm .mktoLabel {
+  width: 100% !important;
+  float: none !important;
+}
+
+/* Asterisk after the label text. Marketo emits <div class="mktoAsterix">*</div>
+   FIRST inside the label; flex + order:1 moves it to the end ("First name*"). */
+.marketo-form .mktoForm .mktoLabel {
+  display: flex !important;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.marketo-form .mktoForm .mktoLabel .mktoAsterix {
+  order: 1 !important;
+  float: none !important;
+  padding: 0 !important;
+}
+
+/* Kill the label/field gutter and any placeholder offsets. */
+.marketo-form .mktoForm .mktoGutter,
+.marketo-form .mktoForm .mktoOffset {
+  display: none !important;
+  width: 0 !important;
+}
+
+/* Fields fill the row width beneath their label. */
+.marketo-form .mktoForm .mktoField {
+  width: 100% !important;
+  float: none !important;
+  box-sizing: border-box;
+}
+
+/* ---- Marketo form internals (cosmetic overrides; layout left to Marketo) ---- */
+
+/* Labels — 18px bold. Marketo sets label width inline & font in an injected
+   <style>, so !important is required to win. */
+.marketo-form .mktoForm .mktoLabel {
+  font-size: var(--mkto-font-size) !important;
+  font-weight: 700 !important;
+  color: var(--mkto-label-color) !important;
+  font-family: var(--mkto-font-family) !important;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+/* Text inputs, selects & textarea — clean white fields with a light border. */
+.marketo-form .mktoForm input[type="text"],
+.marketo-form .mktoForm input[type="email"],
+.marketo-form .mktoForm input[type="tel"],
+.marketo-form .mktoForm input[type="url"],
+.marketo-form .mktoForm input[type="number"],
+.marketo-form .mktoForm select.mktoField,
+.marketo-form .mktoForm textarea.mktoField {
+  background-color: var(--mkto-surface) !important;
+  border: 1px solid var(--mkto-border) !important;
+  border-radius: var(--mkto-radius);
+  padding: 10px 12px !important;
+  font-size: 16px;
+  font-family: var(--mkto-font-family);
+  color: var(--mkto-text);
+  box-shadow: none !important;
+}
+
+/* Single-line fields — pin a consistent height. Marketo's mobile stylesheet
+   collapses text inputs to ~30px (the <select> is unaffected), so force the same
+   46px on every viewport with !important to beat that override. Textarea is
+   excluded (it keeps its own multi-line height below). */
+.marketo-form .mktoForm input[type="text"],
+.marketo-form .mktoForm input[type="email"],
+.marketo-form .mktoForm input[type="tel"],
+.marketo-form .mktoForm input[type="url"],
+.marketo-form .mktoForm input[type="number"],
+.marketo-form .mktoForm select.mktoField {
+  height: 46px !important;
+  line-height: normal !important;
+}
+
+.marketo-form .mktoForm textarea.mktoField{
+  height: 135px;
+}
+
+.marketo-form .mktoForm input:focus,
+.marketo-form .mktoForm select.mktoField:focus,
+.marketo-form .mktoForm textarea.mktoField:focus {
+  outline: none;
+  border-color: var(--mkto-accent) !important;
+}
+
+/* ---- Checkboxes & radios ----
+   Real Marketo markup (verified against a rendered form) + the `forms2-theme-inset`
+   stylesheet Marketo loads:
+
+     <div class="mktoLogicalField mktoCheckboxList mktoHasWidth" style="width:350px">
+       <input type="checkbox" class="mktoField" id="…_0"><label for="…_0">A</label>
+       …
+     </div>
+
+   CRITICAL — how the theme actually renders these (this is why styling the <input>
+   does nothing): the inset theme sets the real <input> to `opacity:0` and draws the
+   VISIBLE control on the LABEL's `::before` box (border + white background),
+   swapping in a "✓" glyph / dot image on `:checked + label::before`. So the control
+   you see and must style is `label::before`, NOT the input. We:
+     - keep the input as a transparent, correctly-sized click/focus target,
+     - restyle `label::before` into the modern themed box (grey at rest, brand green
+       on hover, solid green + white mark when checked),
+     - draw our own crisp checkmark / dot on `label::after` (killing the theme glyph),
+     - force each option onto its own row (there is NO <br> between input/label
+       pairs — they are inline siblings that otherwise flow onto one line). */
+
+/* Container fills the field width; drop Marketo's inline pixel width. */
+.marketo-form .mktoForm .mktoCheckboxList.mktoHasWidth,
+.marketo-form .mktoForm .mktoRadioList.mktoHasWidth,
+.marketo-form .mktoForm .mktoCheckboxList,
+.marketo-form .mktoForm .mktoRadioList {
+  width: 100% !important;
+  padding: 0 !important;
+  overflow: hidden;   /* contain the floated rows */
+}
+
+/* Checkbox/radio field wraps get 26px bottom spacing instead of the 36px used by
+   every other field wrap — the option rows already carry their own inter-row
+   margin, so the group needs a little less trailing gap. */
+.marketo-form .mktoForm .mktoFieldWrap:has(.mktoCheckboxList),
+.marketo-form .mktoForm .mktoFieldWrap:has(.mktoRadioList) {
+  margin-bottom: 26px !important;
+}
+
+/* The real input: invisible (theme sets opacity:0) but kept as the interactive
+   target. Float it so it clears onto its own row and reserves the control's width;
+   the visible box (label::before) is overlaid on top of it via negative margin. */
+.marketo-form .mktoForm .mktoCheckboxList input[type="checkbox"].mktoField,
+.marketo-form .mktoForm .mktoRadioList input[type="radio"].mktoField {
+  clear: both !important;
+  float: left !important;
+  /* Zero-width footprint: the input is an invisible click/focus target overlaid on
+     the label's ::before box, so it must NOT reserve its own horizontal space
+     (that produced a gap to the left of every control). It stays 20px tall to keep
+     each option on its own row. */
+  width: 0 !important;
+  min-width: 0 !important;
+  height: 20px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+/* Label: floats beside its input, on the same row. `position:relative` anchors the
+   ::before control box; left padding leaves room for it. Not cleared, so it stays
+   next to the input rather than dropping below. */
+.marketo-form .mktoForm .mktoCheckboxList label,
+.marketo-form .mktoForm .mktoRadioList label {
+  float: left !important;
+  display: block !important;
+  position: relative;
+  width: auto !important;
+  max-width: calc(100% - 44px);
+  margin: 0 0 10px 0 !important;
+  padding-left: 30px !important;   /* space for the ::before control box */
+  min-height: 20px;
+  font-size: var(--mkto-font-size);
+  font-weight: 400 !important;
+  font-family: var(--mkto-font-family);
+  color: var(--mkto-text) !important;
+  line-height: 20px;   /* == control box height, so text centers against the box */
+  cursor: pointer;
+}
+
+/* The VISIBLE control box — restyle the theme's label::before. Grey border, white
+   fill, matching the text inputs. Overrides the theme's inline shadow/border. */
+.marketo-form .mktoForm .mktoCheckboxList label::before,
+.marketo-form .mktoForm .mktoRadioList label::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  background: var(--mkto-surface) !important;
+  border: 1px solid var(--mkto-border) !important;
+  box-shadow: none !important;
+  transition:
+    border-color var(--mkto-transition),
+    background-color var(--mkto-transition),
+    box-shadow var(--mkto-transition);
+}
+
+/* Checkbox = square; radio = circle. */
+.marketo-form .mktoForm .mktoCheckboxList label::before {
+  border-radius: var(--mkto-radius) !important;
+}
+
+.marketo-form .mktoForm .mktoRadioList label::before {
+  border-radius: 50% !important;
+}
+
+/* Hover (unchecked only) — brand comes alive: green border + soft green-tinted
+   fill, mirroring the grey→brand shift the text inputs use on focus. The
+   `:not(:checked)` guard on BOTH the input- and label-hover paths keeps this from
+   overriding the solid checked fill below (equal specificity, later source order). */
+.marketo-form .mktoForm .mktoCheckboxList input:not(:checked):hover + label::before,
+.marketo-form .mktoForm .mktoRadioList input:not(:checked):hover + label::before,
+.marketo-form .mktoForm .mktoCheckboxList input:not(:checked) + label:hover::before,
+.marketo-form .mktoForm .mktoRadioList input:not(:checked) + label:hover::before {
+  border-color: var(--mkto-accent) !important;
+  background: var(--mkto-accent-tint) !important;
+}
+
+/* Keyboard focus only — brand focus ring on the control box. Gated to
+   `:focus-visible` so a plain MOUSE click does NOT draw the ring (that was the
+   "weird green semi-transparent border" on click); it appears only for keyboard
+   tab navigation, preserving accessibility. */
+.marketo-form .mktoForm .mktoCheckboxList input:focus-visible + label::before,
+.marketo-form .mktoForm .mktoRadioList input:focus-visible + label::before {
+  border-color: var(--mkto-accent) !important;
+  box-shadow: 0 0 0 3px var(--mkto-accent-ring) !important;
+}
+
+/* Checked — solid brand fill + border. */
+.marketo-form .mktoForm .mktoCheckboxList input:checked + label::before,
+.marketo-form .mktoForm .mktoRadioList input:checked + label::before {
+  background: var(--mkto-accent) !important;
+  border-color: var(--mkto-accent) !important;
+  color: transparent !important;   /* hide the theme's "✓" glyph; we draw our own */
+}
+
+/* Checked + hover — deepen to the brand hover-green for feedback. */
+.marketo-form .mktoForm .mktoCheckboxList input:checked:hover + label::before,
+.marketo-form .mktoForm .mktoRadioList input:checked:hover + label::before,
+.marketo-form .mktoForm .mktoCheckboxList input:checked + label:hover::before,
+.marketo-form .mktoForm .mktoRadioList input:checked + label:hover::before {
+  background: var(--mkto-accent-hover) !important;
+  border-color: var(--mkto-accent-hover) !important;
+}
+
+/* Checkbox tick — crisp white checkmark drawn on label::after, centered in the
+   20px box. Only shown when the input is checked. */
+.marketo-form .mktoForm .mktoCheckboxList input:checked + label::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 7px !important;
+  top: 3px !important;
+  width: 5px !important;
+  height: 10px !important;
+  border: solid var(--mkto-surface) !important;
+  border-width: 0 2px 2px 0 !important;
+  background: none !important;
+  transform: rotate(45deg);
+}
+
+/* Radio dot — white centre on label::after. */
+.marketo-form .mktoForm .mktoRadioList input:checked + label::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  top: 10px !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: var(--mkto-surface) !important;
+  transform: translate(-50%, -50%);
+}
+
+/* Required-field asterisk — same colour as the label text. */
+.marketo-form .mktoForm .mktoRequiredField .mktoAsterix {
+  color: var(--mkto-label-color) !important;
+}
+
+/* Submit button — green pill, centered. Marketo injects a <style> targeting
+   `.mktoButtonWrap.mktoDownloadButton button.mktoButton` (specificity 0,4,1)
+   AND styles the button inline, so we match that variant and use !important. */
+.marketo-form .mktoForm .mktoButtonRow {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.marketo-form .mktoForm .mktoButtonWrap,
+.marketo-form .mktoForm .mktoButtonWrap.mktoDownloadButton {
+  margin-left: 0 !important;
+  float: none !important;
+  display: inline-block;
+}
+
+.marketo-form .mktoForm .mktoButtonWrap button.mktoButton,
+.marketo-form .mktoForm .mktoButtonWrap.mktoDownloadButton button.mktoButton {
+  background: var(--mkto-accent) !important;
+  background-image: none !important;
+  border: 1px solid var(--mkto-accent) !important;
+  border-radius: var(--mkto-radius) !important;
+  box-shadow: none !important;
+  color: var(--mkto-surface) !important;
+  font-family: var(--mkto-font-family) !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  height: auto !important;
+  padding: 12px 28px !important;
+  text-shadow: none !important;
+  cursor: pointer;
+  transition: background-color var(--mkto-transition), border-color var(--mkto-transition);
+}
+
+.marketo-form .mktoForm .mktoButtonWrap button.mktoButton:hover,
+.marketo-form .mktoForm .mktoButtonWrap button.mktoButton:focus,
+.marketo-form .mktoForm .mktoButtonWrap.mktoDownloadButton button.mktoButton:hover,
+.marketo-form .mktoForm .mktoButtonWrap.mktoDownloadButton button.mktoButton:focus {
+  background: var(--mkto-accent-hover) !important;
+  border-color: var(--mkto-accent-hover) !important;
+}
+
+/* Keep simple fallback message styling for non-Marketo states. */
+.marketo-form .marketo-form-success {
+  padding: 16px;
+}
+
+.marketo-form .marketo-form-success-heading {
+  margin: 0 0 8px;
+}
+
+.marketo-form .marketo-form-success-message {
+  margin: 0;
+}
+
+.marketo-form .marketo-form-error {
+  padding: 16px;
+  border: 1px solid var(--mkto-error);
+  border-radius: 2px;
+  background: var(--mkto-error-bg);
+  color: var(--mkto-error-dark);
+  font-family: var(--mkto-font-family);
+}
+
+.marketo-form .marketo-form-error p {
+  margin: 0;
+}
+
+/* Client-side validation error banner (custom, from marketo.js). */
+.marketo-form .mkto-validation-error {
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border: 1px solid var(--mkto-error);
+  border-radius: 2px;
+  background: var(--mkto-error-bg);
+  color: var(--mkto-error-dark);
+  font-family: var(--mkto-font-family);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* One list item per problem (marketo.js lists them all, not just the first). */
+.marketo-form .mkto-validation-error ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.marketo-form .mkto-validation-error ul li:only-child {
+  list-style: none;
+  margin-left: -18px;
+}
+
+/* ---- Marketo native per-field validation ----
+   Marketo injects an absolutely-positioned black error bubble (.mktoError with
+   .mktoErrorArrow + .mktoErrorMsg) beside invalid fields, plus red-ish inline
+   borders. Restyle to a simple inline red message and a red field border, using
+   !important to beat Marketo's inline styles. */
+
+/* Invalid field gets a red border — but ONLY after a submit was attempted.
+   marketo.js adds [data-submitted] on the form at the first submit press, so
+   fields never turn red while the user is still filling the form out. */
+.marketo-form .mktoForm[data-submitted] .mktoField[aria-invalid="true"],
+.marketo-form .mktoForm[data-submitted] .mktoField.mkto-field-invalid {
+  border-color: var(--mkto-error) !important;
+}
+
+/* Checkbox/radio inputs have no border to redden — outline them instead, and
+   redden their label text so the outstanding choice is obvious. */
+.marketo-form .mktoForm[data-submitted] .mktoField.mkto-field-invalid[type="checkbox"],
+.marketo-form .mktoForm[data-submitted] .mktoField.mkto-field-invalid[type="radio"] {
+  outline: 2px solid var(--mkto-error);
+  outline-offset: 1px;
+}
+
+/* Keep Marketo's floating tooltip bubble, but force it BELOW the field.
+   Gated on [data-submitted] so it only appears after a submit attempt.
+   Marketo positions .mktoError absolutely with an inline `bottom` offset to
+   float it above the field; override to pin it to the bottom edge instead. */
+.marketo-form .mktoForm[data-submitted] .mktoError {
+  position: absolute !important;
+  top: 100% !important;
+  bottom: auto !important;
+  right: 0 !important;
+  margin-top: 6px !important;
+  z-index: 2 !important;
+}
+
+/* The bubble itself — red, rounded, subtle shadow (was Marketo's black bubble). */
+.marketo-form .mktoForm .mktoError .mktoErrorMsg {
+  background: var(--mkto-error) !important;
+  background-image: none !important;
+  border: 1px solid var(--mkto-error-dark) !important;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%) !important;
+  text-shadow: none !important;
+  padding: 6px 10px !important;
+  margin: 0 !important;
+  color: var(--mkto-surface) !important;
+  font-family: var(--mkto-font-family) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+}
+
+/* The pointer arrow — Marketo draws it at the bubble's bottom pointing down.
+   Since the bubble is now below the field, flip it to the TOP pointing up.
+   The arrow is a rotated square with two visible borders; recolor + reposition. */
+.marketo-form .mktoForm .mktoError .mktoErrorArrowWrap {
+  top: -6px !important;
+  bottom: auto !important;
+  right: 12px !important;
+  left: auto !important;
+  overflow: hidden !important;
+}
+
+.marketo-form .mktoForm .mktoError .mktoErrorArrow {
+  background: var(--mkto-error) !important;
+  border: 1px solid var(--mkto-error-dark) !important;
+  border-width: 1px 0 0 1px !important;
+  box-shadow: none !important;
+}

@@ -1,0 +1,35 @@
+{
+  "_comment": [
+    "OPTIONAL per-site override sheet. Only needed when one codebase serves several",
+    "sites/locales that each need their own Marketo instance or Munchkin ID — otherwise",
+    "set the values inline in tools/marketo/marketo-config.js and delete this file.",
+    "",
+    "This is the shape EDS serves for a published DA sheet: a `data` array of",
+    "{ key, value } rows. Author it as a two-column spreadsheet in DA (columns named",
+    "`key` and `value`), publish it, and point `sheet.path` in marketo-config.js at",
+    "the resulting path — by default /data/marketo-config.json.",
+    "",
+    "Any key present here overrides the inline value; keys you omit fall through to",
+    "the inline config. Key names themselves are configurable under `sheet.keys`.",
+    "",
+    "Delete this _comment field in a real sheet — it is here for documentation only."
+  ],
+  "total": 3,
+  "offset": 0,
+  "limit": 3,
+  "data": [
+    {
+      "key": "marketo-base-url",
+      "value": "//123-ABC-456.mktoweb.com"
+    },
+    {
+      "key": "marketo-munchkin-id",
+      "value": "123-ABC-456"
+    },
+    {
+      "key": "marketo-munchkin-id-sandbox",
+      "value": "789-XYZ-012"
+    }
+  ],
+  ":type": "sheet"
+}

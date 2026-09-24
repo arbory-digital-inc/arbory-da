@@ -1,0 +1,32 @@
+name = "marketo-forms-service"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Your Marketo REST endpoint. Marketo → Admin → Web Services → "Endpoint",
+# minus the /rest suffix. Format: https://{munchkinId}.mktorest.com
+MARKETO_REST_URL = ""
+
+# LaunchPoint service client id. Marketo → Admin → LaunchPoint → your custom
+# service → View Details. The API-Only user behind it needs the "Access API >
+# Read-Only Assets" role — nothing more.
+MARKETO_CLIENT_ID = ""
+
+# Origins allowed to call this service. Comma-separated; `*` matches any run of
+# characters except `/`. Keep this tight — it is the only thing standing between
+# a stranger and your form catalog.
+#
+# Include da.live (where the authoring dialog runs) plus your EDS preview/live
+# hosts, e.g.:
+#   https://da.live,https://content.da.live,https://*--{repo}--{org}.aem.page,https://*--{repo}--{org}.aem.live,http://localhost:3000
+ALLOWED_ORIGINS = "https://da.live,https://content.da.live,http://localhost:3000"
+
+# Optional. Which forms to list. "approved" hides drafts from authors.
+FORMS_STATUS = "approved"
+
+# Optional. Page size for the catalog fetch. Marketo caps this at 200.
+MAX_RETURN = "200"
+
+# MARKETO_CLIENT_SECRET is a SECRET, never a var — do not add it here.
+# Set it out-of-band so it is never committed:
+#     wrangler secret put MARKETO_CLIENT_SECRET

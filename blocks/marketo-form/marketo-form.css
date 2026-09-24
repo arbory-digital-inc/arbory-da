@@ -1,0 +1,22 @@
+/*
+ * Marketo Form Block — Styles
+ * Imports the shared stylesheet from tools/marketo/.
+ */
+@import url("../../tools/marketo/marketo.css");
+
+/* stylelint-disable selector-class-pattern -- Marketo's own camelCase classes */
+
+/* Arbory brand mapping. Inputs stay light (dark text on --mkto-surface);
+   labels and checkbox/radio text sit on the dark page background. */
+.marketo-form {
+  --mkto-accent: var(--link-color);
+  --mkto-accent-hover: var(--link-hover-color);
+  --mkto-font-family: var(--body-font-family);
+  --mkto-label-color: var(--text-color);
+  --mkto-radius: 4px;
+}
+
+.marketo-form .mktoForm .mktoCheckboxList label,
+.marketo-form .mktoForm .mktoRadioList label {
+  color: var(--mkto-label-color) !important;
+}

@@ -1,0 +1,306 @@
+/*
+ * Marketo Form — DA Library Plugin styles
+ *
+ * Standalone styles for the plugin UI rendered inside the DA library palette.
+ * Intentionally self-contained (no site design tokens) because the plugin runs
+ * in its own iframe on da.live, not on the published page. Visual language
+ * mirrors Adobe Spectrum / the legacy Marketo configurator screens.
+ */
+
+:root {
+  --mkto-blue: #1473e6;
+  --mkto-blue-dark: #0d66d0;
+  --mkto-text: #1f2329;
+  --mkto-label: #4b4b4b;
+  --mkto-muted: #6e6e6e;
+  --mkto-border: #cacaca;
+  --mkto-border-strong: #8d8d8d;
+  --mkto-bg: #fff;
+  --mkto-panel-bg: #f5f5f5;
+  --mkto-error: #d7373f;
+  --mkto-radius: 4px;
+  --mkto-gap: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: adobe-clean, -apple-system, "Segoe UI", roboto, sans-serif;
+  font-size: 14px;
+  color: var(--mkto-text);
+  background: var(--mkto-bg);
+}
+
+.mkto-plugin {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.mkto-plugin-loading {
+  color: var(--mkto-label);
+  font-style: italic;
+}
+
+/* ── tabs ──────────────────────────────────────────────────────── */
+
+.mkto-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--mkto-border);
+  margin-bottom: 20px;
+}
+
+.mkto-tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 2px;
+  margin-bottom: -1px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mkto-label);
+  cursor: pointer;
+}
+
+.mkto-tab:hover { color: var(--mkto-text); }
+
+.mkto-tab.is-active {
+  color: var(--mkto-blue);
+  border-bottom-color: var(--mkto-blue);
+}
+
+/* ── panels ────────────────────────────────────────────────────── */
+
+.mkto-panel { display: none; flex: 1; }
+.mkto-panel.is-active { display: block; }
+
+/* ── fields ────────────────────────────────────────────────────── */
+
+.mkto-field { margin-bottom: var(--mkto-gap); }
+
+.mkto-label {
+  display: block;
+  font-size: 12px;
+  color: var(--mkto-label);
+  margin-bottom: 6px;
+}
+
+.mkto-required { color: var(--mkto-error); }
+
+.mkto-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--mkto-text);
+  padding: 8px 10px;
+  border: 1px solid var(--mkto-border-strong);
+  border-radius: var(--mkto-radius);
+  background: var(--mkto-bg);
+  appearance: none;
+}
+
+.mkto-input:focus {
+  outline: none;
+  border-color: var(--mkto-blue);
+  box-shadow: 0 0 0 1px var(--mkto-blue);
+}
+
+select.mkto-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234b4b4b' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 32px;
+}
+
+.mkto-textarea { min-height: 80px; resize: vertical; }
+
+.mkto-input-row { display: flex; align-items: stretch; gap: 8px; }
+.mkto-input-row .mkto-input { flex: 1; }
+
+.mkto-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  border: 1px solid var(--mkto-border-strong);
+  border-radius: var(--mkto-radius);
+  cursor: pointer;
+}
+
+.mkto-hint {
+  font-size: 12px;
+  color: var(--mkto-label);
+  margin: 6px 0 0;
+}
+
+.mkto-error { color: var(--mkto-error); min-height: 1em; }
+
+/* ── values / mappings ─────────────────────────────────────────── */
+
+.mkto-group-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--mkto-label);
+  margin: 0 0 12px;
+}
+
+.mkto-mapping {
+  background: var(--mkto-panel-bg);
+  border-radius: var(--mkto-radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.mkto-mapping-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.mkto-mapping-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mkto-label);
+}
+
+.mkto-icon-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--mkto-radius);
+}
+
+.mkto-icon-btn:hover { background: rgb(0 0 0 / 6%); }
+
+/* ── buttons ───────────────────────────────────────────────────── */
+
+.mkto-btn {
+  appearance: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mkto-btn-secondary {
+  background: var(--mkto-bg);
+  border-color: var(--mkto-border-strong);
+  color: var(--mkto-text);
+}
+
+.mkto-btn-secondary:hover { border-color: var(--mkto-text); }
+
+.mkto-btn-primary {
+  background: var(--mkto-blue);
+  color: #fff;
+}
+
+.mkto-btn-primary:hover { background: var(--mkto-blue-dark); }
+
+/* ── footer ────────────────────────────────────────────────────── */
+
+.mkto-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--mkto-border);
+}
+
+/* ── searchable form picker ────────────────────────────────────── */
+
+.mkto-combobox {
+  position: relative;
+}
+
+.mkto-listbox {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--mkto-border);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 12%);
+}
+
+.mkto-listbox[hidden] {
+  display: none;
+}
+
+.mkto-option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.mkto-option:hover,
+.mkto-option.is-active {
+  background: var(--mkto-blue);
+  color: #fff;
+}
+
+.mkto-option-name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mkto-option-meta {
+  flex: none;
+  font-size: 12px;
+  color: var(--mkto-muted);
+}
+
+.mkto-option:hover .mkto-option-meta,
+.mkto-option.is-active .mkto-option-meta {
+  color: rgb(255 255 255 / 80%);
+}
+
+.mkto-listbox-msg {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--mkto-muted);
+}
+
+/* ── checkbox-style label (e.g. the sandbox toggle) ────────────── */
+
+.mkto-label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.mkto-label input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--mkto-blue);
+}

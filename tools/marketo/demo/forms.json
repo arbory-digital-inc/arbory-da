@@ -1,0 +1,34 @@
+{
+  "forms": [
+    { "id": 1057, "name": "Contact Us (live demo form)", "locale": "en_US", "status": "approved" },
+    { "id": 2001, "name": "Newsletter Signup", "locale": "en_US", "status": "approved" },
+    { "id": 2002, "name": "Webinar Registration – AEM Edge Delivery", "locale": "en_US", "status": "approved" },
+    { "id": 2003, "name": "Request a Consultation", "locale": "en_US", "status": "approved" },
+    { "id": 2004, "name": "Contactez-nous", "locale": "fr_FR", "status": "approved" }
+  ],
+  "fields": {
+    "1057": [
+      { "name": "LeadSource", "label": "Lead Source", "type": "string", "required": false },
+      { "name": "Campaign", "label": "Campaign", "type": "string", "required": false },
+      { "name": "MktoPersonNotes", "label": "Person Notes", "type": "text", "required": false },
+      { "name": "utm_source", "label": "UTM Source", "type": "hidden", "required": false }
+    ],
+    "2001": [
+      { "name": "LeadSource", "label": "Lead Source", "type": "string", "required": false },
+      { "name": "Newsletter_Topic__c", "label": "Newsletter Topic", "type": "string", "required": false }
+    ],
+    "2002": [
+      { "name": "LeadSource", "label": "Lead Source", "type": "string", "required": false },
+      { "name": "Webinar_Session_ID__c", "label": "Webinar Session ID", "type": "string", "required": false },
+      { "name": "utm_campaign", "label": "UTM Campaign", "type": "hidden", "required": false }
+    ],
+    "2003": [
+      { "name": "LeadSource", "label": "Lead Source", "type": "string", "required": false },
+      { "name": "Service_Interest__c", "label": "Service Interest", "type": "string", "required": false },
+      { "name": "MktoPersonNotes", "label": "Person Notes", "type": "text", "required": false }
+    ],
+    "2004": [
+      { "name": "LeadSource", "label": "Lead Source", "type": "string", "required": false }
+    ]
+  }
+}

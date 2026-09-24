@@ -1,0 +1,5 @@
+/*
+ * Marketo Form Block — Styles
+ * Imports the shared stylesheet from tools/marketo/.
+ */
+@import url('../../tools/marketo/marketo.css');

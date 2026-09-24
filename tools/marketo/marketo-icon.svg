@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Marketo Form">
+  <rect width="64" height="64" rx="12" fill="#5C4C9F"/>
+  <path d="M16 44V20l8 10 8-10v24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 24h10M40 32h10M40 40h6" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+</svg>
