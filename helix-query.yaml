@@ -4,6 +4,7 @@ indices:
       - /**
     exclude:
       - /0-sandbox/**
+      - /**/drafts/**
     target: /blog.json
     properties:
       author:
