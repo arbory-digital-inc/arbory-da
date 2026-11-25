@@ -51,6 +51,7 @@ const STRINGS = {
     removeFilter: 'Remove filter {name}',
     openSearch: 'Open search',
     closeSearch: 'Close search',
+    poweredBy: 'Search powered by:',
   },
   de: {
     published: 'Veröffentlicht am ',
@@ -79,6 +80,7 @@ const STRINGS = {
     removeFilter: 'Filter {name} entfernen',
     openSearch: 'Suche öffnen',
     closeSearch: 'Suche schließen',
+    poweredBy: 'Suche bereitgestellt von:',
   },
   es: {
     published: 'Publicado el ',
@@ -107,6 +109,7 @@ const STRINGS = {
     removeFilter: 'Quitar el filtro {name}',
     openSearch: 'Abrir la búsqueda',
     closeSearch: 'Cerrar la búsqueda',
+    poweredBy: 'Búsqueda impulsada por:',
   },
   fr: {
     published: 'Publié le ',
@@ -135,6 +138,7 @@ const STRINGS = {
     removeFilter: 'Retirer le filtre {name}',
     openSearch: 'Ouvrir la recherche',
     closeSearch: 'Fermer la recherche',
+    poweredBy: 'Recherche propulsée par :',
   },
   it: {
     published: 'Pubblicato il ',
@@ -163,6 +167,7 @@ const STRINGS = {
     removeFilter: 'Rimuovi il filtro {name}',
     openSearch: 'Apri la ricerca',
     closeSearch: 'Chiudi la ricerca',
+    poweredBy: 'Ricerca basata su:',
   },
   pl: {
     published: 'Opublikowano ',
@@ -191,6 +196,7 @@ const STRINGS = {
     removeFilter: 'Usuń filtr {name}',
     openSearch: 'Otwórz wyszukiwanie',
     closeSearch: 'Zamknij wyszukiwanie',
+    poweredBy: 'Wyszukiwanie obsługiwane przez:',
   },
   pt: {
     published: 'Publicado em ',
@@ -219,6 +225,7 @@ const STRINGS = {
     removeFilter: 'Remover o filtro {name}',
     openSearch: 'Abrir a pesquisa',
     closeSearch: 'Fechar a pesquisa',
+    poweredBy: 'Pesquisa com tecnologia de:',
   },
   ja: {
     published: '公開日: ',
@@ -247,6 +254,7 @@ const STRINGS = {
     removeFilter: 'フィルター「{name}」を解除',
     openSearch: '検索を開く',
     closeSearch: '検索を閉じる',
+    poweredBy: '検索技術提供：',
   },
   ko: {
     published: '게시일: ',
@@ -275,6 +283,7 @@ const STRINGS = {
     removeFilter: '{name} 필터 제거',
     openSearch: '검색 열기',
     closeSearch: '검색 닫기',
+    poweredBy: '검색 기술 제공:',
   },
   'zh-cn': {
     published: '发布于 ',
@@ -303,6 +312,7 @@ const STRINGS = {
     removeFilter: '移除筛选条件 {name}',
     openSearch: '打开搜索',
     closeSearch: '关闭搜索',
+    poweredBy: '搜索技术支持：',
   },
   'zh-tw': {
     published: '發布於 ',
@@ -331,6 +341,7 @@ const STRINGS = {
     removeFilter: '移除篩選條件 {name}',
     openSearch: '開啟搜尋',
     closeSearch: '關閉搜尋',
+    poweredBy: '搜尋技術支援：',
   },
 };
 
