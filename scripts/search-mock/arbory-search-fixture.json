@@ -1,0 +1,486 @@
+{
+ "_comment": "Mock StreamX search fixture for the Arbory search page. Titles, paths and descriptions are real arborydigital.com pages; facet values are hand-assigned to match the arbory-pages contract (content_type/topic/technology/year/author _level0). NOT used in production: see mock-search.js (?stx-mock=1).",
+ "documents": [
+  {
+   "_id": "en:/en/blog/config-examples-for-managed-cdn-on-aem-as-a-cloud-service",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Configuration Examples for Adobe Managed CDN on AEM as a Cloud Service",
+     "description": "How to do client-side redirects, geoIP redirects and backend path-based origin switching on the new Adobe Managed CDN for AEM as a Cloud Service",
+     "date": "2025-10-24",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Configuration Examples for Adobe Managed CDN on AEM as a Cloud Service. How to do client-side redirects, geoIP redirects and backend path-based origin switching on the new Adobe Managed CDN for AEM as a Cloud Service AEM as a Cloud Service CDN & Dispatcher. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "AEM as a Cloud Service",
+       "CDN & Dispatcher"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/what-is-document-authoring-for-edge-delivery",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "An Introduction to Document Authoring (DA) for Edge Delivery Services",
+     "description": "Learn about Document Authoring or \"DA\" (formerly known as \"Project Dark Alley\") - a blazing-fast, Edge Delivery-native, Early-Access Technology from Adobe for managing, editing and publishing sites based on Edge Delivery Services.",
+     "date": "2025-01-08",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "An Introduction to Document Authoring (DA) for Edge Delivery Services. Learn about Document Authoring or \"DA\" (formerly known as \"Project Dark Alley\") - a blazing-fast, Edge Delivery-native, Early-Access Technology from Adobe for managing, editing and publishing sites based on Edge Delivery Services. Document Authoring Edge Delivery Services. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "Document Authoring",
+       "Edge Delivery Services"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/redirects-on-aem-and-edge-delivery",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Know the 6 Ways to do Redirects on AEM and Edge Delivery Services",
+     "description": "Redirects are a crucial aspect of web infrastructure, especially when managing content on platforms like Adobe Experience Manager (AEM) and Edge Delivery Services. Now that there is a brand-new pipeline-free redirects option for doing URL redirect maps in AEM / AEM Cloud Service, it's a good time to go over ALL of the various options at your disposal as they all have their own time, place and use case.",
+     "date": "2025-01-07",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Know the 6 Ways to do Redirects on AEM and Edge Delivery Services. Redirects are a crucial aspect of web infrastructure, especially when managing content on platforms like Adobe Experience Manager (AEM) and Edge Delivery Services. Now that there is a brand-new pipeline-free redirects option for doing URL redirect maps in AEM / AEM Cloud Service, it's a good time to go over ALL of the various options at your disposal as they all have their own time, place and use case. AEM Edge Delivery Services CDN & Dispatcher. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "AEM",
+       "Edge Delivery Services",
+       "CDN & Dispatcher"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/how-to-check-aem-version",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "How To Check AEM Version on 6.5 and AEM Cloud Service",
+     "description": "A guide to checking local and Cloud AEM instances for what exact version & patch level of the AEM application they are presently running.",
+     "date": "2025-01-08",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "How To Check AEM Version on 6.5 and AEM Cloud Service. A guide to checking local and Cloud AEM instances for what exact version & patch level of the AEM application they are presently running. AEM 6.5 LTS AEM as a Cloud Service. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "AEM 6.5 LTS",
+       "AEM as a Cloud Service"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Chase Hollander"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/da-bulk-tool",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Performing Bulk Operations on Adobe Edge Delivery Services Using Document Authoring (DA)",
+     "description": "Managing large volumes of content can be time-consuming, but Document Authoring's bulk tool simplifies the process. This powerful feature enables users to preview and publish multiple pages efficiently and make simultaneous changes using find and replace functionality. This reduces manual effort and ensures consistency across documents.",
+     "date": "2025-03-05",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Performing Bulk Operations on Adobe Edge Delivery Services Using Document Authoring (DA). Managing large volumes of content can be time-consuming, but Document Authoring's bulk tool simplifies the process. This powerful feature enables users to preview and publish multiple pages efficiently and make simultaneous changes using find and replace functionality. This reduces manual effort and ensures consistency across documents. Document Authoring Edge Delivery Services. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "Document Authoring",
+       "Edge Delivery Services"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Chase Hollander"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/aem-66-and-jdk-17",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "AEM 6.6 (aka AEM 6.5 LTS) on Java 17 is Released",
+     "description": "A new version of AEM called AEM 6.5 LTS (known internally as AEM 6.6) has just been released for AEM on-premise, self-hosted and AMS customers with an upgrade to JDK 17. Here's what we know, and how you should prepare.",
+     "date": "2024-11-08",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "AEM 6.6 (aka AEM 6.5 LTS) on Java 17 is Released. A new version of AEM called AEM 6.5 LTS (known internally as AEM 6.6) has just been released for AEM on-premise, self-hosted and AMS customers with an upgrade to JDK 17. Here's what we know, and how you should prepare. AEM 6.5 LTS AEM. AEM News.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM News"
+      ],
+      "technology_level0": [
+       "AEM 6.5 LTS",
+       "AEM"
+      ],
+      "year_level0": [
+       "2024"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/tailing-aemaacs-logs",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "How to Tail AEM, Dispatcher and CDN Logs on AEM as a Cloud Service",
+     "date": "2024-03-11",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "How to Tail AEM, Dispatcher and CDN Logs on AEM as a Cloud Service. A step-by-step guide on how to tail or view AEM, Apache and CDN logs in real time on AEM as a Cloud Service using Adobe IO. AEM as a Cloud Service Observability DevOps & CI/CD. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "AEM as a Cloud Service",
+       "Observability",
+       "DevOps & CI/CD"
+      ],
+      "year_level0": [
+       "2024"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/back-to-the-roots",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "AEM and Edge Delivery Services: Bringing the Web Back to the Roots",
+     "description": "Adobe EDS is Doing Less — and That’s a Good Thing. Adobe's Edge Delivery Services makes the web faster and better by bringing the web back to its roots, rather than obfuscate it away in frameworks.",
+     "date": "2025-05-21",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "AEM and Edge Delivery Services: Bringing the Web Back to the Roots. Adobe EDS is Doing Less — and That’s a Good Thing. Adobe's Edge Delivery Services makes the web faster and better by bringing the web back to its roots, rather than obfuscate it away in frameworks. Edge Delivery Services AEM. AEM Technical Help.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "AEM Technical Help"
+      ],
+      "technology_level0": [
+       "Edge Delivery Services",
+       "AEM"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Frank Townsend"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/arbory-adobe-partner",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Arbory Digital Group is an Adobe Silver Solution Partner",
+     "description": "Our expertise and experience align with the Adobe product set and we are committed to helping our customers with their Adobe solutions.",
+     "date": "2026-03-16",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Arbory Digital Group is an Adobe Silver Solution Partner. Our expertise and experience align with the Adobe product set and we are committed to helping our customers with their Adobe solutions. AEM. Arbory Digital News.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "Arbory Digital News"
+      ],
+      "technology_level0": [
+       "AEM"
+      ],
+      "year_level0": [
+       "2026"
+      ],
+      "author_level0": [
+       "Hank Thobe"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/podcast/difference-between-aem-and-eds",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Understanding the Differences Between AEM and Edge Delivery Services (EDS) Projects",
+     "description": "A podcast we've wanted to do for a LONG time: What are the real differences in mindset, in project makeup, in skillset and in results between a traditional AEM on-prem or AEM Cloud Service project and AEM Edge Delivery Services?",
+     "date": "2025-05-21",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Understanding the Differences Between AEM and Edge Delivery Services (EDS) Projects. A podcast we've wanted to do for a LONG time: What are the real differences in mindset, in project makeup, in skillset and in results between a traditional AEM on-prem or AEM Cloud Service project and AEM Edge Delivery Services? AEM Edge Delivery Services. AEM News.",
+     "facets": {
+      "content_type_level0": [
+       "Podcast"
+      ],
+      "topic_level0": [
+       "AEM News"
+      ],
+      "technology_level0": [
+       "AEM",
+       "Edge Delivery Services"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves",
+       "Sean Archibeque",
+       "Justin Ranly"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/podcast/future-of-aem-edge-delivery-da",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Could this be the Future of AEM? DA, Edge Delivery & Future AEM Architectures",
+     "description": "Is this technology a harbinger of the next-generation of AEM projects? Should your next big implementation use Document Authoring or Edge Delivery, or should it use a traditional AEM backend? Principal Architects Tad Reeves & Bryce Acer have a combined 30+ years in the AEM field & discuss the DA toolchain and how it may affect what your next AEM environment might look like.",
+     "date": "2025-01-30",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Could this be the Future of AEM? DA, Edge Delivery & Future AEM Architectures. Is this technology a harbinger of the next-generation of AEM projects? Should your next big implementation use Document Authoring or Edge Delivery, or should it use a traditional AEM backend? Principal Architects Tad Reeves & Bryce Acer have a combined 30+ years in the AEM field & discuss the DA toolchain and how it may affect what your next AEM environment might look like. Document Authoring Edge Delivery Services AI. AEM News.",
+     "facets": {
+      "content_type_level0": [
+       "Podcast"
+      ],
+      "topic_level0": [
+       "AEM News"
+      ],
+      "technology_level0": [
+       "Document Authoring",
+       "Edge Delivery Services",
+       "AI"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves",
+       "Bryce Acer"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/podcast/making-aem-and-edge-delivery-go-crazy-fast",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Making AEM & Edge Delivery Go CRAZY FAST - Interview with StreamX Co-Founder",
+     "description": "How do you solve the constant problem of cache freshness and backend system latency in any modern CMS (especially AEM or Edge Delivery?)  In this episode we talk to Michał Cukierman, CTO of Dynamic Solutions and co-founder of StreamX - a digital experience mesh for dramatically and reliably accelerating complicated dynamic content requests from the many constituent systems that make up a modern CMS deployment.",
+     "date": "2024-05-17",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Making AEM & Edge Delivery Go CRAZY FAST - Interview with StreamX Co-Founder. How do you solve the constant problem of cache freshness and backend system latency in any modern CMS (especially AEM or Edge Delivery?)  In this episode we talk to Michał Cukierman, CTO of Dynamic Solutions and co-founder of StreamX - a digital experience mesh for dramatically and reliably accelerating complicated dynamic content requests from the many constituent systems that make up a modern CMS deployment. Edge Delivery Services CDN & Dispatcher. AEM News.",
+     "facets": {
+      "content_type_level0": [
+       "Podcast"
+      ],
+      "topic_level0": [
+       "AEM News"
+      ],
+      "technology_level0": [
+       "Edge Delivery Services",
+       "CDN & Dispatcher"
+      ],
+      "year_level0": [
+       "2024"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/customer-stories/jmp-aem-eds-customer-spotlight",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "JMP + Arbory Digital Customer Story: World's First Document Authoring Customer Implementation",
+     "description": "Arbory Digital partnered with JMP Statistical Discovery to launch the world's first customer implementation of Document Authoring (DA) technology, along with Adobe Edge Delivery Services & AEM.",
+     "date": "2025-05-01",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "JMP + Arbory Digital Customer Story: World's First Document Authoring Customer Implementation. Arbory Digital partnered with JMP Statistical Discovery to launch the world's first customer implementation of Document Authoring (DA) technology, along with Adobe Edge Delivery Services & AEM. Document Authoring Edge Delivery Services. Arbory Digital News.",
+     "facets": {
+      "content_type_level0": [
+       "Customer story"
+      ],
+      "topic_level0": [
+       "Arbory Digital News"
+      ],
+      "technology_level0": [
+       "Document Authoring",
+       "Edge Delivery Services"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves",
+       "Drew Oliver Cummings"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/summit-2025/adobe-summit-2025-live-blog",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Adobe Summit 2025 Live Blog",
+     "description": "Live blog of Adobe Summit 2025 from Arbory Digital with blow-by-blow updates as Summit progresses!",
+     "date": "2025-03-20",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Adobe Summit 2025 Live Blog. Live blog of Adobe Summit 2025 from Arbory Digital with blow-by-blow updates as Summit progresses! AEM AI. AEM News.",
+     "facets": {
+      "content_type_level0": [
+       "Event"
+      ],
+      "topic_level0": [
+       "AEM News"
+      ],
+      "technology_level0": [
+       "AEM",
+       "AI"
+      ],
+      "year_level0": [
+       "2025"
+      ],
+      "author_level0": [
+       "Tad Reeves"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "_id": "en:/en/blog/index",
+   "_source": {
+    "type": "page/eds",
+    "namespace": "en",
+    "payload": {
+     "title": "Arbory Digital Blog",
+     "description": "AEM, Edge Delivery Services and Document Authoring articles from the Arbory Digital team.",
+     "ingested": "2026-11-24T00:00:00Z",
+     "content": "Arbory Digital Blog. AEM technical help, AEM news and Arbory Digital news.",
+     "facets": {
+      "content_type_level0": [
+       "Article"
+      ],
+      "topic_level0": [
+       "Arbory Digital News"
+      ],
+      "technology_level0": [
+       "AEM"
+      ],
+      "year_level0": [
+       "2026"
+      ],
+      "author_level0": []
+     }
+    }
+   }
+  }
+ ]
+}
