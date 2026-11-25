@@ -1319,3 +1319,134 @@ main .search-results-panel .search-results-panel-view-results {
     transition: none !important;
   }
 }
+
+/* ------------------------------------------------------------ powered by --- */
+
+/* "Search powered by: Arbory Digital + StreamX" under the facets (powered-by.js),
+   with a slowly shifting purple glow beneath the logos. */
+main .search-results-panel .search-results-panel-powered-by {
+  --srp-glow-1: #7714ff;
+  --srp-glow-2: #b14dff;
+  --srp-glow-3: #ff5ad9;
+  --srp-glow-4: #5b6cff;
+
+  align-items: flex-start;
+  border-block-start: 1px solid var(--srp-divider);
+  color: var(--srp-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--srp-space-s);
+  margin-block-start: var(--srp-space-l);
+  max-inline-size: 300px;
+  padding-block-start: var(--srp-space-m);
+  text-decoration: none;
+}
+
+main .search-results-panel .search-results-panel-powered-by__caption {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  transition: color var(--srp-transition);
+}
+
+main .search-results-panel .search-results-panel-powered-by__logos {
+  align-items: center;
+  display: inline-flex;
+  gap: 10px;
+  isolation: isolate;
+  padding: 4px 6px 12px;
+  position: relative;
+}
+
+/* the glow: a blurred gradient ellipse under the logos */
+main .search-results-panel .search-results-panel-powered-by__logos::after {
+  animation:
+    srp-glow-shift 6s linear infinite,
+    srp-glow-breathe 3s ease-in-out infinite alternate;
+  background:
+    linear-gradient(
+      90deg,
+      var(--srp-glow-1),
+      var(--srp-glow-2),
+      var(--srp-glow-3),
+      var(--srp-glow-4),
+      var(--srp-glow-1)
+    );
+  background-size: 300% 100%;
+  block-size: 14px;
+  border-radius: 50%;
+  content: "";
+  filter: blur(10px);
+  inset: auto 4% 0;
+  opacity: 0.7;
+  position: absolute;
+  transition: opacity var(--srp-transition);
+  z-index: -1;
+}
+
+main .search-results-panel .search-results-panel-powered-by__logos img {
+  animation: srp-logo-float 4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 6px rgb(119 20 255 / 45%));
+  inline-size: auto;
+}
+
+main .search-results-panel .search-results-panel-powered-by__logos img:first-child {
+  block-size: 34px;
+}
+
+main .search-results-panel .search-results-panel-powered-by__logos img:last-child {
+  animation-delay: -2s;
+  block-size: 24px;
+}
+
+main .search-results-panel .search-results-panel-powered-by__plus {
+  color: var(--srp-muted);
+  font-size: 0.875rem;
+}
+
+main .search-results-panel .search-results-panel-powered-by:hover .search-results-panel-powered-by__caption {
+  color: var(--srp-text);
+}
+
+main .search-results-panel .search-results-panel-powered-by:hover .search-results-panel-powered-by__logos::after {
+  opacity: 1;
+}
+
+main .search-results-panel .search-results-panel-powered-by:focus-visible {
+  border-radius: var(--srp-radius-s);
+  outline: 2px solid var(--srp-focus);
+  outline-offset: 4px;
+}
+
+@keyframes srp-glow-shift {
+  to {
+    background-position: 300% 0;
+  }
+}
+
+@keyframes srp-glow-breathe {
+  from {
+    transform: scaleX(0.85);
+  }
+
+  to {
+    transform: scaleX(1.05);
+  }
+}
+
+@keyframes srp-logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main .search-results-panel .search-results-panel-powered-by__logos::after,
+  main .search-results-panel .search-results-panel-powered-by__logos img {
+    animation: none;
+  }
+}

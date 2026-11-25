@@ -34,6 +34,7 @@ import { installOperatorRequestHook } from './search-operators.js';
 import {
   t, formatCount, searchLanguage, searchLocale, libraryLabels, facetHeading, facetValueLabel,
 } from './search-i18n.js';
+import { observePoweredBy } from './powered-by.js';
 
 /*
  * The bundle's own stylesheet.
@@ -2167,6 +2168,7 @@ export default async function decorate(block) {
   observeFilterMenu(block);
   observeSuggestions(block);
   observePageParam(block);
+  observePoweredBy(block);
 
   /*
    * The two curated panels — the featured answer and the promo rail — from one
