@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Curated panel preview</title>
+
+    <!--
+      THE REAL STYLESHEETS, not a copy of them.
+
+      This document exists as a separate frame for exactly one reason: the panels
+      are styled by rules scoped to `main .search-results-panel …`, using design
+      tokens from the site's own styles.css. Loading those into the tool's page
+      would restyle the tool; loading them here renders the panels under the
+      rules the reader gets, at widths derived from the same grid, with no second
+      set of numbers to keep in step.
+    -->
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/blocks/search-results-panel/search-results-panel.css" />
+
+    <style>
+      body {
+        margin: 0;
+        /*
+         * A FIXED, DESKTOP width, because the three-column layout only exists at
+         * 1200px and up — below it the promo rail is a full-width panel under the
+         * results, where its measure is not the thing being previewed. The parent
+         * scales this frame down to fit its pane, so the proportions survive.
+         */
+        width: 1240px;
+        background: var(--background-color, #272b36);
+        padding: 24px;
+        box-sizing: border-box;
+      }
+
+      /* Stand-ins for the parts of the results page that are not being edited.
+         Deliberately flat and grey: nothing here should read as real content. */
+      .ghost { color: #b8bcc6; }
+
+      .ghost-header {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      .ghost-facet,
+      .ghost-result {
+        background: rgb(255 255 255 / 6%);
+        border-radius: 3px;
+      }
+
+      .ghost-facet { height: 18px; margin-bottom: 14px; }
+      .ghost-facet:nth-child(2n) { width: 70%; }
+      .ghost-result { height: 62px; margin-bottom: 18px; }
+      .ghost-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px; }
+      .empty { font-size: 13px; font-style: italic; }
+    </style>
+  </head>
+  <body>
+    <!--
+      The skeleton `search-results-panel.css` expects, reproduced exactly:
+
+        .stx-search-results-panel          ← the grid
+          ├ .stx-query-input               → track 2, row 1
+          ├ .stx-results-panel             → display: contents
+          │   ├ aside.…__facets-container  → track 1, row 2
+          │   └ .…__container              → track 2, row 2
+          └ aside.search-results-panel-promo  → track 3, row 2
+
+      The promo rail is a direct child of the wrapper, and the featured panel goes
+      inside the results container BEFORE the results list — both are where
+      observePromo and observeFeatured put them, so the preview cannot be right
+      about the panel and wrong about where it lands.
+    -->
+    <main>
+      <!--
+        `.section` on the `main > div` gives the frame the site's own section
+        padding and 1200px content width, so the grid tracks — and with them
+        the promo rail's measure — are the ones a reader gets.
+      -->
+      <div class="section">
+        <div class="block-content">
+          <div class="search-results-panel block">
+            <div class="stx-search-results-panel">
+              <div class="stx-query-input ghost"><p class="ghost-label">Query field</p></div>
+              <div class="stx-results-panel">
+                <aside class="stx-results-panel__facets-container ghost">
+                  <p class="ghost-label">Filters</p>
+                  <div class="ghost-facet"></div>
+                  <div class="ghost-facet"></div>
+                  <div class="ghost-facet"></div>
+                  <div class="ghost-facet"></div>
+                </aside>
+                <div class="stx-results-panel__container">
+                  <p class="ghost ghost-header">Showing 1-10 of 24 Results</p>
+                  <div class="stx-results-panel__results-list ghost">
+                    <div class="ghost-result"></div>
+                    <div class="ghost-result"></div>
+                    <div class="ghost-result"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/tools/search-terms/st-preview.js" type="module"></script>
+  </body>
+</html>
