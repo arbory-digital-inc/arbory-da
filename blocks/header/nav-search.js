@@ -40,7 +40,10 @@ async function mountSuggestions(navSearch, lang) {
   const plain = navSearch.querySelector('.nav-search-input');
   try {
     loadCSS(`${window.hlx.codeBasePath}/scripts/search/streamx-search.css`);
-    const { createSearchInput } = await import('../../scripts/search/streamx-search-inline.js');
+    const [{ createSearchInput }, { renderSuggestion }] = await Promise.all([
+      import('../../scripts/search/streamx-search-inline.js'),
+      import('../search-results-panel/search-links.js'),
+    ]);
     const labels = libraryLabels(lang);
     const typed = plain.value;
     const hadFocus = document.activeElement === plain;
@@ -52,6 +55,10 @@ async function mountSuggestions(navSearch, lang) {
       queryParam: QUERY_PARAM,
       namespace: lang,
       showSearchButton: false,
+      // The search page's option: a folder's index page links to the folder
+      // (the library's own links `/en/index`, a 404), and an apex-site hit to its
+      // own host. Same class, so the capture click below still finds it.
+      renderers: { suggestionItem: renderSuggestion },
       labels: {
         inputPlaceholder: labels.inputPlaceholder,
         inputLabel: labels.inputLabel,
