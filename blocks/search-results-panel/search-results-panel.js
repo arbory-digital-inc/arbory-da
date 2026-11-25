@@ -24,7 +24,7 @@
  * Ported from an earlier client site's block of the same name and re-themed for Arbory
  * (search-results-panel.css). The earlier site's analytics hooks are not carried over.
  */
-import { codeBasePath, loadCSS } from './platform.js';
+import { codeBasePath, loadCSS, siteStyles } from './platform.js';
 import decorateResultsPanel from '../../scripts/search/eds/search-results-panel.js';
 import {
   highlightNodes, renderSuggestion, resultUrl, SUGGESTION_CLASS,
@@ -83,7 +83,9 @@ export async function loadSearchStyles() {
     );
   }
   try {
-    await loadCSS(STREAMX_CSS);
+    // The site's theme (platform.js) loads alongside: it overrides tokens the
+    // panel's own CSS sets, so it must be in place before the panel paints.
+    await Promise.all([STREAMX_CSS, ...siteStyles()].map((href) => loadCSS(href)));
   } catch {
     // A failed stylesheet must not stop the panel; the bundle retries its own.
   }

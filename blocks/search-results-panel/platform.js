@@ -37,3 +37,11 @@ export const BLOG_ORIGIN = '';
  * @returns {string}
  */
 export const blogLocale = (lang) => lang;
+
+/**
+ * Extra stylesheets the panel loads after its own, for this site's theme.
+ * None here: search-results-panel.css is written in the blog's tokens.
+ *
+ * @returns {string[]} Root-relative hrefs
+ */
+export const siteStyles = () => [];
