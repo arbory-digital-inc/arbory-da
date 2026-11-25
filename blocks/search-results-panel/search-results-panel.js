@@ -31,6 +31,9 @@ import holdSuggestions from './suggestion-hold.js';
 import { installMockSearch } from '../../scripts/search-mock/mock-search.js';
 import { observeFeatured, observePromo } from './curated-results.js';
 import { installOperatorRequestHook } from './search-operators.js';
+import {
+  t, formatCount, searchLanguage, searchLocale, libraryLabels, facetHeading, facetValueLabel,
+} from './search-i18n.js';
 
 /*
  * The bundle's own stylesheet.
@@ -231,7 +234,7 @@ function formatItemDate(value) {
   const parsed = parseIndexDate(value);
   if (!parsed) return '';
 
-  return new Date(parsed.ms).toLocaleDateString('en-US', {
+  return new Date(parsed.ms).toLocaleDateString(searchLocale(), {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -359,7 +362,7 @@ export function renderItem(item) {
   if (contentType) {
     const pill = document.createElement('span');
     pill.className = 'search-results-panel-item__type';
-    pill.textContent = contentType;
+    pill.textContent = facetValueLabel(contentType);
     meta.append(pill);
   }
 
@@ -370,7 +373,7 @@ export function renderItem(item) {
     // so the machine-readable element still holds nothing but the date.
     const dateEl = document.createElement('span');
     dateEl.className = 'search-results-panel-item__date';
-    dateEl.append(document.createTextNode('Published '));
+    dateEl.append(document.createTextNode(t('published')));
 
     const time = document.createElement('time');
     time.dateTime = String(rawDate);
@@ -429,7 +432,7 @@ export function renderItem(item) {
 
   const chevron = document.createElement('span');
   chevron.className = 'search-results-panel-item__more-chevron';
-  more.append(chevron, document.createTextNode('Read more'));
+  more.append(chevron, document.createTextNode(t('readMore')));
 
   link.append(more);
 
@@ -559,16 +562,14 @@ export const searchRenderers = {
 };
 
 /*
- * Facet boxes whose heading differs from the index field behind it.
- *
- * KEYED ON THE RENDERED TEXT, not the field, because the field never reaches the
- * DOM: `createFacetGroup` writes `humanizeFacetName(field)` into the heading and
- * keeps the field itself in a closure. So the key here is that function's output
- * — `content_type_level0` → `Content Type` — and a field renamed upstream would
+ * Facet headings are relabelled from search-i18n.js (`facetHeading`), KEYED ON
+ * THE RENDERED TEXT, not the field, because the field never reaches the DOM:
+ * `createFacetGroup` writes `humanizeFacetName(field)` into the heading and keeps
+ * the field itself in a closure. So the key is that function's output —
+ * `content_type_level0` → `Content Type` — and a field renamed upstream would
  * simply stop matching and show its own humanised name, which is a visible miss
- * rather than a silent wrong label. Sentence case, like the rest of the site.
+ * rather than a silent wrong label.
  */
-const FACET_LABELS = { 'Content Type': 'Content type' };
 
 /*
  * The order the facet boxes are rendered in, top to bottom: Content type,
@@ -580,7 +581,7 @@ const FACET_LABELS = { 'Content Type': 'Content type' };
  * in the order OpenSearch serialised its aggregations object — which is neither
  * the template's declaration order nor alphabetical (measured on the earlier site's index).
  *
- * KEYED ON THE HEADING TEXT, like FACET_LABELS above and for the same reason.
+ * KEYED ON THE ENGLISH HEADING TEXT, like the relabel above and for the same reason.
  * These are `humanizeFacetName` outputs, so `content_type_level0` is "Content
  * Type" with a capital T — the lower-case rendering is the relabel, applied
  * after this runs.
@@ -741,8 +742,15 @@ export function sortFacetValuesByKey(group) {
 
 function relabelFacetGroup(group) {
   const name = group.querySelector('.stx-results-panel__facet-name');
-  const label = FACET_LABELS[name?.textContent?.trim()];
+  const label = facetHeading(name?.textContent?.trim());
   if (label) name.textContent = label;
+  // Values are filter keys (the checkbox's `value`) and stay as indexed; only
+  // the text beside the box is translated.
+  group.querySelectorAll('.stx-results-panel__facet-label').forEach((el) => {
+    const value = el.textContent.trim();
+    const translated = facetValueLabel(value);
+    if (translated !== value) el.textContent = translated;
+  });
 }
 
 function enhanceFacetGroup(group) {
@@ -755,8 +763,8 @@ function enhanceFacetGroup(group) {
   const search = document.createElement('input');
   search.type = 'search';
   search.className = 'search-results-panel-facet-search';
-  search.placeholder = 'Filter';
-  search.setAttribute('aria-label', groupName ? `Filter ${groupName}` : 'Filter values');
+  search.placeholder = t('filter');
+  search.setAttribute('aria-label', groupName ? t('filterGroup', { group: groupName }) : t('filterValues'));
 
   const labelOf = (node) => facetLabelOf(node).toLowerCase();
 
@@ -836,7 +844,7 @@ function renderSelectedBadges(panel) {
     const badge = document.createElement('button');
     badge.type = 'button';
     badge.className = 'search-results-panel-selected-badge';
-    badge.setAttribute('aria-label', `Remove filter ${path.join(' › ') || leaf}`);
+    badge.setAttribute('aria-label', t('removeFilter', { name: path.join(' › ') || leaf }));
     // Only the ancestry a nested value carries; a top-level one adds nothing.
     if (path.length > 1) badge.title = path.join(' › ');
 
@@ -1079,7 +1087,7 @@ function buildSortControl(remount) {
   const label = document.createElement('label');
   label.className = `${SORT_CLASS}__label`;
   label.htmlFor = id;
-  label.textContent = 'Sort by';
+  label.textContent = t('sortBy');
 
   /*
    * A wrapper around the select, purely so the chevron has something to position
@@ -1098,7 +1106,7 @@ function buildSortControl(remount) {
   select.className = `${SORT_CLASS}__select`;
   select.id = id;
 
-  [['', 'Relevance'], [SORT_BY_DATE, 'Date']].forEach(([value, text]) => {
+  [['', t('relevance')], [SORT_BY_DATE, t('date')]].forEach(([value, text]) => {
     const option = document.createElement('option');
     option.value = value;
     option.textContent = text;
@@ -1241,7 +1249,7 @@ function renderResultsRange(panel) {
 
   const start = (page - 1) * size + 1;
   const end = Math.min(start + rows - 1, total);
-  const text = `Showing ${start.toLocaleString()}-${end.toLocaleString()} of ${total.toLocaleString()} Results`;
+  const text = t('showing', { start: formatCount(start), end: formatCount(end), total: formatCount(total) });
 
   let range = meta.querySelector(`.${RANGE_CLASS}`);
   if (!range) {
@@ -1375,14 +1383,14 @@ function enhancePagination(panel) {
 
   const label = document.createElement('span');
   label.className = PAGE_NUMBER_CLASS;
-  label.textContent = `Page ${current.toLocaleString()}`;
+  label.textContent = t('page', { n: formatCount(current) });
 
   list.replaceChildren(
-    arrow('first', 1, 'Go to first page'),
-    arrow('prev', current - 1, 'Go to previous page'),
+    arrow('first', 1, t('firstPage')),
+    arrow('prev', current - 1, t('prevPage')),
     label,
-    arrow('next', current + 1, 'Go to next page'),
-    arrow('last', pages, 'Go to last page'),
+    arrow('next', current + 1, t('nextPage')),
+    arrow('last', pages, t('lastPage')),
   );
 
   /*
@@ -1471,13 +1479,11 @@ function clearFiltersOrReload(panel) {
 function emptyMessage(query, filtered) {
   const title = document.createElement('p');
   title.className = `${EMPTY_CLASS}__title`;
-  title.textContent = query ? `No results for “${query}”.` : 'No results found.';
+  title.textContent = query ? t('noResultsFor', { query }) : t('noResults');
 
   const hint = document.createElement('p');
   hint.className = `${EMPTY_CLASS}__hint`;
-  hint.textContent = filtered
-    ? 'Check the spelling, use more general words, or remove some filters.'
-    : 'Check the spelling, or use more general words.';
+  hint.textContent = filtered ? t('hintFiltered') : t('hint');
   return [title, hint];
 }
 
@@ -1516,7 +1522,7 @@ function renderEmptyState(panel, { queryParam = 'query', onClear }) {
     const clear = document.createElement('button');
     clear.type = 'button';
     clear.className = `${EMPTY_CLASS}__clear`;
-    clear.textContent = 'Clear all filters';
+    clear.textContent = t('clearAll');
     clear.hidden = true;
     clear.addEventListener('click', () => onClear(panel));
 
@@ -1784,8 +1790,8 @@ const INLINE_PROMO_MEDIA = '(width < 1200px)';
  */
 function viewResultsLabel(panel) {
   const total = panel ? totalOf(panel) : NaN;
-  if (Number.isNaN(total)) return 'View Results';
-  return `View ${total.toLocaleString()} ${total === 1 ? 'Result' : 'Results'}`;
+  if (Number.isNaN(total)) return t('viewResults');
+  return total === 1 ? t('viewResultsOne') : t('viewResultsMany', { n: formatCount(total) });
 }
 
 /**
@@ -1815,7 +1821,7 @@ export function observeFilterMenu(block) {
         toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = MENU_TOGGLE_CLASS;
-        toggle.textContent = 'Sorts and filters';
+        toggle.textContent = t('sortsAndFilters');
         // Before the selection badges, which wrap to a row of their own.
         const badges = meta.querySelector(':scope > .search-results-panel-selected');
         if (badges) badges.before(toggle);
@@ -2009,6 +2015,31 @@ export function observeQueryClear(root, queryParam = 'query') {
   });
 }
 
+/**
+ * The rows a page in another language would otherwise have to author: the
+ * bundle's own labels (placeholder, total, pagination, button names) in the
+ * page's language, and `namespace` as that language, so /de/search searches
+ * only German pages. Each is added only when the page does not author it.
+ *
+ * @param {Element[]} rows The authored key/value rows
+ * @returns {Element[]} Rows to append
+ */
+export function localeRows(rows) {
+  const authored = new Set(rows.map((row) => row.children[0]?.textContent?.trim()));
+  const wanted = { namespace: searchLanguage(), ...libraryLabels() };
+  return Object.entries(wanted)
+    .filter(([key]) => !authored.has(key))
+    .map(([key, value]) => {
+      const row = document.createElement('div');
+      const name = document.createElement('div');
+      const cell = document.createElement('div');
+      name.textContent = key;
+      cell.textContent = value;
+      row.append(name, cell);
+      return row;
+    });
+}
+
 export default async function decorate(block) {
   const rows = readRows(block);
   // Before the panel mounts: the interceptor has to be in place when the first
@@ -2023,6 +2054,7 @@ export default async function decorate(block) {
    * first. Cloned again per mount, so one remount cannot spend them.
    */
   const authoredRows = [...block.children].map((row) => row.cloneNode(true));
+  authoredRows.push(...localeRows(authoredRows));
 
   // AFTER installMockSearch, so these wrap the mock rather than the other way
   // round and the mock sees the sort and the operators. See
