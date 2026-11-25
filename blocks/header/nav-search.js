@@ -9,7 +9,7 @@
  * first open, not with the page; until it arrives, the plain input still submits
  * to the search page.
  */
-import { loadCSS } from '../../scripts/aem.js';
+import { codeBasePath, loadCSS } from '../search-results-panel/platform.js';
 import { libraryLabels, searchLanguage, t } from '../search-results-panel/search-i18n.js';
 
 /* The suggestion endpoint: GET with `query` and `namespace`, routed to StreamX. */
@@ -39,7 +39,7 @@ export function searchPageUrl(lang, query = '') {
 async function mountSuggestions(navSearch, lang) {
   const plain = navSearch.querySelector('.nav-search-input');
   try {
-    loadCSS(`${window.hlx.codeBasePath}/scripts/search/streamx-search.css`);
+    loadCSS(`${codeBasePath()}/scripts/search/streamx-search.css`);
     const [{ createSearchInput }, { renderSuggestion }] = await Promise.all([
       import('../../scripts/search/streamx-search-inline.js'),
       import('../search-results-panel/search-links.js'),

@@ -9,6 +9,7 @@
  * groups, so an observer puts the badge back and keeps it last. On a phone it
  * shows in the "Sorts and filters" menu, under the facets.
  */
+import { BLOG_ORIGIN, blogLocale, codeBasePath } from './platform.js';
 import { searchLanguage, t } from './search-i18n.js';
 
 const FACETS_CONTAINER = '.stx-results-panel__facets-container';
@@ -24,12 +25,12 @@ const EPISODE = 'podcast/making-aem-and-edge-delivery-go-crazy-fast';
  * @returns {string} e.g. '/ja/podcast/making-aem-and-edge-delivery-go-crazy-fast'
  */
 export function poweredByHref(lang = searchLanguage()) {
-  return `/${lang}/${EPISODE}`;
+  return `${BLOG_ORIGIN}/${blogLocale(lang)}/${EPISODE}`;
 }
 
 function logo(file, alt, width, height) {
   const img = document.createElement('img');
-  img.src = `${window.hlx?.codeBasePath || ''}/icons/${file}`;
+  img.src = `${codeBasePath()}/icons/${file}`;
   img.alt = alt;
   img.width = width;
   img.height = height;

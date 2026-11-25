@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from '@esm-bundle/chai';
 import {
-  highlightNodes, publicPath, renderSuggestion, resultUrl, SUGGESTION_CLASS,
+  highlightNodes, onBlog, publicPath, renderSuggestion, resultUrl, SUGGESTION_CLASS,
 } from '../../../blocks/search-results-panel/search-links.js';
 
 const hit = (id, namespace = 'en', extra = {}) => ({ _id: id, _source: { namespace, ...extra } });
@@ -24,6 +24,14 @@ describe('search hit links', () => {
     expect(resultUrl(hit('en://arborydigital.com/en/index'))).to.equal('//arborydigital.com/en/');
     expect(publicPath('/index')).to.equal('/');
     expect(publicPath('/en/blog/search-index')).to.equal('/en/blog/search-index');
+  });
+
+  it('sends a blog hit to the blog host from another site, and only a blog hit', () => {
+    const blog = 'https://blog.arborydigital.com';
+    expect(onBlog('/en/blog/post', blog)).to.equal('https://blog.arborydigital.com/en/blog/post');
+    expect(onBlog('//arborydigital.com/en/', blog)).to.equal('//arborydigital.com/en/');
+    expect(onBlog('/en/blog/post', '')).to.equal('/en/blog/post');
+    expect(onBlog('/en/blog/post')).to.equal('/en/blog/post');
   });
 
   it('keeps only <em> marks from a highlight', () => {
