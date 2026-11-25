@@ -7,11 +7,13 @@
  * should not pull the panel bundle in with it.
  *
  * The index holds two sites. A blog page is keyed `<lang>:/<lang>/<path>` and
- * links root-relative, to the host the reader is on; an apex-site page is keyed
- * `<lang>://arborydigital.com/<path>` and links protocol-relative, to its own host.
+ * links root-relative on the blog (BLOG_ORIGIN-prefixed elsewhere); an apex-site
+ * page is keyed `<lang>://arborydigital.com/<path>` and links protocol-relative,
+ * to its own host.
  */
 /* eslint-disable no-underscore-dangle -- `_id` and `_source` are OpenSearch's field names */
 import { getHitUrl } from '../../scripts/search/streamx-search-inline.js';
+import { BLOG_ORIGIN } from './platform.js';
 
 /**
  * Turns one highlight fragment into DOM nodes, keeping only its `<em>` marks.
@@ -73,14 +75,32 @@ export function publicPath(path) {
 }
 
 /**
+ * A root-relative blog URL, made absolute when this site is not the blog.
+ *
+ * @param {string} url e.g. '/en/blog/post' or '//arborydigital.com/en/'
+ * @param {string} [origin] The blog's origin; BLOG_ORIGIN, '' on the blog itself
+ * @returns {string}
+ */
+export function onBlog(url, origin = BLOG_ORIGIN) {
+  if (!origin || typeof url !== 'string' || !url.startsWith('/') || url.startsWith('//')) return url;
+  return `${origin}${url}`;
+}
+
+/**
  * The URL a hit links to: `getHitUrl` (the bundle's, copy-in-only) with folder
  * index pages mapped by publicPath. Result rows and suggestions both use it.
  *
+ * A blog hit's URL is root-relative. On the blog that is the right host; on
+ * another site it is not, so it is prefixed with the platform's BLOG_ORIGIN
+ * ('' on the blog). An apex-site hit is already protocol-relative and is left
+ * alone on either site.
+ *
  * @param {Object} item Search hit
- * @returns {string} Root-relative URL of the page, or protocol-relative
- *   (`//arborydigital.com/…`) for a page of another site
+ * @returns {string} Root-relative URL of a blog page (absolute when this site is
+ *   not the blog), or protocol-relative (`//arborydigital.com/…`) for an
+ *   apex-site page
  */
-export const resultUrl = (item) => publicPath(getHitUrl(item));
+export const resultUrl = (item) => onBlog(publicPath(getHitUrl(item)));
 
 /* The class the library's combobox finds its options by. */
 export const SUGGESTION_CLASS = 'stx-suggestion__item';

@@ -24,7 +24,7 @@
  * Ported from an earlier client site's block of the same name and re-themed for Arbory
  * (search-results-panel.css). The earlier site's analytics hooks are not carried over.
  */
-import { loadCSS } from '../../scripts/aem.js';
+import { codeBasePath, loadCSS, siteStyles } from './platform.js';
 import decorateResultsPanel from '../../scripts/search/eds/search-results-panel.js';
 import {
   highlightNodes, renderSuggestion, resultUrl, SUGGESTION_CLASS,
@@ -48,7 +48,7 @@ import { observePoweredBy } from './powered-by.js';
  * pre-load and de-duplicate it.
  *
  * That is correct on EDS regardless: code and content are served from the same
- * host, so `window.hlx.codeBasePath` is empty and the root-absolute path is the
+ * host, so `codeBasePath()` is empty and the root-absolute path is the
  * code path. loadSearchStyles warns if that ever stops being true.
  */
 const STREAMX_CSS = '/scripts/search/streamx-search.css';
@@ -70,7 +70,7 @@ const STREAMX_CSS = '/scripts/search/streamx-search.css';
  * @returns {Promise<void>} Resolves once the stylesheet has loaded (or failed)
  */
 export async function loadSearchStyles() {
-  const codeBase = window.hlx?.codeBasePath || '';
+  const codeBase = codeBasePath();
   // A non-empty code base path means code is served from somewhere other than
   // the page root, and the bundle's root-absolute path would miss it. Warn
   // rather than throw: that degrades to the bundle's own (unstyled-first)
@@ -83,7 +83,9 @@ export async function loadSearchStyles() {
     );
   }
   try {
-    await loadCSS(STREAMX_CSS);
+    // The site's theme (platform.js) loads alongside: it overrides tokens the
+    // panel's own CSS sets, so it must be in place before the panel paints.
+    await Promise.all([STREAMX_CSS, ...siteStyles()].map((href) => loadCSS(href)));
   } catch {
     // A failed stylesheet must not stop the panel; the bundle retries its own.
   }
