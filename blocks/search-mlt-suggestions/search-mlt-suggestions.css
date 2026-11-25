@@ -7,16 +7,75 @@
   --mlt-accent: var(--link-color, #62a814);
   --mlt-radius: 10px;
 
+  /* the search page's "powered by" glow (search-results-panel.css), so the set
+     reads as suggested by search rather than picked by a tag */
+  --mlt-glow-1: #7714ff;
+  --mlt-glow-2: #b14dff;
+  --mlt-glow-3: #ff5ad9;
+  --mlt-glow-4: #5b6cff;
+
   margin: 32px 0 0;
 }
 
 .search-mlt-suggestions-list {
   display: grid;
+  position: relative;
+  isolation: isolate;
   grid-template-columns: 1fr;
   gap: 24px;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/*
+ * A soft purple halo behind the whole set, once it has loaded: the shifting,
+ * breathing gradient under the Arbory + StreamX logos on the search page.
+ * The cards are opaque, so it shows only around and between them.
+ */
+.search-mlt-suggestions-list::before {
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: calc(var(--mlt-radius) + 8px);
+  background:
+    linear-gradient(
+      90deg,
+      var(--mlt-glow-1),
+      var(--mlt-glow-2),
+      var(--mlt-glow-3),
+      var(--mlt-glow-4),
+      var(--mlt-glow-1)
+    );
+  background-size: 300% 100%;
+  content: "";
+  filter: blur(26px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.search-mlt-suggestions-list:not([aria-busy])::before {
+  animation:
+    search-mlt-glow-shift 6s linear infinite,
+    search-mlt-glow-pulse 3s ease-in-out infinite alternate;
+  opacity: 0.32;
+}
+
+@keyframes search-mlt-glow-shift {
+  to { background-position: 300% 0; }
+}
+
+@keyframes search-mlt-glow-pulse {
+  from {
+    opacity: 0.22;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 0.42;
+    transform: scale(1.01);
+  }
 }
 
 @media (width >= 700px) {
@@ -194,6 +253,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .search-mlt-suggestions-list::before,
   .search-mlt-suggestions-link,
   .search-mlt-suggestions-media img,
   .search-mlt-suggestions-placeholder .search-mlt-suggestions-media,
