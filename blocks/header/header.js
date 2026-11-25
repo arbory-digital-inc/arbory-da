@@ -1,6 +1,7 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 import { getLanguage, isLanguageSupported } from '../../scripts/lang.js';
+import createNavSearch from './nav-search.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -332,6 +333,15 @@ export default async function decorate(block) {
   // Add language selector to tools section
   const navTools = nav.querySelector('.nav-tools');
   if (navTools) {
+    // the search icon authored in the nav becomes an expanding search box
+    const searchIcon = navTools.querySelector('span.icon-search');
+    if (searchIcon) {
+      const iconContainer = searchIcon.closest('p');
+      const navSearch = createNavSearch(searchIcon, { isDesktop });
+      if (iconContainer) iconContainer.replaceWith(navSearch);
+      else navTools.prepend(navSearch);
+    }
+
     const langSelector = createLanguageSelector();
     if (langSelector) {
       navTools.appendChild(langSelector);
