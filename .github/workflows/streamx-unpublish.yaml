@@ -27,14 +27,26 @@ jobs:
       - name: Prepare ingestion variables
         id: vars
         shell: bash
+        env:
+          # From the payload, through env rather than inlined into the script.
+          RESOURCE_PATH: ${{ github.event.client_payload.path }}
         run: |
-          sleep 1s
-          streamx_namespace=$(echo "$path" | sed -nE 's|^/([a-z]{2,5}(-[a-z]{2,5})?)/.*|\1:|p')
-          streamx_subject=${streamx_namespace}$(echo "$path" | sed -E 's|\.md$||')        
+          # The subject is the index document id. It MUST be derived exactly as
+          # streamx-publish.yaml derives it, or the unpublish names a document
+          # that does not exist and the page stays searchable.
+          streamx_path=$(echo "$RESOURCE_PATH" | sed 's/\.md$//g')
+          if [[ "$streamx_path" =~ ^/([a-z]{2}(-[a-z]{2})?)(/|$) ]]; then
+            streamx_namespace="${BASH_REMATCH[1]}:"
+          else
+            streamx_namespace=""
+          fi
+          streamx_subject=${streamx_namespace}${streamx_path}
+          if [ -z "$streamx_path" ]; then
+            echo "::error::client_payload.path is empty; nothing to unpublish"
+            exit 1
+          fi
           echo "CloudEvent subject: ${streamx_subject}"
-          echo "CloudEvent subject plain:: $streamx_subject.plain.html"
           echo "streamx_subject=${streamx_subject}" >> "$GITHUB_OUTPUT"
-          echo "streamx_subject_plain=$streamx_subject.plain.html" >> "$GITHUB_OUTPUT"
 
       - name: Run unpublish from StreamX
         uses: streamx-hub/streamx-common-github-actions/.github/actions/connector-github@v1
