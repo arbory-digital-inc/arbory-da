@@ -25,7 +25,8 @@ describe('search strings', () => {
   it('has every English key in every language, and every library row', () => {
     const keys = Object.keys(libraryLabels('en'));
     SITE_LANGUAGES.forEach((lang) => {
-      ['published', 'readMore', 'sortBy', 'showing', 'noResultsFor', 'clearAll', 'viewResultsMany']
+      ['published', 'readMore', 'sortBy', 'showing', 'noResultsFor', 'clearAll', 'viewResultsMany',
+        'openSearch', 'closeSearch']
         .forEach((key) => expect(t(key, {}, lang), `${lang}.${key}`).to.not.equal(key));
       expect(Object.keys(libraryLabels(lang)), lang).to.have.members(keys);
       expect(libraryLabels(lang).totalResults, lang).to.contain('{{totalCount}}');

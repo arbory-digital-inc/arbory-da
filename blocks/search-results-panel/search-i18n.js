@@ -49,6 +49,8 @@ const STRINGS = {
     filterGroup: 'Filter {group}',
     filterValues: 'Filter values',
     removeFilter: 'Remove filter {name}',
+    openSearch: 'Open search',
+    closeSearch: 'Close search',
   },
   de: {
     published: 'Veröffentlicht am ',
@@ -75,6 +77,8 @@ const STRINGS = {
     filterGroup: '{group} filtern',
     filterValues: 'Werte filtern',
     removeFilter: 'Filter {name} entfernen',
+    openSearch: 'Suche öffnen',
+    closeSearch: 'Suche schließen',
   },
   es: {
     published: 'Publicado el ',
@@ -101,6 +105,8 @@ const STRINGS = {
     filterGroup: 'Filtrar {group}',
     filterValues: 'Filtrar valores',
     removeFilter: 'Quitar el filtro {name}',
+    openSearch: 'Abrir la búsqueda',
+    closeSearch: 'Cerrar la búsqueda',
   },
   fr: {
     published: 'Publié le ',
@@ -127,6 +133,8 @@ const STRINGS = {
     filterGroup: 'Filtrer : {group}',
     filterValues: 'Filtrer les valeurs',
     removeFilter: 'Retirer le filtre {name}',
+    openSearch: 'Ouvrir la recherche',
+    closeSearch: 'Fermer la recherche',
   },
   it: {
     published: 'Pubblicato il ',
@@ -153,6 +161,8 @@ const STRINGS = {
     filterGroup: 'Filtra {group}',
     filterValues: 'Filtra valori',
     removeFilter: 'Rimuovi il filtro {name}',
+    openSearch: 'Apri la ricerca',
+    closeSearch: 'Chiudi la ricerca',
   },
   pl: {
     published: 'Opublikowano ',
@@ -179,6 +189,8 @@ const STRINGS = {
     filterGroup: 'Filtruj: {group}',
     filterValues: 'Filtruj wartości',
     removeFilter: 'Usuń filtr {name}',
+    openSearch: 'Otwórz wyszukiwanie',
+    closeSearch: 'Zamknij wyszukiwanie',
   },
   pt: {
     published: 'Publicado em ',
@@ -205,6 +217,8 @@ const STRINGS = {
     filterGroup: 'Filtrar {group}',
     filterValues: 'Filtrar valores',
     removeFilter: 'Remover o filtro {name}',
+    openSearch: 'Abrir a pesquisa',
+    closeSearch: 'Fechar a pesquisa',
   },
   ja: {
     published: '公開日: ',
@@ -231,6 +245,8 @@ const STRINGS = {
     filterGroup: '{group}で絞り込み',
     filterValues: '値を絞り込み',
     removeFilter: 'フィルター「{name}」を解除',
+    openSearch: '検索を開く',
+    closeSearch: '検索を閉じる',
   },
   ko: {
     published: '게시일: ',
@@ -257,6 +273,8 @@ const STRINGS = {
     filterGroup: '{group} 필터',
     filterValues: '값 필터',
     removeFilter: '{name} 필터 제거',
+    openSearch: '검색 열기',
+    closeSearch: '검색 닫기',
   },
   'zh-cn': {
     published: '发布于 ',
@@ -283,6 +301,8 @@ const STRINGS = {
     filterGroup: '筛选{group}',
     filterValues: '筛选值',
     removeFilter: '移除筛选条件 {name}',
+    openSearch: '打开搜索',
+    closeSearch: '关闭搜索',
   },
   'zh-tw': {
     published: '發布於 ',
@@ -309,6 +329,8 @@ const STRINGS = {
     filterGroup: '篩選{group}',
     filterValues: '篩選值',
     removeFilter: '移除篩選條件 {name}',
+    openSearch: '開啟搜尋',
+    closeSearch: '關閉搜尋',
   },
 };
 
