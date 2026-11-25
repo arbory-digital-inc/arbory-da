@@ -26,7 +26,9 @@
  */
 import { loadCSS } from '../../scripts/aem.js';
 import decorateResultsPanel from '../../scripts/search/eds/search-results-panel.js';
-import { getHitUrl } from '../../scripts/search/streamx-search-results-panel.js';
+import {
+  highlightNodes, renderSuggestion, resultUrl, SUGGESTION_CLASS,
+} from './search-links.js';
 import holdSuggestions from './suggestion-hold.js';
 import { installMockSearch } from '../../scripts/search-mock/mock-search.js';
 import { observeFeatured, observePromo } from './curated-results.js';
@@ -96,43 +98,6 @@ export async function loadSearchStyles() {
 export function dedupeSearchStyles() {
   const links = document.head.querySelectorAll(`link[rel="stylesheet"][href="${STREAMX_CSS}"]`);
   for (let i = 1; i < links.length; i += 1) links[i].remove();
-}
-
-/**
- * Turns one highlight fragment into DOM nodes, keeping only its `<em>` marks.
- *
- * OpenSearch returns highlights as a string with matched terms wrapped in
- * `<em>`. Everything else in the fragment is page text and is emitted as a text
- * node, so no other markup — from the index or from a page — can reach the DOM.
- *
- * @param {string} fragment One entry from `highlight['payload.content']`
- * @returns {Node[]} Text nodes interleaved with `<em>` elements
- */
-function highlightNodes(fragment) {
-  const nodes = [];
-  const pattern = /<em>([\s\S]*?)<\/em>/g;
-  let cursor = 0;
-  let match = pattern.exec(fragment);
-  const unescape = (value) => value
-    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-    // Ampersand last, so "&amp;lt;" does not become "<".
-    .replace(/&amp;/g, '&');
-
-  while (match) {
-    if (match.index > cursor) {
-      nodes.push(document.createTextNode(unescape(fragment.slice(cursor, match.index))));
-    }
-    const mark = document.createElement('em');
-    mark.textContent = unescape(match[1]);
-    nodes.push(mark);
-    cursor = match.index + match[0].length;
-    match = pattern.exec(fragment);
-  }
-  if (cursor < fragment.length) {
-    nodes.push(document.createTextNode(unescape(fragment.slice(cursor))));
-  }
-  return nodes;
 }
 
 /*
@@ -244,33 +209,6 @@ function formatItemDate(value) {
 }
 
 /**
- * The public path of a page, from the path its index document is named by.
- *
- * The index names a FOLDER's index page after its DA document (`en:/en/index`,
- * `en:/en/blog/index`), but EDS serves it at the folder, `/en/` and
- * `/en/blog/`. The trailing slash is kept (`/about` and `/about/` can be
- * different pages), and only a final segment of exactly `index` counts:
- * `/en/blog/search-index` is unchanged.
- *
- * @param {string} path A hit path, e.g. from `getHitUrl`
- * @returns {string} The path the page is served at
- */
-export function publicPath(path) {
-  if (typeof path !== 'string') return path;
-  if (path === '/index') return '/';
-  return path.endsWith('/index') ? path.slice(0, -'index'.length) : path;
-}
-
-/**
- * The URL a hit links to: `getHitUrl` (the bundle's, copy-in-only) with folder
- * index pages mapped by publicPath. Result rows and suggestions both use it.
- *
- * @param {Object} item Search hit
- * @returns {string} Root-relative URL of the page
- */
-export const resultUrl = (item) => publicPath(getHitUrl(item));
-
-/**
  * Renders one search result as a link to the page it represents.
  *
  * `resultUrl` turns the hit's `_id` ("en:/en/blog/…") into its URL,
@@ -313,6 +251,10 @@ export function renderItem(item) {
    * same document on whatever host the reader is currently browsing — so a
    * result on the preview host opens the preview copy, not production. They are
    * the same page, and on production they are the same URL.
+   *
+   * An apex-site hit is the exception by construction: its URL is already
+   * protocol-relative (`//arborydigital.com/en/…`), so `new URL` keeps its own
+   * host for the text and the link opens on that host from anywhere.
    *
    * Not a nested `<a>`: the whole row is already one anchor, and an anchor
    * inside an anchor is invalid and unreachable by keyboard. This is text that
@@ -456,40 +398,6 @@ const icon = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
 export const searchIcon = () => icon('<circle cx="11" cy="11" r="7" /><path d="m20 20-3.6-3.6" />');
 
 export const clearIcon = () => icon('<path d="M18 6 6 18M6 6l12 12" />');
-
-/* The class the library's combobox finds its options by. */
-const SUGGESTION_CLASS = 'stx-suggestion__item';
-let suggestionSeq = 0;
-
-/**
- * Renders one type-ahead suggestion as a link to the page it names.
- *
- * Replaces the library's default `suggestionItem`, whose href is the raw
- * `getHitUrl` (so the home page linked to `/index`) and is interpolated into
- * innerHTML unescaped. Here the href goes through `resultUrl` and every index
- * value is applied as a property or a text node. It shows the same text: the
- * first highlight fragment, else the plain title.
- *
- * The library's class and an id are kept: the combobox finds its options by
- * that class and points `aria-activedescendant` at that id.
- *
- * @param {Object} item Suggestion hit
- * @returns {HTMLElement} The option's link
- */
-export function renderSuggestion(item) {
-  const link = document.createElement('a');
-  link.className = SUGGESTION_CLASS;
-  suggestionSeq += 1;
-  link.id = `search-suggestion-${suggestionSeq}`;
-  link.href = resultUrl(item);
-
-  const text = document.createElement('span');
-  const fragment = item?.highlight?.['payload.title']?.[0] ?? item?.highlight?.['payload.content']?.[0];
-  if (fragment) text.append(...highlightNodes(fragment));
-  else text.textContent = item?._source?.payload?.title || link.getAttribute('href');
-  link.append(text);
-  return link;
-}
 
 /**
  * Makes choosing a suggestion OPEN its page, rather than search for its title.
