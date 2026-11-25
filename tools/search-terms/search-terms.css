@@ -1,0 +1,600 @@
+/* --------------------------------------------------------------------------
+ * Search Terms Manager — styles
+ *
+ * Deliberately NOT the site's design system. This is an authoring tool that sits
+ * beside the DA sheet editor, and matching the site would make the tool chrome
+ * look like the content being edited. The one place the site's own styling
+ * appears is the preview frame, where it is the point.
+ *
+ * The hierarchy the layout is built on: a row's TERM is its identity — it alone
+ * decides whether the row matches anything — so it reads as the heading, and
+ * title/body/link sit under it in a quiet label column. Five equally-weighted
+ * labelled fields per row gave every card the same grey texture and no subject.
+ * ------------------------------------------------------------------------ */
+
+search-terms-manager {
+  --st-ink: #16161a;
+  --st-muted: #6e6e77;
+  --st-faint: #9a9aa3;
+  --st-line: #e4e4e9;
+  --st-hairline: #eeeef2;
+  --st-surface: #fff;
+  --st-sunken: #f6f6f8;
+  --st-accent: #1473e6;
+  --st-error: #c1170a;
+  --st-warning: #a86400;
+  --st-ok: #1f7a5c;
+  --st-radius: 8px;
+
+  display: block;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 28px 72px;
+  color: var(--st-ink);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+search-terms-manager :is(input, textarea, select, button) {
+  font: inherit;
+}
+
+/* ---------- header ---------- */
+
+.st-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 40px;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 28px 0 18px;
+}
+
+.st-head h1 {
+  font-size: 21px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 0 0 5px;
+}
+
+.st-sub {
+  margin: 0;
+  max-width: 64ch;
+  font-size: 13px;
+  color: var(--st-muted);
+}
+
+.st-sub code {
+  font-size: 12px;
+  color: var(--st-ink);
+  background: var(--st-sunken);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.st-head-actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+/* ---------- form primitives ---------- */
+
+.st-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--st-faint);
+}
+
+:is(.st-field, .st-field-row) :is(input, textarea, select) {
+  color: var(--st-ink);
+  background: var(--st-surface);
+  border: 1px solid var(--st-line);
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  min-width: 0;
+}
+
+.st-field textarea,
+.st-field-row textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+:is(.st-field, .st-field-row) :is(input, textarea, select):focus {
+  outline: 2px solid var(--st-accent);
+  outline-offset: -1px;
+  border-color: var(--st-accent);
+}
+
+::placeholder {
+  color: var(--st-faint);
+}
+
+.st-btn {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--st-accent);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.st-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.st-btn:hover:not(:disabled) {
+  filter: brightness(0.94);
+}
+
+.st-btn.st-secondary {
+  color: var(--st-ink);
+  background: var(--st-surface);
+  border-color: var(--st-line);
+}
+
+/* ---------- banner ---------- */
+
+.st-banner {
+  font-size: 13.5px;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--st-line);
+  background: var(--st-surface);
+}
+
+.st-banner-is-ok {
+  border-color: rgb(31 122 92 / 35%);
+  background: #f2faf7;
+  color: var(--st-ok);
+}
+
+.st-banner-is-warning {
+  border-color: rgb(168 100 0 / 35%);
+  background: #fdf8f0;
+  color: var(--st-warning);
+}
+
+.st-banner-is-error {
+  border-color: rgb(193 23 10 / 35%);
+  background: #fdf4f3;
+  color: var(--st-error);
+}
+
+.st-banner-is-busy {
+  color: var(--st-muted);
+}
+
+/* ---------- sheet tabs ---------- */
+
+.st-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--st-line);
+  margin-bottom: 22px;
+}
+
+.st-tab {
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 8px 14px 11px;
+  margin-bottom: -1px;
+  cursor: pointer;
+  color: var(--st-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+/* The count belongs to the label, not to the column the blurb happens to make.
+   Grid-placed it drifted to the far side of the tab, reading as unrelated. */
+.st-tab-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.st-tab:hover {
+  color: var(--st-ink);
+}
+
+.st-tab[aria-selected="true"] {
+  color: var(--st-ink);
+  border-bottom-color: var(--st-accent);
+}
+
+.st-tab-label {
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.st-tab-count {
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--st-muted);
+  background: var(--st-sunken);
+  border-radius: 9px;
+  padding: 0 7px;
+}
+
+.st-tab-blurb {
+  font-size: 12px;
+  color: var(--st-faint);
+}
+
+/* ---------- body ---------- */
+
+.st-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+@media (width >= 1180px) {
+  .st-body {
+    grid-template-columns: minmax(0, 1fr) minmax(400px, 38%);
+  }
+}
+
+.st-rows-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.st-summary {
+  margin: 0;
+  font-size: 13px;
+  color: var(--st-muted);
+}
+
+.st-summary strong {
+  color: var(--st-ink);
+  font-weight: 600;
+}
+
+.st-notice {
+  font-size: 13px;
+  background: #fffaf0;
+  border: 1px solid #efdcb4;
+  border-radius: 6px;
+  padding: 11px 14px;
+  margin-bottom: 16px;
+}
+
+.st-notice p {
+  margin: 0;
+}
+
+.st-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.st-empty {
+  border: 1px dashed var(--st-line);
+  border-radius: var(--st-radius);
+  padding: 30px 24px;
+  font-size: 13.5px;
+  color: var(--st-muted);
+  text-align: center;
+}
+
+.st-empty p {
+  margin: 0 0 6px;
+}
+
+.st-empty p:last-child {
+  margin: 0;
+}
+
+/* ---------- one row ---------- */
+
+.st-row {
+  background: var(--st-surface);
+  border: 1px solid var(--st-hairline);
+  border-radius: var(--st-radius);
+  padding: 12px 16px 14px;
+  display: grid;
+  gap: 10px;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.st-row.is-selected {
+  border-color: #c8dcf7;
+  box-shadow: 0 0 0 1px #c8dcf7;
+}
+
+/*
+ * The verdict is a left EDGE, because it is the one thing that must be legible
+ * without reading: red means the row is dead copy, amber means it will be seen
+ * but not as intended. A `note` gets no edge at all — a copy-length hint is
+ * advice, and giving it the same furniture as a broken row is what makes a
+ * status colour stop meaning anything.
+ */
+.st-row-is-error,
+.st-row-is-warning {
+  border-left-width: 3px;
+  padding-left: 14px;
+}
+
+.st-row-is-error {
+  border-left-color: var(--st-error);
+}
+
+.st-row-is-warning {
+  border-left-color: var(--st-warning);
+}
+
+.st-row-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.st-rank {
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--st-faint);
+  min-width: 1.4em;
+  text-align: right;
+}
+
+/* The term is the row's heading: borderless until you touch it, so a list of
+   rows reads as a list of terms rather than a wall of input boxes. */
+.st-row .st-term {
+  flex: 1;
+  font-size: 15.5px;
+  font-weight: 600;
+  border-color: transparent;
+  background: none;
+  padding: 4px 7px;
+  margin-left: -7px;
+}
+
+.st-row .st-term:hover:not(:focus) {
+  background: var(--st-sunken);
+}
+
+.st-row .st-term::placeholder {
+  font-weight: 400;
+}
+
+.st-row-tools {
+  display: flex;
+  gap: 1px;
+  margin-left: auto;
+  opacity: 0.45;
+  transition: opacity 0.12s;
+}
+
+.st-row:hover .st-row-tools,
+.st-row:focus-within .st-row-tools {
+  opacity: 1;
+}
+
+.st-icon {
+  font-size: 12px;
+  line-height: 1;
+  color: var(--st-muted);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.st-icon:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.st-icon:hover:not(:disabled) {
+  color: var(--st-ink);
+  background: var(--st-sunken);
+}
+
+.st-icon.st-danger:hover:not(:disabled) {
+  color: var(--st-error);
+  background: #fdf4f3;
+}
+
+/* ---------- the fields under the term ---------- */
+
+.st-fields {
+  display: grid;
+  gap: 7px;
+}
+
+/*
+ * A LABEL COLUMN rather than a label above every control. Five stacked
+ * label/field pairs is five headings nobody reads and twice the height; aligned
+ * down one column they become a quiet index the eye skips until it needs them.
+ */
+.st-field-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+
+.st-field-row-is-pair {
+  grid-template-columns: 74px minmax(0, 1fr) minmax(0, 1.6fr);
+}
+
+.st-label {
+  font-size: 12px;
+  color: var(--st-faint);
+  padding-top: 8px;
+}
+
+/* ---------- diagnostics ---------- */
+
+.st-issues {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.st-issue {
+  font-size: 12.5px;
+  line-height: 1.45;
+  padding-left: 19px;
+  position: relative;
+}
+
+.st-issue::before {
+  position: absolute;
+  left: 2px;
+  top: 0;
+}
+
+.st-issue-is-error {
+  color: var(--st-error);
+}
+
+.st-issue-is-error::before {
+  content: "✕";
+  font-size: 11px;
+}
+
+.st-issue-is-warning {
+  color: var(--st-warning);
+}
+
+.st-issue-is-warning::before {
+  content: "▲";
+  font-size: 9px;
+  top: 1px;
+}
+
+.st-issue-is-note {
+  color: var(--st-muted);
+}
+
+.st-issue-is-note::before {
+  content: "·";
+  font-weight: 700;
+}
+
+/* ---------- preview pane ---------- */
+
+.st-preview-pane {
+  position: sticky;
+  top: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.st-tester {
+  background: var(--st-surface);
+  border: 1px solid var(--st-hairline);
+  border-radius: var(--st-radius);
+  padding: 15px 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.st-verdicts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: 5px 12px;
+}
+
+.st-verdict-lead {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--st-muted);
+}
+
+.st-verdict {
+  display: contents;
+}
+
+.st-verdict-row {
+  font-size: 13px;
+}
+
+.st-verdict-what {
+  color: var(--st-faint);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.st-verdict-is-none .st-verdict-row {
+  color: var(--st-faint);
+}
+
+.st-frame-wrap {
+  overflow: hidden;
+  border: 1px solid var(--st-hairline);
+  border-radius: var(--st-radius);
+  background: var(--st-surface);
+}
+
+.st-frame {
+  width: 1240px;
+  border: 0;
+  display: block;
+  transform-origin: top left;
+}
+
+.st-frame-note {
+  margin: -4px 0 0;
+  font-size: 11.5px;
+  color: var(--st-faint);
+}
+
+/* ---------- confirm dialog ---------- */
+
+.st-confirm {
+  border: 0;
+  border-radius: 10px;
+  padding: 22px 24px;
+  max-width: 46ch;
+  color: var(--st-ink);
+  box-shadow: 0 12px 44px rgb(0 0 0 / 22%);
+}
+
+.st-confirm::backdrop {
+  background: rgb(0 0 0 / 30%);
+}
+
+.st-confirm-text {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.st-confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

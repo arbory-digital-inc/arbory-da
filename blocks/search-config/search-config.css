@@ -1,0 +1,11 @@
+/* Block: search-config
+   A headless config block for a header search. Its decorator empties it and
+   publishes the authored values as a data attribute, so there is nothing to
+   style — but it must not occupy space or leave a gap in the nav.
+
+   This file also exists so the block loader gets a 200 for the
+   conventional <block>.css fetch instead of a 404. */
+
+.search-config {
+  display: none;
+}
