@@ -96,7 +96,7 @@ describe('search-topics', () => {
     expect(pillHref(pill, 'de')).to.equal(`/de/search?stx-facets=${encodeURIComponent('{"technology_level0":["Observability"]}')}`);
   });
 
-  it('shows an escaped tag as plain text, translated, and filters by the indexed value', () => {
+  it('shows and filters by an escaped tag as plain text, translated for display', () => {
     const self = {
       _id: 'de:/de/x',
       _source: { payload: { facets: { technology_level0: ['CDN &amp; Dispatcher', 'Replication &amp; Publishing'] } } },
@@ -105,7 +105,8 @@ describe('search-topics', () => {
       id: 'de:/de/x', text: '', count: 8, lang: 'de',
     }, {});
     expect(pills.map((p) => p.label)).to.deep.equal(['CDN & Dispatcher', 'Replikation & Veröffentlichung']);
-    expect(pills[0].value).to.equal('CDN &amp; Dispatcher');
+    expect(pills[0].value).to.equal('CDN & Dispatcher');
+    expect(pillHref(pills[0], 'de')).to.equal(`/de/search?stx-facets=${encodeURIComponent('{"technology_level0":["CDN & Dispatcher"]}')}`);
     expect(unescapeHtml('a &amp;lt; b')).to.equal('a &lt; b');
   });
 

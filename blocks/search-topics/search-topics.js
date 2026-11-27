@@ -179,10 +179,11 @@ export function pickPills(json, {
   const self = json?.hits?.hits?.[0];
   const tagged = self?._id === id ? self._source?.payload?.facets?.technology_level0 || [] : [];
   const tags = [];
-  tagged.forEach((tag) => {
-    /* The index keeps tags HTML-escaped ("CDN &amp; Dispatcher"): show and
-       translate the plain text, filter by the value as indexed. */
-    const label = facetValueLabel(unescapeHtml(tag), lang);
+  tagged.forEach((raw) => {
+    /* `_source` keeps tags HTML-escaped ("CDN &amp; Dispatcher"); the facet
+       filter and the translations want the plain text. */
+    const tag = unescapeHtml(raw);
+    const label = facetValueLabel(tag, lang);
     const pill = { label, kind: 'tag', value: tag };
     const same = (p) => [label, tag].some((l) => p.label.toLowerCase() === l.toLowerCase());
     if (![...terms, ...tags].some(same)) tags.push(pill);
