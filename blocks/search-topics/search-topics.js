@@ -119,6 +119,20 @@ export function mentions(text, key) {
 }
 
 /**
+ * Plain text for an HTML-escaped index value.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+export function unescapeHtml(value) {
+  return value
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    // Ampersand last, so "&amp;lt;" does not become "<".
+    .replace(/&amp;/g, '&');
+}
+
+/**
  * The request body for `/search/<anything>/body`. The glossary goes as the
  * template's include regex.
  *
@@ -166,7 +180,9 @@ export function pickPills(json, {
   const tagged = self?._id === id ? self._source?.payload?.facets?.technology_level0 || [] : [];
   const tags = [];
   tagged.forEach((tag) => {
-    const label = facetValueLabel(tag, lang);
+    /* The index keeps tags HTML-escaped ("CDN &amp; Dispatcher"): show and
+       translate the plain text, filter by the value as indexed. */
+    const label = facetValueLabel(unescapeHtml(tag), lang);
     const pill = { label, kind: 'tag', value: tag };
     const same = (p) => [label, tag].some((l) => p.label.toLowerCase() === l.toLowerCase());
     if (![...terms, ...tags].some(same)) tags.push(pill);

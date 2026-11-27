@@ -2,6 +2,7 @@
 import { expect } from '@esm-bundle/chai';
 import {
   articleText, mentions, pageKey, pickPills, pillHref, readConfig, renderPills, requestBody,
+  unescapeHtml,
 } from '../../../blocks/search-topics/search-topics.js';
 import { GLOSSARY } from '../../../blocks/search-topics/glossary.js';
 
@@ -93,6 +94,19 @@ describe('search-topics', () => {
     expect(pill.kind).to.equal('tag');
     expect(pill.value).to.equal('Observability');
     expect(pillHref(pill, 'de')).to.equal(`/de/search?stx-facets=${encodeURIComponent('{"technology_level0":["Observability"]}')}`);
+  });
+
+  it('shows an escaped tag as plain text, translated, and filters by the indexed value', () => {
+    const self = {
+      _id: 'de:/de/x',
+      _source: { payload: { facets: { technology_level0: ['CDN &amp; Dispatcher', 'Replication &amp; Publishing'] } } },
+    };
+    const pills = pickPills(response([], self), {
+      id: 'de:/de/x', text: '', count: 8, lang: 'de',
+    }, {});
+    expect(pills.map((p) => p.label)).to.deep.equal(['CDN & Dispatcher', 'Replikation & Veröffentlichung']);
+    expect(pills[0].value).to.equal('CDN &amp; Dispatcher');
+    expect(unescapeHtml('a &amp;lt; b')).to.equal('a &lt; b');
   });
 
   it('links a name to a search in the page language', () => {
