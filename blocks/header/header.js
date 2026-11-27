@@ -2,6 +2,7 @@ import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 import { getLanguage, isLanguageSupported } from '../../scripts/lang.js';
 import createNavSearch from './nav-search.js';
+import { languageHref, refreshLanguageLinks } from './language-links.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
@@ -167,19 +168,8 @@ function createLanguageSelector() {
           const langItem = document.createElement('li');
           const langLink = document.createElement('a');
 
-          // Get the current path without language prefix
-          const pathParts = window.location.pathname.split('/');
-          // Remove empty first element and language code if present
-          pathParts.splice(0, pathParts[1] && pathParts[1].length <= 5 ? 2 : 1);
-          const currPagePath = pathParts.join('/');
-
-          // Construct direct language URL
-          const langUrl = `/${lang.code}/${currPagePath}`;
-
-          // Ensure it's an absolute URL with origin
-          langLink.href = `${window.location.origin}${langUrl}`;
-
-          // Add data attribute for debugging
+          // Same page in that language, keeping any search (see language-links.js)
+          langLink.href = languageHref(lang.code);
           langLink.setAttribute('data-lang', lang.code);
           langLink.textContent = lang.label;
           langItem.appendChild(langLink);
@@ -207,8 +197,15 @@ function createLanguageSelector() {
   // Start loading language options
   loadLanguageOptions();
 
+  /* The search page rewrites its URL without an event: follow it whenever a
+     link is about to be seen or used. */
+  ['focusin', 'pointerover', 'pointerdown'].forEach((type) => {
+    langDropdown.addEventListener(type, () => refreshLanguageLinks(langDropdown));
+  });
+
   // Build and show mobile full-screen modal
   const openMobileModal = () => {
+    refreshLanguageLinks(langDropdown);
     const overlay = document.createElement('div');
     overlay.className = 'language-modal-overlay';
 
@@ -262,6 +259,7 @@ function createLanguageSelector() {
       return;
     }
     const expanded = currentLangButton.getAttribute('aria-expanded') === 'true';
+    if (!expanded) refreshLanguageLinks(langDropdown);
     currentLangButton.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     langDropdown.style.display = expanded ? 'none' : 'block';
   });
