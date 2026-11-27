@@ -71,6 +71,20 @@ describe('search-topics', () => {
     expect(pills.map((p) => p.label)).to.deep.equal(['Oak', 'Sling']);
   });
 
+  it('drops a name another one covers, and keeps room for two tags', () => {
+    const self = {
+      _id: 'en:/en/a',
+      _source: { payload: { facets: { technology_level0: ['FinOps', 'DevOps & CI/CD', 'Observability'] } } },
+    };
+    const glossary = {
+      aio: 'AIO CLI', cli: 'CLI', rde: 'RDE', splunk: 'Splunk', oak: 'Oak',
+    };
+    const pills = pickPills(response(['aio', 'cli', 'rde', 'splunk', 'oak'], self), {
+      id: 'en:/en/a', text: 'aio cli rde splunk oak', count: 5, lang: 'en',
+    }, glossary);
+    expect(pills.map((p) => p.label)).to.deep.equal(['AIO CLI', 'RDE', 'Splunk', 'FinOps', 'DevOps & CI/CD']);
+  });
+
   it('translates a tag for display and filters by its indexed value', () => {
     const self = { _id: 'de:/de/x', _source: { payload: { facets: { technology_level0: ['Observability'] } } } };
     const [pill] = pickPills(response([], self), {

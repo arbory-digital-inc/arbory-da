@@ -29,6 +29,8 @@ const DEFAULTS = {
 };
 const MAX_COUNT = 16;
 const MIN_PILLS = 2;
+/* Slots kept for the article's curated technology tags when names would fill the row. */
+const TAG_ROOM = 2;
 /* Enough of the article for an unindexed page; the index has the rest. */
 const TEXT_LIMIT = 2000;
 /* Where the article's copy is not: other feeds, furniture, this block. */
@@ -144,21 +146,35 @@ export function requestBody({ namespace, id, text }, glossary = GLOSSARY) {
 export function pickPills(json, {
   id, text, count, lang,
 }, glossary = GLOSSARY) {
-  const pills = [];
-  const has = (label) => pills.some((p) => p.label.toLowerCase() === label.toLowerCase());
+  const words = (label) => label.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  /* The same label, or one whose words another already covers ("CLI", "AIO CLI"). */
+  const covered = (label, pills) => pills.some((p) => {
+    const [a, b] = [words(label), words(p.label)];
+    const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+    return short.every((w) => long.includes(w));
+  });
+
+  const terms = [];
   const buckets = json?.aggregations?.neighbourhood?.topics?.buckets || [];
   buckets.forEach(({ key }) => {
     const label = glossary[key];
-    if (!label || has(label) || !mentions(text, key)) return;
-    pills.push({ label, kind: 'term', value: label });
+    if (!label || covered(label, terms) || !mentions(text, key)) return;
+    terms.push({ label, kind: 'term', value: label });
   });
+
   const self = json?.hits?.hits?.[0];
-  const tags = self?._id === id ? self._source?.payload?.facets?.technology_level0 || [] : [];
-  tags.forEach((tag) => {
+  const tagged = self?._id === id ? self._source?.payload?.facets?.technology_level0 || [] : [];
+  const tags = [];
+  tagged.forEach((tag) => {
     const label = facetValueLabel(tag, lang);
-    if (!has(label) && !has(tag)) pills.push({ label, kind: 'tag', value: tag });
+    const pill = { label, kind: 'tag', value: tag };
+    const same = (p) => [label, tag].some((l) => p.label.toLowerCase() === l.toLowerCase());
+    if (![...terms, ...tags].some(same)) tags.push(pill);
   });
-  return pills.slice(0, count);
+
+  /* Names first, but keep room for up to TAG_ROOM of the article's own tags. */
+  const room = Math.min(tags.length, TAG_ROOM, count);
+  return [...terms.slice(0, count - room), ...tags].slice(0, count);
 }
 
 /**

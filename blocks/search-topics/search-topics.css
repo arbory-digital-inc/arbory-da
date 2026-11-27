@@ -1,5 +1,5 @@
 .search-topics {
-  --topics-text: var(--text-color);
+  --topics-text: #ece6ff;
   --topics-muted: #b5b5b5;
   --topics-bg: rgb(119 20 255 / 10%);
   --topics-border: rgb(177 77 255 / 35%);
@@ -82,7 +82,7 @@
   display: flex;
 }
 
-.search-topics-pill {
+.search-topics .search-topics-pill {
   display: inline-flex;
   align-items: center;
   min-height: 30px;
@@ -98,8 +98,8 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.search-topics-pill:hover,
-.search-topics-pill:focus-visible {
+.search-topics .search-topics-pill:hover,
+.search-topics .search-topics-pill:focus-visible {
   transform: translateY(-1px);
   border-color: var(--topics-border-hover);
   box-shadow: 0 0 12px rgb(177 77 255 / 35%);
@@ -107,18 +107,18 @@
   text-decoration: none;
 }
 
-.search-topics-pill:focus-visible {
+.search-topics .search-topics-pill:focus-visible {
   outline: 2px solid var(--topics-glow-2);
   outline-offset: 2px;
 }
 
 /* A curated tag reads a shade quieter than a name the index picked. */
-.search-topics-tag {
+.search-topics .search-topics-tag {
   border-style: dashed;
   background: transparent;
 }
 
-.search-topics-placeholder {
+.search-topics .search-topics-placeholder {
   height: 30px;
   padding: 0;
   border-color: rgb(255 255 255 / 8%);
